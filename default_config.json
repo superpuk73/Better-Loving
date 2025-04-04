@@ -1,5 +1,5 @@
 ﻿{
-  "Settings": [
+  "CrossSpecies": [
     {
       "Id": "AllowCrossSpeciesLove",
       "Type": "SWITCH",

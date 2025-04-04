@@ -7,39 +7,10 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
-// TODO: we also prob want to make sure they arent foes like xenophobic or anything lol (DONE)
-// TODO: Figure out how reproduction methods like mitosis work (DONE)
-// TODO: Figure out how to handle Harmony traits (DONE)
-// TODO: figure out why 2+ creatures with mitosis wont fall in love with each other
-// TODO: add options to configure chances (DONE)
+//TODO: add tool that lets u force units to become lovers
+//TODO: add trait that lets a unit be aromantic
 namespace Better_Loving
 {
-    public class Util
-    {
-        // Returns the parent that has a population limit not REACHED yet
-        public static Actor EnsurePopulationFromParent(List<Actor> parents)
-        {
-            var canMake = new List<Actor>();
-
-            foreach (var parent in parents)
-            {
-                if (!parent.subspecies.hasReachedPopulationLimit())
-                    canMake.Add(parent);
-            }
-
-            if (canMake.Count <= 0) return null;
-
-            return canMake.GetRandom();
-        }
-
-        public static bool IsSmart(Actor actor)
-        {
-            return actor.hasSubspeciesTrait("prefrontal_cortex") 
-                   && actor.hasSubspeciesTrait("advanced_hippocampus") 
-                   && actor.hasSubspeciesTrait("amygdala") 
-                   && actor.hasSubspeciesTrait("wernicke_area");
-        }
-    }
     public class ModClass : BasicMod<ModClass>
     {
         public static BasicMod<ModClass> Mod;
@@ -73,73 +44,47 @@ namespace Better_Loving
         }
     }
 
-    [HarmonyPatch(typeof(BehTryToSocialize), nameof(BehTryToSocialize.getRandomActorAround))]
-    // this patch makes it so ppl that DON'T need opposite sex type for reproduction can still become lovers
-    // this makes it so ppl with like mitosis reproduction can still become lovers even if they dont need each other
-    class GetRandomActorAroundPatch
+    public class Util
     {
-        static bool Prefix(Actor pActor, BehTryToSocialize __instance, ref Actor __result)
+        // Returns the parent that has a population limit not REACHED yet
+        public static Actor EnsurePopulationFromParent(List<Actor> parents)
         {
-            using (ListPool<Actor> listPool1 = new ListPool<Actor>(4))
+            var canMake = new List<Actor>();
+
+            foreach (var parent in parents)
             {
-                using (ListPool<Actor> listPool2 = new ListPool<Actor>(4))
-                {
-                    bool flag1 = true; //pActor.subspecies.needOppositeSexTypeForReproduction();
-                    bool flag2 = pActor.hasCulture() && pActor.culture.hasTrait("animal_whisperers");
-                    int num = pActor.hasTelepathicLink() ? 1 : 0;
-                    if (num != 0)
-                        __instance.fillUnitsViaTelepathicLink(pActor, listPool1, listPool2);
-                    int pChunkRadius = 1;
-                    if (num != 0)
-                        pChunkRadius = 2;
-                    bool pRandom = Randy.randomBool();
-                    foreach (Actor actor in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
-                    {
-                        if (pActor.canTalkWith(actor))
-                        {
-                            if (pActor.isKingdomCiv())
-                            {
-                                if (actor.isKingdomMob())
-                                {
-                                    if (!flag2)
-                                        continue;
-                                }
-                                else if (!actor.isKingdomCiv())
-                                    ;
-                            }
-                            else if (!pActor.isSameSpecies(actor))
-                                continue;
-                            if (flag1 && pActor.canFallInLoveWith(actor))
-                            {
-                                listPool1.Add(actor);
-                                if (pRandom)
-                                {
-                                    if (Randy.randomBool())
-                                        break;
-                                }
-                            }
-                            listPool2.Add(actor);
-                            if (pRandom && ((ICollection)listPool1).Count > 0)
-                            {
-                                if (Randy.randomBool())
-                                    break;
-                            }
-                        }
-                    }
-                    if (((ICollection)listPool1).Count > 0)
-                        __result = listPool1.GetRandom<Actor>();
-                    __result= ((ICollection) listPool2).Count > 0 ? listPool2.GetRandom<Actor>() : (Actor) null;
-                }
+                if (!parent.subspecies.hasReachedPopulationLimit())
+                    canMake.Add(parent);
             }
 
-            return false;
+            if (canMake.Count <= 0) return null;
+
+            return canMake.GetRandom();
+        }
+
+        public static bool IsSmart(Actor actor)
+        {
+            return actor.hasSubspeciesTrait("prefrontal_cortex") 
+                   && actor.hasSubspeciesTrait("advanced_hippocampus") 
+                   && actor.hasSubspeciesTrait("amygdala") 
+                   && actor.hasSubspeciesTrait("wernicke_area");
+        }
+    }
+    
+    // gives asexual units the ability to find love!
+    [HarmonyPatch(typeof(Actor), nameof(Actor.create))]
+    class ActorCreatePatch
+    {
+        static void Postfix(Actor __instance)
+        {
+            __instance.asset.addDecision("find_lover");
         }
     }
 
+    // for the sake of not having weird family issues down the road, we'll just create a new family immediately when they become lovers
     [HarmonyPatch(typeof(Actor), nameof(Actor.becomeLoversWith))]
     class BecomeLoversWithPatch
     {
-        // for the sake of not having weird family issues down the road, we'll just create a new family immediately when they become lovers
         static void Postfix(Actor pTarget, Actor __instance)
         {
             if(!__instance.hasFamily() && !pTarget.hasFamily())
@@ -147,12 +92,13 @@ namespace Better_Loving
         }
     }
     
+    // This is where we handle the beef of our code for having cross species and non-same reproduction method ppl fall in love
     [HarmonyPatch(typeof(Actor), nameof(Actor.canFallInLoveWith))]
-    class CheckLovePatch
+    class CanFallInLoveWithPatch
     {
         static bool Prefix(Actor pTarget, ref bool __result, Actor __instance)
         {
-            // LogService.LogInfo($"Tryna see if we can fall in love with {pTarget.getName()}");
+            // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
             var config = ModClass.Mod.GetConfig();
             var forbiddenLove = (float)config["Misc"]["ForbiddenLove"].GetValue();
             var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
@@ -164,8 +110,7 @@ namespace Better_Loving
                 || !__instance.isAdult()
                 || !__instance.isBreedingAge()
                 || __instance.areFoes(pTarget)
-                || !__instance.subspecies.needs_mate
-
+                // || !__instance.subspecies.needs_mate this makes it so asexual ppl can reproduce
                 || (!__instance.isSameSpecies(pTarget) && !__instance.isSameSubspecies(pTarget.subspecies)
                      && (!(( __instance.hasCulture() && __instance.culture.hasTrait("xenophiles") || !mustBeXenophile)
                                                   && (Util.IsSmart(__instance) && Util.IsSmart(pTarget) || !mustBeSmart)
@@ -174,7 +119,7 @@ namespace Better_Loving
                 || (!__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
                       && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
                       && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic() && 
-                    Random.Range(1, 101) / 100.0 > forbiddenLove) // gay chance
+                    Random.Range(1, 101) / 100.0 > forbiddenLove) // chance of getting together even if they cant reproduce
                 
                 || pTarget.hasLover()
                 || !pTarget.isAdult()
@@ -184,13 +129,7 @@ namespace Better_Loving
                 return false;
             }
 
-            if (!__instance.isSapient() || !__instance.hasFamily())
-            {
-                __result = true;
-                return false;
-            }
-
-            if (__instance.isRelatedTo(pTarget) && !incest)
+            if ((__instance.isChildOf(pTarget) || __instance.isParentOf(pTarget)) && !incest)
             {
                 __result = false;
                 return false;
@@ -199,23 +138,11 @@ namespace Better_Loving
             __result = true;
 
             // LogService.LogInfo($"Success! They in love :D");
-            return false; // It's harsh code I know, but this does basically overwrite how loving works so it's necessary.
-            // Users probably won't have another mod that modifies how loving works anyways. Chances are this mod will cover that.
-            // if an issue, we can solve this later
-        }
-    }
-
-    [HarmonyPatch(typeof(BabyHelper), nameof(BabyHelper.checkMetaLimitsResult))]
-    class checkMetaLimitsPatch
-    {
-        static bool Prefix(Actor pActor, ref bool __result)
-        {
-            // we removed the population check for subspecies cause we do our own in the other patches
-            __result = !pActor.hasCity() || pActor.city.canProduceUnits();
             return false;
         }
     }
-
+    
+    // We just randomize the parent chosen for the subspecies here
     [HarmonyPatch(typeof(BabyMaker), nameof(BabyMaker.makeBaby))]
     class MakeBabyPatch
     {
@@ -241,11 +168,10 @@ namespace Better_Loving
 
             Actor dominantParent = Util.EnsurePopulationFromParent(parents);
             if (dominantParent == null) 
-                // there seems to be a bug in the game that allows reproduction strategies aren't sexual to PRODUCE beyond the harmony traits cap. probably because they dont check for populations there lol
+                // there seems to be a bug in the game that allows reproduction strategies that aren't sexual to PRODUCE beyond the harmony traits cap. probably because they dont check for populations there lol
                 dominantParent = pParent1;
             
             Actor nonDominantParent = dominantParent != pParent1 ? pParent1 : pParent2;
-            // Subspecies randomSpecies = randomDecidingParent.subspecies;
             ActorAsset asset = dominantParent.asset;
             
             ActorData pData = new ActorData();
@@ -342,14 +268,19 @@ namespace Better_Loving
         }
     }
 
-    // this patch is to edit sexual reproduction before it starts making a baby!
+    // this patch handles who the mother is when it comes to sexual reproduction
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
     class CheckForBabiesPatch
     {
+        // custom method specifically to avoid population limit checks because we do that later
+        static bool CanMakeBabies(Actor pActor)
+        {
+            return pActor.isAdult() && !pActor.hasReachedOffspringLimit() && (!pActor.hasCity() || pActor.city.canProduceUnits()) && pActor.haveNutritionForNewBaby();
+        }
         static bool Prefix(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)
         {
-            if (!BabyHelper.canMakeBabies(pParentA) || !BabyHelper.canMakeBabies(pParentB))
+            if (!CanMakeBabies(pParentA) || !CanMakeBabies(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
