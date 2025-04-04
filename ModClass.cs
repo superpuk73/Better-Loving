@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using ai.behaviours;
@@ -8,6 +9,20 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
+// TODO: Adding sexuality/romantic traits (done) (configurable!)
+// TODO: add cultural queer traits
+
+// TODO: Sexuality can be fluid and change over time (done) (configurable)
+// TODO: People who turn 18 will get their sexuality traits (done)
+
+// TODO: People are more likely to date within an age range (configurable) (but they cant necessarily have babies)
+
+// TODO: configurable options for the traits
+
+// TODO: new trait that makes ppl have sex with their partner anwyays even if they do not desire IF population subspecies is low
+// TODO: faithful trait (partners never cheat on each other)
+// TODO: new cheating system (when ppl cheat, the other person gets angry and sad!) (done, just need icon)
+// TODO: unfluid trait (sexuality and romantic traits never change)
 namespace Better_Loving
 {
     public class ModClass : BasicMod<ModClass>
@@ -38,26 +53,7 @@ namespace Better_Loving
 
             LM.ApplyLocale();
             
-            // adds in Aromantic trait
-            var aromanticTrait = new ActorTrait
-            {
-                id = "aromantic",
-                path_icon = "ui/Icons/actor_traits/iconAromantic", // temporary icon!
-                group_id = "mind",
-                rate_birth=1,
-                rate_acquire_grow_up = 1,
-                type=TraitType.Other,
-                unlocked_with_achievement = false,
-                rarity = Rarity.R3_Legendary,
-                needs_to_be_explored = true
-            };
-            
-            for (int index = 0; index < aromanticTrait.rate_birth; ++index)
-                AssetManager.traits.pot_traits_birth.Add(aromanticTrait);
-            for (int index = 0; index < aromanticTrait.rate_acquire_grow_up; ++index)
-                AssetManager.traits.pot_traits_growup.Add(aromanticTrait);
-            
-            AssetManager.traits.add(aromanticTrait);
+            QueerTraits.Init();
             
             // adds in ForceLover tool
             var forceLover = new GodPower
@@ -65,7 +61,7 @@ namespace Better_Loving
                 id = "forceLover",
                 name = "ForceLover",
                 force_map_mode = MetaType.Unit,
-                path_icon = "god_powers/iconForceLover", // temporary icon!
+                path_icon = "god_powers/force_lover", // temporary icon!
                 can_drag_map = true,
                 type = PowerActionType.PowerSpecial,
                 select_button_action = powerId => 
@@ -127,47 +123,61 @@ namespace Better_Loving
         }
     }
 
-    public class Util
-    {
-        // Returns the parent that has a population limit not REACHED yet
-        public static Actor EnsurePopulationFromParent(List<Actor> parents)
-        {
-            var canMake = new List<Actor>();
-
-            foreach (var parent in parents)
-            {
-                if (!parent.subspecies.hasReachedPopulationLimit())
-                    canMake.Add(parent);
-            }
-
-            if (canMake.Count <= 0) return null;
-
-            return canMake.GetRandom();
-        }
-
-        public static bool IsSmart(Actor actor)
-        {
-            return actor.hasSubspeciesTrait("prefrontal_cortex") 
-                   && actor.hasSubspeciesTrait("advanced_hippocampus") 
-                   && actor.hasSubspeciesTrait("amygdala") 
-                   && actor.hasSubspeciesTrait("wernicke_area");
-        }
-    }
-    
-    // gives asexual units the ability to find love!
+    // gives asexual (reproduction method i mean) units the ability to find love!
     [HarmonyPatch(typeof(Actor), nameof(Actor.create))]
     class ActorCreatePatch
     {
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
+            
+            // if (__instance.isAdult())
+            // {
+            //     QueerTraits.GiveQueerTraits(__instance);
+            // }
         }
     }
 
-    // for the sake of not having weird family issues down the road, we'll just create a new family immediately when they become lovers
+    [HarmonyPatch(typeof(Actor), nameof(Actor.updateAge))]
+    class CalcAgeStatesPatch
+    {
+        static void Postfix(Actor __instance)
+        {
+            if (__instance.isAdult() && (!QueerTraits.HasQueerTraits(__instance) 
+                                         || (Randy.randomChance(0.02f) && !__instance.hasTrait("unfluid")))) // fluid sexuality
+            {
+                QueerTraits.GiveQueerTraits(__instance);
+
+                // preferences likely changed, let's do some rolls here for potential breakups!
+                if (__instance.hasLover() && !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) && Randy.randomChance(0.2f))
+                {
+                    __instance.lover.setLover(null);
+                    __instance.lover.addStatusEffect("crying");
+                    __instance.setLover(null);
+                    // breakup!
+                }
+            } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds lover
+            {
+                QueerTraits.GiveQueerTraits(__instance);
+            }
+        }
+}
+
     [HarmonyPatch(typeof(Actor), nameof(Actor.becomeLoversWith))]
     class BecomeLoversWithPatch
     {
+        // removes past lovers for cheating purposes
+        static void Prefix(Actor pTarget, Actor __instance)
+        {
+            if (__instance.hasLover() && __instance.lover != pTarget)
+            {
+                var cheatedActor = __instance.lover;
+                cheatedActor.setLover(null);
+                cheatedActor.addStatusEffect("angry", pColorEffect: false);
+                cheatedActor._aggression_targets.Add(__instance.getID());
+                cheatedActor._aggression_targets.Add(pTarget.getID());
+            }
+        }
         static void Postfix(Actor pTarget, Actor __instance)
         {
             if(!__instance.hasFamily() && !pTarget.hasFamily())
@@ -179,6 +189,14 @@ namespace Better_Loving
     [HarmonyPatch(typeof(Actor), nameof(Actor.canFallInLoveWith))]
     class CanFallInLoveWithPatch
     {
+        private static bool WithinOfAge(Actor pActor, Actor pTarget)
+        { 
+            // later return if configured to be if they are both adults instead
+            int higherAge = Math.Max(pActor.age, pTarget.age);
+            int lowerAge = Math.Min(pActor.age, pTarget.age);
+            int minimumAge = higherAge / 2 + 7;
+            return lowerAge >= minimumAge;
+        }
         static bool Prefix(Actor pTarget, ref bool __result, Actor __instance)
         {
             // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
@@ -188,10 +206,25 @@ namespace Better_Loving
             var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             var incest = (bool)config["Misc"]["Incest"].GetValue();
+            var queerTraitsEnabled = true;//(bool)config
+            var canCheat = true;
             
-            if (__instance.hasLover()
-                || !__instance.isAdult()
-                || !__instance.isBreedingAge()
+            if (((
+                !QueerTraits.PreferenceMatches(__instance, pTarget, false)
+                || !QueerTraits.PreferenceMatches(pTarget, __instance, false)) && queerTraitsEnabled)
+                // we'll make this configurable
+                
+                || (__instance.hasLover() && (!Randy.randomChance(QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.05f) 
+                                              || __instance.hasTrait("faithful") || !canCheat)) 
+                || (pTarget.hasLover() && (!Randy.randomChance(
+                                               (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
+                                               + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
+                                           || pTarget.hasTrait("faithful") || !canCheat))
+                // we'll make this cheating configurablep
+                
+                // we'll change the adult thing to be based on age ranges later on
+                || !WithinOfAge(__instance, pTarget)
+                
                 || __instance.areFoes(pTarget)
                 // || !__instance.subspecies.needs_mate this makes it so asexual ppl can reproduce
                 || (!__instance.isSameSpecies(pTarget) && !__instance.isSameSubspecies(pTarget.subspecies)
@@ -199,16 +232,12 @@ namespace Better_Loving
                                                   && (Util.IsSmart(__instance) && Util.IsSmart(pTarget) || !mustBeSmart)
                           && (!pTarget.hasCulture() || (pTarget.hasCulture() && !pTarget.culture.hasTrait("xenophobic")))) || !allowCrossSpeciesLove)) // subspecies stuff!
                 
-                || (!__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
-                      && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
-                      && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic() && 
-                    Random.Range(1, 101) / 100.0 > forbiddenLove) // chance of getting together even if they cant reproduce
-                
-                || pTarget.hasLover()
-                || !pTarget.isAdult()
-                || !pTarget.isBreedingAge()
-                || __instance.hasTrait("aromantic")
-                || pTarget.hasTrait("aromantic"))
+            // the below code is replaced by preferences now
+            
+                // || (!__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
+                      // && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
+                      // && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic() && 
+                    // !Randy.randomChance(forbiddenLove))) // chance of getting together even if they cant reproduce)
             {
                 __result = false;
                 return false;
@@ -353,7 +382,7 @@ namespace Better_Loving
         }
     }
 
-    // this patch handles who the mother is when it comes to sexual reproduction
+    // this patch handles who the mother is when it comes to sexual reproduction and if it should even happen
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
     class CheckForBabiesPatch
@@ -361,7 +390,11 @@ namespace Better_Loving
         // custom method specifically to avoid population limit checks because we do that later
         static bool CanMakeBabies(Actor pActor)
         {
-            return pActor.isAdult() && !pActor.hasReachedOffspringLimit() && (!pActor.hasCity() || pActor.city.canProduceUnits()) && pActor.haveNutritionForNewBaby();
+            // make it configurable so they have to be adults or not
+            return pActor.isBreedingAge() 
+                   && !pActor.hasReachedOffspringLimit() 
+                   && (!pActor.hasCity() || pActor.city.canProduceUnits()) 
+                   && pActor.haveNutritionForNewBaby();
         }
         static bool Prefix(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)
         {
@@ -371,9 +404,13 @@ namespace Better_Loving
             // ensures that both subspecies HAVE not reached population limit
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
+
+            if (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
+                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
+                return false;
             
-            Subspecies subspeciesA = pParentA.subspecies;
-            Subspecies subspeciesB = pParentB.subspecies;
+            var subspeciesA = pParentA.subspecies;
+            var subspeciesB = pParentB.subspecies;
 
             Actor mother = null;
             

@@ -1,16 +1,47 @@
 ﻿{
+  "status_title_cheated_on": "Cheated On",
+  "status_description_cheated_on": "I just got cheated on!",
+  
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",
   "love_cancelled": "Force lover cancelled!",
   "love_successful": "Force lover successful!",
-  
   "ForceLover": "Force Lover",
   "ForceLover Description": "Force a unit to become lovers with another unit",
-  
   
   "trait_aromantic": "Aromantic",
   "trait_aromantic_info": "They do not desire love unlike most",
   "trait_aromantic_info_2": "It's not because they have not found the right person, they just feel this way",
+
+  "trait_homoromantic": "Homoromantic",
+  "trait_homoromantic_info": "They would like to only romantically be involved with the same sex",
+  "trait_homoromantic_info_2": "I love people who are like me!",
+
+  "trait_heteroromantic": "Heteroromantic",
+  "trait_heteroromantic_info": "They would like to only romantically be involved with the different sex",
+  "trait_heteroromantic_info_2": "Only 50% less boring!",
+
+  "trait_biromantic": "Biromantic",
+  "trait_biromantic_info": "They romantically love both sexes",
+  "trait_biromantic_info_2": "Pulls sexes without needing to fuck any of them. What's your excuse?",
+
+  "trait_asexual": "Asexual",
+  "trait_asexual_info": "They do not desire sex unlike most",
+  "trait_asexual_info_2": "Sex is so weird. It's soggy and time consuming.",
+  
+  "trait_heterosexual": "Heterosexual",
+  "trait_heterosexual_info": "They prefer having sex with the opposite sex",
+  "trait_heterosexual_info_2": "Aka, factory settings.",
+
+  "trait_homosexual": "Homosexual",
+  "trait_homosexual_info": "They prefer having sex with the same sex",
+  "trait_homosexual_info_2": "It ain't a choice, that much can be told.",
+
+  "trait_bisexual": "Bisexual",
+  "trait_bisexual_info": "They love having sex with both sexes",
+  "trait_bisexual_info_2": "Gotta swing both ways!",
+  
+  
   
   "Incest": "Incest",
   "Incest Description": "Whether family members can become lovers of one another. Aka, the good ol' medieval times.",

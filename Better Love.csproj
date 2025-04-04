@@ -44,11 +44,20 @@
     <ItemGroup>
         <Compile Include="ModClass.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="QueerTraits.cs" />
+        <Compile Include="Util.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
-      <Content Include="GameResources\ui\Icons\actor_traits\iconAromantic.png" />
-      <Content Include="GameResources\ui\Icons\god_powers\iconForceLover.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\aromantic.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\asexual.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\biromantic.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\bisexual.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\heteroromantic.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\heterosexual.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\homoromantic.png" />
+      <Content Include="GameResources\ui\Icons\actor_traits\homosexual.png" />
+      <Content Include="GameResources\ui\Icons\god_powers\force_lover.png" />
       <Content Include="Locales\en.json" />
       <Content Include="mod.json" />
     </ItemGroup>
