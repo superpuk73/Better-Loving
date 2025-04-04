@@ -47,6 +47,9 @@
     </ItemGroup>
     <ItemGroup>
       <Content Include="default_config.json" />
+      <Content Include="GameResources\ui\Icons\actor_traits\iconAromantic.png" />
+      <Content Include="GameResources\ui\Icons\god_powers\iconForceLover.png" />
+      <Content Include="Locales\en.json" />
       <Content Include="mod.json" />
     </ItemGroup>
     <ItemGroup>

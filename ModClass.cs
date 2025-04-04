@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using ai.behaviours;
 using UnityEngine;
 using NeoModLoader.api;
@@ -7,13 +8,13 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
-//TODO: add tool that lets u force units to become lovers
-//TODO: add trait that lets a unit be aromantic
 namespace Better_Loving
 {
     public class ModClass : BasicMod<ModClass>
     {
         public static BasicMod<ModClass> Mod;
+        public Actor SelectedActorA;
+        public Actor SelectedActorB;
         
         protected override void OnModLoad()
         {
@@ -22,20 +23,102 @@ namespace Better_Loving
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
             LogService.LogInfo($"[{GetDeclaration().Name}]: Making people more loveable!");
             
-            LM.AddToCurrentLocale("Incest", "Incest");
-            LM.AddToCurrentLocale("Incest Description", "Whether family members can become lovers of one another. Aka, the good ol' medieval times.");
-            LM.AddToCurrentLocale("ForbiddenLove", "Forbidden Love Chance");
-            LM.AddToCurrentLocale("ForbiddenLove Description", "When the game rolls for two lovers that cannot reproduce together (this roll happens every time they socialize), this determines how likely it is that they will end up together. Do not set this too high or you will have population collapse! \n\nExample: Gay couples with the sexual reproduction method.");
-            LM.AddToCurrentLocale("Misc", "Misc");
+            var locale_dir = GetLocaleFilesDirectory(GetDeclaration());
+            foreach (var file in Directory.GetFiles(locale_dir))
+            {
+                if (file.EndsWith(".json"))
+                {
+                    LM.LoadLocale(Path.GetFileNameWithoutExtension(file), file);
+                }
+                else if (file.EndsWith(".csv"))
+                {
+                    LM.LoadLocales(file);
+                }
+            }
+
+            LM.ApplyLocale();
             
-            LM.AddToCurrentLocale("CrossSpecies", "Cross Species");
-            LM.AddToCurrentLocale("AllowCrossSpeciesLove", "Allow Cross Species Love");
-            LM.AddToCurrentLocale("AllowCrossSpeciesLove Description", "Whether different species should be able to love each other.");
-            LM.AddToCurrentLocale("MustBeSmart", "Must Be Smart");
-            LM.AddToCurrentLocale("MustNotBeSmart Description", "Whether the two subspecies involved have to have all their brain functions in order to love each other.");
-            LM.AddToCurrentLocale("MustBeXenophile", "Must Be Xenophile");
-            LM.AddToCurrentLocale("MustBeXenophile Description", "Whether the initiating lover has to be xenophile in order to love another subspecies unlike them. The receiving lover does NOT need to be xenophile, but they cannot be xenophobic.");
-            LM.ApplyLocale("en");
+            // adds in Aromantic trait
+            var aromanticTrait = new ActorTrait
+            {
+                id = "aromantic",
+                path_icon = "ui/Icons/actor_traits/iconAromantic", // temporary icon!
+                group_id = "mind",
+                rate_birth=1,
+                rate_acquire_grow_up = 1,
+                type=TraitType.Other,
+                unlocked_with_achievement = false,
+                rarity = Rarity.R3_Legendary,
+                needs_to_be_explored = true
+            };
+            
+            for (int index = 0; index < aromanticTrait.rate_birth; ++index)
+                AssetManager.traits.pot_traits_birth.Add(aromanticTrait);
+            for (int index = 0; index < aromanticTrait.rate_acquire_grow_up; ++index)
+                AssetManager.traits.pot_traits_growup.Add(aromanticTrait);
+            
+            AssetManager.traits.add(aromanticTrait);
+            
+            // adds in ForceLover tool
+            var forceLover = new GodPower
+            {
+                id = "forceLover",
+                name = "ForceLover",
+                force_map_mode = MetaType.Unit,
+                path_icon = "god_powers/iconForceLover", // temporary icon!
+                can_drag_map = true,
+                type = PowerActionType.PowerSpecial,
+                select_button_action = powerId => 
+                {
+                    WorldTip.showNow("love_selected", pPosition: "top");
+                    SelectedActorA = null;
+                    SelectedActorB = null;
+                    return false;
+                },
+                click_special_action = (pTile, powerId) =>
+                {
+                    var pActor = pTile != null ? ActionLibrary.getActorFromTile(pTile) : World.world.getActorNearCursor();
+                    if (pActor == null)
+                        return false;
+
+                    if (SelectedActorA == null)
+                    {
+                        SelectedActorA = pActor;
+                        ActionLibrary.showWhisperTip("love_selected_first");
+                        return false;
+                    } 
+                    
+                    if (SelectedActorB == null && pActor == SelectedActorA)
+                    {
+                        ActionLibrary.showWhisperTip("love_cancelled");
+                        SelectedActorA = null;
+                        SelectedActorB = null;
+                        return false;
+                    }
+
+                    if (SelectedActorA.lover == pActor)
+                    {
+                        ActionLibrary.showWhisperTip("love_cancelled");
+                        SelectedActorA = null;
+                        SelectedActorB = null;
+                        return false;
+                    }
+                
+                    ActionLibrary.showWhisperTip("love_successful");
+                    SelectedActorB = pActor;
+                    SelectedActorA.becomeLoversWith(SelectedActorB);
+                    SelectedActorA = null;
+                    SelectedActorB = null;
+                
+                    return true;
+                },
+                tester_enabled = false
+            };
+            AssetManager.powers.add(forceLover);
+            
+            // TODO: finish this when NML unscuffs their UI
+            // TabManager.TabOther.AddPowerButton("Default", PowerButtonCreator.CreateGodPowerButton("forceLover", 
+                // SpriteTextureLoader.getSprite("ui/Icons/god_powers/iconForceLover")));
         }
         private void Awake()
         {
@@ -123,7 +206,9 @@ namespace Better_Loving
                 
                 || pTarget.hasLover()
                 || !pTarget.isAdult()
-                || !pTarget.isBreedingAge())
+                || !pTarget.isBreedingAge()
+                || __instance.hasTrait("aromantic")
+                || pTarget.hasTrait("aromantic"))
             {
                 __result = false;
                 return false;

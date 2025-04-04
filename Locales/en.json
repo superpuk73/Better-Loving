@@ -1,0 +1,27 @@
+﻿{
+  "love_selected": "Choose two units to love",
+  "love_selected_first": "Now select another unit",
+  "love_cancelled": "Force lover cancelled!",
+  "love_successful": "Force lover successful!",
+  
+  "ForceLover": "Force Lover",
+  "ForceLover Description": "Force a unit to become lovers with another unit",
+  
+  
+  "trait_aromantic": "Aromantic",
+  "trait_aromantic_info": "They do not desire love unlike most",
+  "trait_aromantic_info_2": "It's not because they have not found the right person, they just feel this way",
+  
+  "Incest": "Incest",
+  "Incest Description": "Whether family members can become lovers of one another. Aka, the good ol' medieval times.",
+  "ForbiddenLove": "Forbidden Love Chance",
+  "ForbiddenLove Description": "When the game rolls for two lovers that cannot reproduce together (this roll happens every time they socialize), this determines how likely it is that they will end up together. Do not set this too high or you will have population collapse! \n\nExample: Gay couples with the sexual reproduction method.",
+  "Misc": "Misc",
+  "CrossSpecies": "Cross Species",
+  "AllowCrossSpeciesLove": "Allow Cross Species Love",
+  "AllowCrossSpeciesLove Description": "Whether different subspecies should be able to love each other.",
+  "MustBeSmart": "Species Must Be Sapient",
+  "MustBeSmart Description": "Whether the two subspecies involved have to have all their brain functions in order to love each other.",
+  "MustBeXenophile": "Initiator Must Be Xenophile",
+  "MustBeXenophile Description": "Whether the initiating lover has to be xenophile in order to love another subspecies unlike them. The receiving lover does NOT need to be xenophile, but they cannot be xenophobic."
+}
