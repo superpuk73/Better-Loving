@@ -6,15 +6,15 @@ namespace Better_Loving
     {
         public static void Init()
         {
+            // small bug where the sprites clip.. i dunno how to fix that tho :<
             Add(new CommunicationAsset
             {
                 id = "orientation",
                 show_topic = true,
-                rate = 0.3f,
-                check = pActor => (pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic")) 
-                    && QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
-                    && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
-                && QueerTraits.GetQueerTraits(pActor, true).Count >= 2,
+                rate = 0.5f,
+                check = pActor => QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
+                                  && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
+                                  && QueerTraits.GetQueerTraits(pActor, true).Count >= 2,
                 pot_fill = (actor, sprites) =>
                 {
                     var unfitPreferences = new List<Preference>();
@@ -32,24 +32,14 @@ namespace Better_Loving
                     var queerTraits = QueerTraits.GetQueerTraits(actor, true);
                     var sexualPreference = queerTraits[0].preference;
                     var romanticPreference = queerTraits[1].preference;
-                    var happy = true;
 
                     sprites.Add(queerTraits[0].getSprite());
                     sprites.Add(queerTraits[1].getSprite());
 
-                    if (unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference))
-                        happy = false;
-
-                    if (happy)
-                    {
+                    if (!(unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference)))
                         actor.changeHappiness("orientation_fits");
-                        sprites.Add(HappinessHelper.getSpriteBasedOnHappinessValue(100));
-                    }
                     else
-                    {
                         actor.changeHappiness("orientation_does_not_fit");
-                        sprites.Add(HappinessHelper.getSpriteBasedOnHappinessValue(-100));
-                    }
                 } 
             });
         }

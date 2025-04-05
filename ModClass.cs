@@ -43,7 +43,7 @@ namespace Better_Loving
             SubspeciesTraits.Init();
             Happiness.Init();
             CommunicationTopics.Init();
-            BehaviourTasks.Init();
+            DecisionAndBehaviorTasks.Init();
             GodPowers.Init();
         }
         private void Awake()
@@ -351,7 +351,7 @@ namespace Better_Loving
             // make it configurable so they have to be adults or not
             return pActor.isBreedingAge() 
                    && !pActor.hasReachedOffspringLimit() 
-                   && (!pActor.hasCity() || pActor.city.canProduceUnits()) 
+                   && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit() && (pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()))
                    && pActor.haveNutritionForNewBaby();
         }
         static bool Prefix(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)

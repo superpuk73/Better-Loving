@@ -1,31 +1,36 @@
 ﻿{
-  "happiness_cheated_on": "I just got cheated on!",
+  "happiness_cheated_on": "Cheated on",
   "happiness_dialog_cheated_on_0": "Why does this always happen to me..?",
   "happiness_dialog_cheated_on_1": "Was it my fault?",
   "happiness_dialog_cheated_on_2": "What did I do to deserve this?",
   "happiness_dialog_cheated_on_3": "Where did it all go wrong?",
 
-  "happiness_breakup": "I just broke up",
+  "happiness_breakup": "Broke up",
   "happiness_dialog_breakup_0": "I wish it didn't have to end..",
   "happiness_dialog_breakup_1": "At least I wasn't cheated on..",
   "happiness_dialog_breakup_2": "I loved them so much.",
   "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
   
-  "happiness_true_self": "I discovered a new part of my orientation!",
+  "happiness_true_self": "Identity feels different",
   "happiness_dialog_true_self_0": "It feels so good to realize myself.",
   "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
   "happiness_dialog_true_self_2": "I'm going to own myself and I won't hide it!",
   "happiness_dialog_true_self_3": "I wouldn't have it any other way.",
 
-  "happiness_orientation_fits": "I am happy that my orientation is not judged!",
+  "happiness_orientation_fits": "Orientation isn't judged",
   "happiness_dialog_orientation_fits_0": "It's nice that I can talk about my orientation without being berated for it.",
+  "happiness_dialog_orientation_fits_1": "I'm so happy that I am accepted here.",
 
-  "happiness_orientation_does_not_fit": "My orientation is despised in my culture!",
+  "happiness_orientation_does_not_fit": "Orientation is despised",
   "happiness_dialog_orientation_does_not_fit_0": "Why did I have to be born this way?",
+  "happiness_dialog_orientation_does_not_fit_1": "Why am I hated for who I am?",
 
-  "happiness_insulted_for_orientation": "I was insulted for my orientation!",
-  "happiness_dialog_insulted_for_orientation_0": "They are so rude!",
+  "happiness_insulted_for_orientation": "Insulted for their orientation",
+  "happiness_dialog_insulted_for_orientation_0": "Why should they care who I have sex with or date?!",
+  "happiness_dialog_insulted_for_orientation_1": "What the hell is wrong with them!",
   
+  "task_insult_orientation": "Insult Orientations",
+
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",
   "love_cancelled": "Force lover cancelled!",

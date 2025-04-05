@@ -42,7 +42,7 @@
         <Reference Include="System.Xml"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="CustomAssets\BehaviourTasks.cs" />
+        <Compile Include="CustomAssets\DecisionAndBehaviorTasks.cs" />
         <Compile Include="CustomAssets\CommunicationTopics.cs" />
         <Compile Include="CustomAssets\CultureTraits.cs" />
         <Compile Include="CustomAssets\GodPowers.cs" />

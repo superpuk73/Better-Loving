@@ -1,4 +1,6 @@
-﻿namespace Better_Loving
+﻿using HarmonyLib;
+
+namespace Better_Loving
 {
     public class Happiness
     {
@@ -48,7 +50,7 @@
                 ignored_by_psychopaths = false,
                 pot_amount = 1,
                 show_change_happiness_effect = true,
-                dialogs_amount = 1
+                dialogs_amount = 2
             });
             
             Add(new HappinessAsset
@@ -60,7 +62,7 @@
                 ignored_by_psychopaths = false,
                 pot_amount = 1,
                 show_change_happiness_effect = true,
-                dialogs_amount = 1
+                dialogs_amount = 2
             });
             
             Add(new HappinessAsset
@@ -72,7 +74,7 @@
                 ignored_by_psychopaths = false,
                 pot_amount = 1,
                 show_change_happiness_effect = true,
-                dialogs_amount = 1
+                dialogs_amount = 2
             });
         }
 
