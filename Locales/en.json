@@ -1,6 +1,21 @@
 ﻿{
-  "status_title_cheated_on": "Cheated On",
-  "status_description_cheated_on": "I just got cheated on!",
+  "happiness_cheated_on": "I just got cheated on!",
+  "happiness_dialog_cheated_on_0": "Why does this always happen to me..?",
+  "happiness_dialog_cheated_on_1": "Was it my fault?",
+  "happiness_dialog_cheated_on_2": "What did I do to deserve this?",
+  "happiness_dialog_cheated_on_3": "Where did it all go wrong?",
+
+  "happiness_breakup": "I just broke up",
+  "happiness_dialog_breakup_0": "I wish it didn't have to end..",
+  "happiness_dialog_breakup_1": "At least I wasn't cheated on..",
+  "happiness_dialog_breakup_2": "I loved them so much.",
+  "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
+  
+  "happiness_true_self": "I discovered a new part of my orientation!",
+  "happiness_dialog_true_self_0": "It feels so good to finally realize myself.",
+  "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
+  "happiness_dialog_true_self_2": "I'm going to own myself and I won't hide it!",
+  "happiness_dialog_true_self_3": "I wouldn't have it any other way.",
   
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",
@@ -40,8 +55,22 @@
   "trait_bisexual": "Bisexual",
   "trait_bisexual_info": "They love having sex with both sexes",
   "trait_bisexual_info_2": "Gotta swing both ways!",
-  
-  
+
+  "trait_faithful": "Faithful",
+  "trait_faithful_info": "They will never cheat on someone even if their romantic preference no longer matches their partner's sex",
+  "trait_faithful_info_2": "It's the right thing to do.",
+
+  "trait_unfaithful": "Unfaithful",
+  "trait_unfaithful_info": "They will never commit to their relationship",
+  "trait_unfaithful_info_2": "Careful with this one!",
+
+  "trait_unfluid": "Unfluid",
+  "trait_unfluid_info": "Their orientations will never change even over time",
+  "trait_unfluid_info_2": "Brains are complex.",
+
+  "culture_trait_homophobic": "Homophobic",
+  "culture_trait_homophobic_info": "They despise others who get romantically or sexually involved with the same sex as themselves",
+  "culture_trait_homophobic_info_2": "Wow such insanity!",
   
   "Incest": "Incest",
   "Incest Description": "Whether family members can become lovers of one another. Aka, the good ol' medieval times.",

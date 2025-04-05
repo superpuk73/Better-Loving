@@ -91,38 +91,65 @@ namespace Better_Loving
             return false;
         }
 
-        public static void GiveQueerTraits(Actor pActor)
+        public static List<QueerTrait> GetQueerTraits(Actor pActor)
+        {
+            List<QueerTrait> list = new List<QueerTrait>();
+            foreach (var trait in _sexualityTraits)
+            {
+                if (pActor.hasTrait(trait))
+                {
+                    list.Add(trait);
+                }
+            }
+            foreach (var trait in _romanticTraits)
+            {
+                if (pActor.hasTrait(trait))
+                {
+                    list.Add(trait);
+                }
+            }
+
+            return list;
+        }
+
+        public static void GiveQueerTraits(Actor pActor, bool equalChances)
         {
             if (!pActor.hasSubspecies()) return;
-            CleanQueerTraits(pActor);
-            var queerTraits = QueerTraits.RandomizeQueerTraits(pActor);
+            var currentTraits = GetQueerTraits(pActor);
+            foreach (var trait in currentTraits)
+            {
+                pActor.removeTrait(trait);
+            }
+            
+            var queerTraits = RandomizeQueerTraits(pActor, equalChances, currentTraits);
             pActor.addTrait(queerTraits[0]);
             if(queerTraits[1] != null)
                 pActor.addTrait(queerTraits[1]);   
         }
 
+        public static Preference GetSexualPrefBasedOnReproduction(Actor pActor)
+        {
+            if (!pActor.hasSubspecies()) return Preference.All;
+            if (pActor.subspecies.hasTraitReproductionSexual())
+                return Preference.DifferentSex;
+            if (pActor.subspecies.hasTraitReproductionSexualHermaphroditic())
+                return Preference.SameOrDifferentSex;
+            return Preference.All;
+        }
+
         // randomizes chances based on what actor's reproduction methods
-        public static List<QueerTrait> RandomizeQueerTraits(Actor pActor)
+        public static List<QueerTrait> RandomizeQueerTraits(Actor pActor, bool equalChances, List<QueerTrait> exclude)
         {
             if (!pActor.hasSubspecies()) return null;
             // randomize for sexual
-            Preference matchingPreference;
-            if (pActor.subspecies.hasTraitReproductionSexual())
-            {
-                matchingPreference = Preference.DifferentSex;
-            } else if (pActor.subspecies.hasTraitReproductionSexualHermaphroditic())
-            {
-                matchingPreference = Preference.SameOrDifferentSex;
-            }
-            else
-            {
-                matchingPreference = Preference.All;
-            }
+            var matchingPreference = equalChances ? Preference.All : GetSexualPrefBasedOnReproduction(pActor);
 
             List<QueerTrait> randomPool = new List<QueerTrait>();
             foreach (var trait in _sexualityTraits)
             {
-                if (trait.preference.Equals(matchingPreference) || matchingPreference.Equals(Preference.All))
+                if (exclude.Contains(trait)) continue;
+                
+                if (trait.preference.Equals(matchingPreference) && !matchingPreference.Equals(Preference.All))
                 {
                     for (int i = 0; i < 20; i++)
                     {
@@ -175,10 +202,17 @@ namespace Better_Loving
 
             return Preference.Neither; // if they have no preference, then they like neither
         }
+
+        public static bool IsConsideredHomo(Actor pActor, bool sexual)
+        {
+            var preference = GetPreferenceFromActor(pActor, sexual);
+            return preference.Equals(Preference.SameSex) || preference.Equals(Preference.DifferentSex) || preference.Equals(Preference.All);
+        }
         
         // Important note that this checks FROM the first actor's point of view, you should also use PreferenceMatches on the other actor to confirm they both like each other!
         public static bool PreferenceMatches(Actor pActor, Actor pTarget, bool sexual)
         {
+            if (pActor == null || pTarget == null) return false;
             var preference = GetPreferenceFromActor(pActor, sexual);
             switch (preference)
             {

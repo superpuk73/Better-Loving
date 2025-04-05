@@ -3,33 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using ai.behaviours;
-using UnityEngine;
 using NeoModLoader.api;
 using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
 // TODO: Adding sexuality/romantic traits (done) (configurable!)
-// TODO: add cultural queer traits
+// TODO: add cultural queer traits (homophobic) (done, needs icon)
 
 // TODO: Sexuality can be fluid and change over time (done) (configurable)
 // TODO: People who turn 18 will get their sexuality traits (done)
+// TODO: new cheating system (done)
 
-// TODO: People are more likely to date within an age range (configurable) (but they cant necessarily have babies)
-
-// TODO: configurable options for the traits
-
-// TODO: new trait that makes ppl have sex with their partner anwyays even if they do not desire IF population subspecies is low
-// TODO: faithful trait (partners never cheat on each other)
-// TODO: new cheating system (when ppl cheat, the other person gets angry and sad!) (done, just need icon)
-// TODO: unfluid trait (sexuality and romantic traits never change)
+// TODO: new subspecies trait that makes ppl have sex with their partner anwyays even if they do not desire IF population subspecies is low. This applies for incest as well.
+// TODO: faithful and unfaithful trait (partners never cheat on each other) (done, needs icon)
+// TODO: unfluid trait (sexuality and romantic traits never change) (done, needs icon)
+// TODO: incest (cultural trait)
+// TODO: date within age range (cultural trait)
+// TODO: okay with cross species love (cultural trait)
+// TODO: cultural trait that effectively disables queer traits
+// TODO: cultural trait that says NO to cheating
 namespace Better_Loving
 {
     public class ModClass : BasicMod<ModClass>
     {
         public static BasicMod<ModClass> Mod;
-        public Actor SelectedActorA;
-        public Actor SelectedActorB;
         
         protected override void OnModLoad()
         {
@@ -54,67 +52,10 @@ namespace Better_Loving
             LM.ApplyLocale();
             
             QueerTraits.Init();
-            
-            // adds in ForceLover tool
-            var forceLover = new GodPower
-            {
-                id = "forceLover",
-                name = "ForceLover",
-                force_map_mode = MetaType.Unit,
-                path_icon = "god_powers/force_lover", // temporary icon!
-                can_drag_map = true,
-                type = PowerActionType.PowerSpecial,
-                select_button_action = powerId => 
-                {
-                    WorldTip.showNow("love_selected", pPosition: "top");
-                    SelectedActorA = null;
-                    SelectedActorB = null;
-                    return false;
-                },
-                click_special_action = (pTile, powerId) =>
-                {
-                    var pActor = pTile != null ? ActionLibrary.getActorFromTile(pTile) : World.world.getActorNearCursor();
-                    if (pActor == null)
-                        return false;
-
-                    if (SelectedActorA == null)
-                    {
-                        SelectedActorA = pActor;
-                        ActionLibrary.showWhisperTip("love_selected_first");
-                        return false;
-                    } 
-                    
-                    if (SelectedActorB == null && pActor == SelectedActorA)
-                    {
-                        ActionLibrary.showWhisperTip("love_cancelled");
-                        SelectedActorA = null;
-                        SelectedActorB = null;
-                        return false;
-                    }
-
-                    if (SelectedActorA.lover == pActor)
-                    {
-                        ActionLibrary.showWhisperTip("love_cancelled");
-                        SelectedActorA = null;
-                        SelectedActorB = null;
-                        return false;
-                    }
-                
-                    ActionLibrary.showWhisperTip("love_successful");
-                    SelectedActorB = pActor;
-                    SelectedActorA.becomeLoversWith(SelectedActorB);
-                    SelectedActorA = null;
-                    SelectedActorB = null;
-                
-                    return true;
-                },
-                tester_enabled = false
-            };
-            AssetManager.powers.add(forceLover);
-            
-            // TODO: finish this when NML unscuffs their UI
-            // TabManager.TabOther.AddPowerButton("Default", PowerButtonCreator.CreateGodPowerButton("forceLover", 
-                // SpriteTextureLoader.getSprite("ui/Icons/god_powers/iconForceLover")));
+            ActorTraits.Init();
+            CulturalTraits.Init();
+            Happiness.Init();
+            GodPowers.Init();
         }
         private void Awake()
         {
@@ -130,11 +71,6 @@ namespace Better_Loving
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
-            
-            // if (__instance.isAdult())
-            // {
-            //     QueerTraits.GiveQueerTraits(__instance);
-            // }
         }
     }
 
@@ -143,22 +79,29 @@ namespace Better_Loving
     {
         static void Postfix(Actor __instance)
         {
+            var preferredSex = QueerTraits.GetSexualPrefBasedOnReproduction(__instance);
+            var sex = QueerTraits.GetPreferenceFromActor(__instance, true);
+            
             if (__instance.isAdult() && (!QueerTraits.HasQueerTraits(__instance) 
-                                         || (Randy.randomChance(0.02f) && !__instance.hasTrait("unfluid")))) // fluid sexuality
+                                         || (Randy.randomChance(preferredSex == sex ? 0.01f : 0.001f) && !__instance.hasTrait("unfluid")))) // fluid sexuality
             {
-                QueerTraits.GiveQueerTraits(__instance);
-
-                // preferences likely changed, let's do some rolls here for potential breakups!
-                if (__instance.hasLover() && !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) && Randy.randomChance(0.2f))
-                {
-                    __instance.lover.setLover(null);
-                    __instance.lover.addStatusEffect("crying");
-                    __instance.setLover(null);
-                    // breakup!
-                }
-            } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds lover
+                QueerTraits.GiveQueerTraits(__instance, true);
+                __instance.changeHappiness("true_self");
+            } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                QueerTraits.GiveQueerTraits(__instance);
+                QueerTraits.GiveQueerTraits(__instance, false);
+            }
+            
+            // Randomize breaking up (0.1% if preferences match. 5% if preferences do not match) 
+            if (__instance.hasLover() && 
+                Randy.randomChance(
+                    __instance.data.sex == __instance.lover.data.sex && (__instance.hasCultureTrait("homophobic") || __instance.lover.hasCultureTrait("homophobic")) ? 0.25f : 
+                    !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.05f : 0.001f))
+            {
+                __instance.lover.setLover(null);
+                __instance.lover.changeHappiness("breakup");
+                __instance.setLover(null);
+                __instance.changeHappiness("breakup");
             }
         }
 }
@@ -173,9 +116,7 @@ namespace Better_Loving
             {
                 var cheatedActor = __instance.lover;
                 cheatedActor.setLover(null);
-                cheatedActor.addStatusEffect("angry", pColorEffect: false);
-                cheatedActor._aggression_targets.Add(__instance.getID());
-                cheatedActor._aggression_targets.Add(pTarget.getID());
+                cheatedActor.changeHappiness("cheated_on");
             }
         }
         static void Postfix(Actor pTarget, Actor __instance)
@@ -201,43 +142,46 @@ namespace Better_Loving
         {
             // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
             var config = ModClass.Mod.GetConfig();
-            var forbiddenLove = (float)config["Misc"]["ForbiddenLove"].GetValue();
+            // var forbiddenLove = (float)config["Misc"]["ForbiddenLove"].GetValue();
             var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
             var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             var incest = (bool)config["Misc"]["Incest"].GetValue();
-            var queerTraitsEnabled = true;//(bool)config
-            var canCheat = true;
+            // var queerTraitsEnabled = true;//(bool)config
+            // var canCheat = true;
             
-            if (((
-                !QueerTraits.PreferenceMatches(__instance, pTarget, false)
-                || !QueerTraits.PreferenceMatches(pTarget, __instance, false)) && queerTraitsEnabled)
-                // we'll make this configurable
+            if (
+                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("queer_no_matter"))
+                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("queer_no_matter"))
                 
-                || (__instance.hasLover() && (!Randy.randomChance(QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.05f) 
-                                              || __instance.hasTrait("faithful") || !canCheat)) 
+                // homophobic cultural trait
+                ||(__instance.data.sex == pTarget.data.sex && (__instance.hasCultureTrait("homophobic") || pTarget.hasCultureTrait("homophobic")))
+                
+                || (__instance.hasLover() && (!Randy.randomChance(
+                        (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
+                        + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
+                                              || __instance.hasTrait("faithful") || __instance.hasCultureTrait("never_cheat"))) 
                 || (pTarget.hasLover() && (!Randy.randomChance(
                                                (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
                                                + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                                           || pTarget.hasTrait("faithful") || !canCheat))
-                // we'll make this cheating configurablep
+                                           || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("never_cheat")))
                 
-                // we'll change the adult thing to be based on age ranges later on
+                // make this a cultural trait to configure
                 || !WithinOfAge(__instance, pTarget)
                 
                 || __instance.areFoes(pTarget)
-                // || !__instance.subspecies.needs_mate this makes it so asexual ppl can reproduce
-                || (!__instance.isSameSpecies(pTarget) && !__instance.isSameSubspecies(pTarget.subspecies)
-                     && (!(( __instance.hasCulture() && __instance.culture.hasTrait("xenophiles") || !mustBeXenophile)
-                                                  && (Util.IsSmart(__instance) && Util.IsSmart(pTarget) || !mustBeSmart)
-                          && (!pTarget.hasCulture() || (pTarget.hasCulture() && !pTarget.culture.hasTrait("xenophobic")))) || !allowCrossSpeciesLove)) // subspecies stuff!
                 
-            // the below code is replaced by preferences now
-            
-                // || (!__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
-                      // && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
-                      // && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic() && 
-                    // !Randy.randomChance(forbiddenLove))) // chance of getting together even if they cant reproduce)
+                || (!__instance.isSameSpecies(pTarget) && !__instance.isSameSubspecies(pTarget.subspecies)
+                                                       && (!(( __instance.hasCulture() && __instance.culture.hasTrait("xenophiles") || !mustBeXenophile)
+                                                             && (Util.IsSmart(__instance) && Util.IsSmart(pTarget) || !mustBeSmart)
+                                                             && (!pTarget.hasCulture() || (pTarget.hasCulture() && !pTarget.culture.hasTrait("xenophobic")))) 
+                                                           || !allowCrossSpeciesLove)) // subspecies stuff!
+                
+                // if queer but culture trait says they do not matter
+                || ((pTarget.hasCultureTrait("queer_no_matter") || __instance.hasCultureTrait("queer_no_matter")) 
+                    && !__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
+                    && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
+                    && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic()))
             {
                 __result = false;
                 return false;
@@ -406,7 +350,8 @@ namespace Better_Loving
                 return false;
 
             if (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
-                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
+                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true) 
+                || pParentA.hasCultureTrait("homophobic") || pParentB.hasCultureTrait("homophobic"))
                 return false;
             
             var subspeciesA = pParentA.subspecies;
