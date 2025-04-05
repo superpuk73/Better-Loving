@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -350,8 +350,7 @@ namespace Better_Loving
                 return false;
 
             if (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
-                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true) 
-                || pParentA.hasCultureTrait("homophobic") || pParentB.hasCultureTrait("homophobic"))
+                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
                 return false;
             
             var subspeciesA = pParentA.subspecies;
