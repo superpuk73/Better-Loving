@@ -11,7 +11,7 @@ namespace Better_Loving
                 id = "orientation",
                 show_topic = true,
                 rate = 0.3f,
-                check = pActor => pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic") 
+                check = pActor => (pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic")) 
                     && QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
                     && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
                 && QueerTraits.GetQueerTraits(pActor, true).Count >= 2,
