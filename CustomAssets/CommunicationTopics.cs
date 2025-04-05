@@ -10,10 +10,11 @@ namespace Better_Loving
             {
                 id = "orientation",
                 show_topic = true,
-                rate = 0.1f,
-                check = (pActor => pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic") 
+                rate = 0.3f,
+                check = pActor => pActor.hasCultureTrait("homophobic") || pActor.hasCultureTrait("heterophobic") 
                     && QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
-                    && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable),
+                    && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
+                && QueerTraits.GetQueerTraits(pActor, true).Count >= 2,
                 pot_fill = (actor, sprites) =>
                 {
                     var unfitPreferences = new List<Preference>();
@@ -29,8 +30,8 @@ namespace Better_Loving
                     }
 
                     var queerTraits = QueerTraits.GetQueerTraits(actor, true);
-                    var romanticPreference = queerTraits[1].preference;
                     var sexualPreference = queerTraits[0].preference;
+                    var romanticPreference = queerTraits[1].preference;
                     var happy = true;
 
                     sprites.Add(queerTraits[0].getSprite());

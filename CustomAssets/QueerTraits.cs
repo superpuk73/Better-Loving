@@ -101,19 +101,19 @@ namespace Better_Loving
             return false;
         }
 
-        public static List<QueerTrait> GetQueerTraits(Actor pActor, bool excludeInapplicate=false)
+        public static List<QueerTrait> GetQueerTraits(Actor pActor, bool excludeInapplicable=false)
         {
             List<QueerTrait> list = new List<QueerTrait>();
             foreach (var trait in _sexualityTraits)
             {
-                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicate))
+                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicable))
                 {
                     list.Add(trait);
                 }
             }
             foreach (var trait in _romanticTraits)
             {
-                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicate))
+                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicable))
                 {
                     list.Add(trait);
                 }

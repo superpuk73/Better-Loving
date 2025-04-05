@@ -78,14 +78,14 @@ namespace Better_Loving
                 {
                     bool changed = false;
                     var list = QueerTraits.GetQueerTraits(__instance);
-                    QueerTraits.RandomizeQueerTraits(__instance, true, list);
-                    if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.05f))
+                    list = QueerTraits.RandomizeQueerTraits(__instance, true, list);
+                    if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
                     {
                         QueerTraits.CleanQueerTraits(__instance, false);
                         __instance.addTrait(list[1]);
                         changed = true;
                     }
-                    if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.05f))
+                    if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.1f))
                     {
                         QueerTraits.CleanQueerTraits(__instance, true);
                         __instance.addTrait(list[0]);
