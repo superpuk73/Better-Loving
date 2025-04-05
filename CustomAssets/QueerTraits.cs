@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NeoModLoader.services;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -12,7 +13,8 @@ namespace Better_Loving
         SameSex,
         DifferentSex,
         SameOrDifferentSex,
-        Neither
+        Neither,
+        Inapplicable
     }
 
     public class QueerTrait : ActorTrait
@@ -33,11 +35,14 @@ namespace Better_Loving
             AddQueerTrait("homosexual", Preference.SameSex, true);
             AddQueerTrait("bisexual", Preference.SameOrDifferentSex, true);
             AddQueerTrait("asexual", Preference.Neither, true);
+            AddQueerTrait("abrosexual", Preference.Inapplicable, true);
             
             AddQueerTrait("heteroromantic", Preference.DifferentSex, false);
             AddQueerTrait("homoromantic", Preference.SameSex, false);
             AddQueerTrait("biromantic", Preference.SameOrDifferentSex, false);
             AddQueerTrait("aromantic", Preference.Neither, false);
+            AddQueerTrait("abroromantic", Preference.Inapplicable, false);
+            
             Finish();
         }
 
@@ -45,6 +50,8 @@ namespace Better_Loving
         {
             foreach(var trait in _sexualityTraits)
             {
+                if (trait.preference == Preference.Inapplicable) continue;
+                
                 trait.opposite_traits = new HashSet<ActorTrait>();
                 foreach (var traitToAdd in _sexualityTraits)
                 {
@@ -57,6 +64,8 @@ namespace Better_Loving
             
             foreach(var trait in _romanticTraits)
             {
+                if (trait.preference == Preference.Inapplicable) continue;
+                
                 trait.opposite_traits = new HashSet<ActorTrait>();
                 foreach (var traitToAdd in _romanticTraits)
                 {
@@ -70,11 +79,12 @@ namespace Better_Loving
             _allTraits.AddRange(_romanticTraits);
         }
 
-        public static void CleanQueerTraits(Actor pActor)
+        public static void CleanQueerTraits(Actor pActor, bool sexual, bool clearInapplicable=false)
         {
-            foreach (var trait in _allTraits)
+            var list = (sexual ? _sexualityTraits : _romanticTraits).Where(trait => !trait.preference.Equals(Preference.Inapplicable) || clearInapplicable).ToList();
+            foreach (var trait in list)
             {
-                pActor.removeTrait(trait); // don't let them lose their lovers on cleaning, we want them to stay lovers
+                pActor.removeTrait(trait);
             }
         }
 
@@ -91,19 +101,19 @@ namespace Better_Loving
             return false;
         }
 
-        public static List<QueerTrait> GetQueerTraits(Actor pActor)
+        public static List<QueerTrait> GetQueerTraits(Actor pActor, bool excludeInapplicate=false)
         {
             List<QueerTrait> list = new List<QueerTrait>();
             foreach (var trait in _sexualityTraits)
             {
-                if (pActor.hasTrait(trait))
+                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicate))
                 {
                     list.Add(trait);
                 }
             }
             foreach (var trait in _romanticTraits)
             {
-                if (pActor.hasTrait(trait))
+                if (pActor.hasTrait(trait) && (!trait.preference.Equals(Preference.Inapplicable) || !excludeInapplicate))
                 {
                     list.Add(trait);
                 }
@@ -112,19 +122,24 @@ namespace Better_Loving
             return list;
         }
 
-        public static void GiveQueerTraits(Actor pActor, bool equalChances)
+        public static void GiveQueerTraits(Actor pActor, bool equalChances, bool clearInapplicable = false)
         {
             if (!pActor.hasSubspecies()) return;
             var currentTraits = GetQueerTraits(pActor);
             foreach (var trait in currentTraits)
             {
+                if (!clearInapplicable && trait.preference.Equals(Preference.Inapplicable)) continue;
                 pActor.removeTrait(trait);
             }
             
             var queerTraits = RandomizeQueerTraits(pActor, equalChances, currentTraits);
-            pActor.addTrait(queerTraits[0]);
-            if(queerTraits[1] != null)
-                pActor.addTrait(queerTraits[1]);   
+            for(int i = 0; i < queerTraits.Count; i++)
+            {
+                if (queerTraits[i] != null)
+                {
+                    pActor.addTrait(queerTraits[i]);
+                }
+            }
         }
 
         public static Preference GetSexualPrefBasedOnReproduction(Actor pActor)
@@ -147,7 +162,7 @@ namespace Better_Loving
             List<QueerTrait> randomPool = new List<QueerTrait>();
             foreach (var trait in _sexualityTraits)
             {
-                if (exclude.Contains(trait)) continue;
+                if (exclude.Contains(trait) || trait.preference.Equals(Preference.Inapplicable)) continue;
                 
                 if (trait.preference.Equals(matchingPreference) && !matchingPreference.Equals(Preference.All))
                 {
@@ -166,12 +181,27 @@ namespace Better_Loving
             var romanticTrait = GetOppositeVariant(sexualTrait);
             
             // random chance that romantic trait will not fit sexuality trait
-            if (Random.Range(1, 101) <= 3)
+            if (Randy.randomChance(0.03f))
             {
                 romanticTrait = _romanticTraits[Random.Range(0, _romanticTraits.Count)];
             }
+            
+            var queerTraits = List.Of(sexualTrait, romanticTrait);
+            
+            // randomize non-preference traits
+            if (Randy.randomChance(0.05f))
+            {
+                randomPool = _sexualityTraits.Where(trait => trait.preference.Equals(Preference.Inapplicable)).ToList();
+                queerTraits.Add(randomPool[Random.Range(0, randomPool.Count)]);
+            }
+            
+            if (Randy.randomChance(0.05f))
+            {
+                randomPool = _romanticTraits.Where(trait => trait.preference.Equals(Preference.Inapplicable)).ToList();
+                queerTraits.Add(randomPool[Random.Range(0, randomPool.Count)]);
+            }
 
-            return List.Of(sexualTrait, romanticTrait);
+            return queerTraits;
         }
         
         // gets the romantic/sexual version of the trait that matches preferences
@@ -184,19 +214,7 @@ namespace Better_Loving
             List<QueerTrait> list = sexual ? _sexualityTraits : _romanticTraits;
             foreach (QueerTrait trait in list)
             {
-                if(pActor.hasTrait(trait))
-                    return trait.preference;
-            }
-
-            return Preference.Neither; // if they have no preference, then they like neither
-        }
-
-        public static Preference GetPreferenceFromActor(ActorAsset asset, bool sexual)
-        {
-            List<QueerTrait> list = sexual ? _sexualityTraits : _romanticTraits;
-            foreach (QueerTrait trait in list)
-            {
-                if(asset.traits.Contains(trait.id))
+                if(pActor.hasTrait(trait) && !trait.preference.Equals(Preference.Inapplicable))
                     return trait.preference;
             }
 
@@ -232,7 +250,7 @@ namespace Better_Loving
             var trait = new QueerTrait
             {
                 id = name,
-                path_icon = "ui/Icons/actor_traits/" + name, // temporary icon!
+                path_icon = "ui/Icons/actor_traits/" + name,
                 group_id = "mind",
                 rate_birth = 0,
                 rate_acquire_grow_up = 0,

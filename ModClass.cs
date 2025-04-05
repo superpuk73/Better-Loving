@@ -8,21 +8,7 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
-// TODO: Adding sexuality/romantic traits (done) (configurable!)
-// TODO: add cultural queer traits (homophobic) (done, needs icon)
-
-// TODO: Sexuality can be fluid and change over time (done) (configurable)
-// TODO: People who turn 18 will get their sexuality traits (done)
-// TODO: new cheating system (done)
-
-// TODO: new subspecies trait that makes ppl have sex with their partner anwyays even if they do not desire IF population subspecies is low. This applies for incest as well.
-// TODO: faithful and unfaithful trait (partners never cheat on each other) (done, needs icon)
-// TODO: unfluid trait (sexuality and romantic traits never change) (done, needs icon)
-// TODO: incest (cultural trait)
-// TODO: date within age range (cultural trait)
-// TODO: okay with cross species love (cultural trait)
-// TODO: cultural trait that effectively disables queer traits
-// TODO: cultural trait that says NO to cheating
+// TODO: improve homophobic & heterophobic trait, they are lacking. (maybe add task to insult?)
 namespace Better_Loving
 {
     public class ModClass : BasicMod<ModClass>
@@ -53,7 +39,8 @@ namespace Better_Loving
             
             QueerTraits.Init();
             ActorTraits.Init();
-            CulturalTraits.Init();
+            CultureTraits.Init();
+            SubspeciesTraits.Init();
             Happiness.Init();
             GodPowers.Init();
         }
@@ -81,22 +68,46 @@ namespace Better_Loving
         {
             var preferredSex = QueerTraits.GetSexualPrefBasedOnReproduction(__instance);
             var sex = QueerTraits.GetPreferenceFromActor(__instance, true);
-            
-            if (__instance.isAdult() && (!QueerTraits.HasQueerTraits(__instance) 
-                                         || (Randy.randomChance(preferredSex == sex ? 0.01f : 0.001f) && !__instance.hasTrait("unfluid")))) // fluid sexuality
+
+            if (__instance.isAdult()) // fluid sexuality
             {
-                QueerTraits.GiveQueerTraits(__instance, true);
-                __instance.changeHappiness("true_self");
+                if (!QueerTraits.HasQueerTraits(__instance)){
+                    QueerTraits.GiveQueerTraits(__instance, false, true);
+                    __instance.changeHappiness("true_self");
+                }
+                else
+                {
+                    bool changed = false;
+                    var list = QueerTraits.GetQueerTraits(__instance);
+                    QueerTraits.RandomizeQueerTraits(__instance, true, list);
+                    if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.05f))
+                    {
+                        QueerTraits.CleanQueerTraits(__instance, false);
+                        __instance.addTrait(list[1]);
+                        changed = true;
+                    }
+                    if (__instance.hasTrait("abrosexual") && Randy.randomChance(0.05f))
+                    {
+                        QueerTraits.CleanQueerTraits(__instance, true);
+                        __instance.addTrait(list[0]);
+                        changed = true;
+                    }
+                    if(changed)
+                        __instance.changeHappiness("true_self");
+                }
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                QueerTraits.GiveQueerTraits(__instance, false);
+                QueerTraits.GiveQueerTraits(__instance, false, true);
+                __instance.changeHappiness("true_self");
             }
             
-            // Randomize breaking up (0.1% if preferences match. 5% if preferences do not match) 
+            // Randomize breaking up (0.1% if preferences match. 5% if preferences do not match. 50% if they are dying out and they cannot reproduce with their lover) 
             if (__instance.hasLover() && 
                 Randy.randomChance(
-                    __instance.data.sex == __instance.lover.data.sex && (__instance.hasCultureTrait("homophobic") || __instance.lover.hasCultureTrait("homophobic")) ? 0.25f : 
-                    !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.05f : 0.001f))
+                    // might change how homophobia works
+                    // __instance.data.sex == __instance.lover.data.sex && (__instance.hasCultureTrait("homophobic") || __instance.lover.hasCultureTrait("homophobic")) ? 0.25f : 
+                    Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, __instance.lover) ? 0.5f 
+                    : !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.05f : 0.001f))
             {
                 __instance.lover.setLover(null);
                 __instance.lover.changeHappiness("breakup");
@@ -132,39 +143,34 @@ namespace Better_Loving
     {
         private static bool WithinOfAge(Actor pActor, Actor pTarget)
         { 
-            // later return if configured to be if they are both adults instead
             int higherAge = Math.Max(pActor.age, pTarget.age);
             int lowerAge = Math.Min(pActor.age, pTarget.age);
             int minimumAge = higherAge / 2 + 7;
-            return lowerAge >= minimumAge;
+            return lowerAge >= minimumAge || (!pActor.hasCultureTrait("mature_dating") && !pTarget.hasCultureTrait("mature_dating"));
         }
         static bool Prefix(Actor pTarget, ref bool __result, Actor __instance)
         {
             // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
             var config = ModClass.Mod.GetConfig();
-            // var forbiddenLove = (float)config["Misc"]["ForbiddenLove"].GetValue();
             var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
             var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
-            var incest = (bool)config["Misc"]["Incest"].GetValue();
-            // var queerTraitsEnabled = true;//(bool)config
-            // var canCheat = true;
             
             if (
-                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("queer_no_matter"))
-                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("queer_no_matter"))
+                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless"))
+                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless"))
                 
                 // homophobic cultural trait
-                ||(__instance.data.sex == pTarget.data.sex && (__instance.hasCultureTrait("homophobic") || pTarget.hasCultureTrait("homophobic")))
+                // ||(__instance.data.sex == pTarget.data.sex && (__instance.hasCultureTrait("homophobic") || pTarget.hasCultureTrait("homophobic")))
                 
                 || (__instance.hasLover() && (!Randy.randomChance(
                         (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
                         + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                                              || __instance.hasTrait("faithful") || __instance.hasCultureTrait("never_cheat"))) 
+                                              || __instance.hasTrait("faithful") || __instance.hasCultureTrait("committed"))) 
                 || (pTarget.hasLover() && (!Randy.randomChance(
                                                (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
                                                + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                                           || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("never_cheat")))
+                                           || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("committed")))
                 
                 // make this a cultural trait to configure
                 || !WithinOfAge(__instance, pTarget)
@@ -178,17 +184,24 @@ namespace Better_Loving
                                                            || !allowCrossSpeciesLove)) // subspecies stuff!
                 
                 // if queer but culture trait says they do not matter
-                || ((pTarget.hasCultureTrait("queer_no_matter") || __instance.hasCultureTrait("queer_no_matter")) 
-                    && !__instance.subspecies.isPartnerSuitableForReproduction(__instance, pTarget) 
-                    && !__instance.subspecies.hasTraitReproductionSexualHermaphroditic() 
-                    && !pTarget.subspecies.hasTraitReproductionSexualHermaphroditic()))
+                || ((pTarget.hasCultureTrait("orientationless") || __instance.hasCultureTrait("orientationless")) 
+                    && !Util.CanReproduce(__instance, pTarget)))
             {
                 __result = false;
                 return false;
             }
 
-            if ((__instance.isChildOf(pTarget) || __instance.isParentOf(pTarget)) && !incest)
+            if ((__instance.isChildOf(pTarget) || __instance.isParentOf(pTarget)) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
             {
+                __result = false;
+                return false;
+            }
+
+            if (
+                (__instance.hasSubspeciesTrait("preservation") && Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, pTarget))
+                ||
+                (pTarget.hasSubspeciesTrait("preservation") && Util.IsDyingOut(pTarget) && !Util.CanReproduce(pTarget, __instance))
+                ) {
                 __result = false;
                 return false;
             }
@@ -349,8 +362,9 @@ namespace Better_Loving
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            if (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
+            if ((!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
                 || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
+                && !Util.IsDyingOut(pParentA) && !Util.IsDyingOut(pParentB))
                 return false;
             
             var subspeciesA = pParentA.subspecies;

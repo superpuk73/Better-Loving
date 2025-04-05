@@ -12,7 +12,7 @@
   "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
   
   "happiness_true_self": "I discovered a new part of my orientation!",
-  "happiness_dialog_true_self_0": "It feels so good to finally realize myself.",
+  "happiness_dialog_true_self_0": "It feels so good to realize myself.",
   "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
   "happiness_dialog_true_self_2": "I'm going to own myself and I won't hide it!",
   "happiness_dialog_true_self_3": "I wouldn't have it any other way.",
@@ -64,19 +64,42 @@
   "trait_unfaithful_info": "They will never commit to their relationship",
   "trait_unfaithful_info_2": "Careful with this one!",
 
-  "trait_unfluid": "Unfluid",
-  "trait_unfluid_info": "Their orientations will never change even over time",
-  "trait_unfluid_info_2": "Brains are complex.",
+  "trait_abroromantic": "Abroromantic",
+  "trait_abroromantic_info": "Their romantic orientation may change over time",
+  "trait_abroromantic_info_2": "It'll be hard to commit to a lover.",
+
+  "trait_abrosexual": "Abrosexual",
+  "trait_abrosexual_info": "Their sexual orientation may change over time",
+  "trait_abrosexual_info_2": "Brains are complex.",
 
   "culture_trait_homophobic": "Homophobic",
   "culture_trait_homophobic_info": "They despise others who get romantically or sexually involved with the same sex as themselves",
-  "culture_trait_homophobic_info_2": "Wow such insanity!",
+  "culture_trait_homophobic_info_2": "To them, it's disgusting.",
+
+  "culture_trait_heterophobic": "Heterophobic",
+  "culture_trait_heterophobic_info": "They despise others who get romantically or sexually involved with a different sex from themselves",
+  "culture_trait_heterophobic_info_2": "It's strange to think of two different sex people getting together.",
+
+  "culture_trait_incest": "Incest",
+  "culture_trait_incest_info": "Biologically related members may fall in love and have sex",
+  "culture_trait_incest_info_2": "Awkward!",
+
+  "culture_trait_orientationless": "Orientationless",
+  "culture_trait_orientationless_info": "The idea of orientations do not exist. They will only find lovers that they can breed with.",
+  "culture_trait_orientationless_info_2": "What's a sexuality or romantic orientation? That's witchcraft thinking!",
+
+  "culture_trait_committed": "Committed",
+  "culture_trait_committed_info": "They are commited to relationships and will never cheat no matter how bad things get.",
+  "culture_trait_committed_info_2": "Loyalty is what matters!",
+
+  "culture_trait_mature_dating": "Mature Dating",
+  "culture_trait_mature_dating_info": "They will only date those that are in the same age stage as them.",
+  "culture_trait_mature_dating_info_2": "No more 18 year olds dating 90 year olds!",
+
+  "subspecies_trait_preservation": "Preservation",
+  "subspecies_trait_preservation_info": "If their relative population count to their max limits are low, they will try to find lovers that they can reproduce with no matter what, disregarding what their culture may deem appropriate.",
+  "subspecies_trait_preservation_info_2": "When the going gets tough, you do what you must can to keep your legacies.",
   
-  "Incest": "Incest",
-  "Incest Description": "Whether family members can become lovers of one another. Aka, the good ol' medieval times.",
-  "ForbiddenLove": "Forbidden Love Chance",
-  "ForbiddenLove Description": "When the game rolls for two lovers that cannot reproduce together (this roll happens every time they socialize), this determines how likely it is that they will end up together. Do not set this too high or you will have population collapse! \n\nExample: Gay couples with the sexual reproduction method.",
-  "Misc": "Misc",
   "CrossSpecies": "Cross Species",
   "AllowCrossSpeciesLove": "Allow Cross Species Love",
   "AllowCrossSpeciesLove Description": "Whether different subspecies should be able to love each other.",

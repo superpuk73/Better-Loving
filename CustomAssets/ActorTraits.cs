@@ -7,7 +7,6 @@
             Add(new ActorTrait
             {
                 id="faithful",
-                path_icon = "ui/Icons/actor_traits/heterosexual", // temp
                 group_id = "mind",
                 rate_birth = 2,
                 rate_acquire_grow_up = 4,
@@ -21,7 +20,6 @@
             Add(new ActorTrait
             {
                 id="unfaithful",
-                path_icon = "ui/Icons/actor_traits/heterosexual", // temp
                 group_id = "mind",
                 rate_birth = 2,
                 rate_acquire_grow_up = 4,
@@ -31,24 +29,11 @@
                 needs_to_be_explored = true,
                 affects_mind = true,
             });
-            
-            Add(new ActorTrait
-            {
-                id="unfluid",
-                path_icon = "ui/Icons/actor_traits/heterosexual", // temp
-                group_id = "mind",
-                rate_birth = 1,
-                rate_acquire_grow_up = 1,
-                type = TraitType.Other,
-                unlocked_with_achievement = false,
-                rarity = Rarity.R2_Epic,
-                needs_to_be_explored = true,
-                affects_mind = true,
-            });
         }
 
         private static void Add(ActorTrait trait)
         {
+            trait.path_icon = "ui/Icons/actor_traits/"+trait.id;
             Util.AddActorTrait(trait);
         }
     }

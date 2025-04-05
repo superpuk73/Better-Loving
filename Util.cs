@@ -39,5 +39,19 @@ namespace Better_Loving
             
             AssetManager.traits.add(trait);
         }
+        
+        public static bool IsDyingOut(Actor pActor)
+        {
+            if (!pActor.hasSubspecies()) return false;
+            int limit = (int) pActor.subspecies.base_stats_meta["limit_population"];
+            return limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50;
+        }
+
+        public static bool CanReproduce(Actor pActor, Actor pTarget)
+        {
+            return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget)
+                   || pTarget.subspecies.hasTraitReproductionSexualHermaphroditic()
+                   || pTarget.subspecies.hasTraitReproductionSexualHermaphroditic();
+        }
     }
 }
