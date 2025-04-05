@@ -42,6 +42,8 @@ namespace Better_Loving
             CultureTraits.Init();
             SubspeciesTraits.Init();
             Happiness.Init();
+            CommunicationTopics.Init();
+            BehaviourTasks.Init();
             GodPowers.Init();
         }
         private void Awake()
@@ -66,9 +68,6 @@ namespace Better_Loving
     {
         static void Postfix(Actor __instance)
         {
-            var preferredSex = QueerTraits.GetSexualPrefBasedOnReproduction(__instance);
-            var sex = QueerTraits.GetPreferenceFromActor(__instance, true);
-
             if (__instance.isAdult()) // fluid sexuality
             {
                 if (!QueerTraits.HasQueerTraits(__instance)){

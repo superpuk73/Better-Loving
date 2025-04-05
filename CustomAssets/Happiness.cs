@@ -38,6 +38,42 @@
                 pot_amount = 1,
                 show_change_happiness_effect = true
             });
+            
+            Add(new HappinessAsset
+            {
+                id = "orientation_fits",
+                value = 5,
+                pot_task_id = "singing",
+                path_icon = "ui/Icons/iconAge",
+                ignored_by_psychopaths = false,
+                pot_amount = 1,
+                show_change_happiness_effect = true,
+                dialogs_amount = 1
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "orientation_does_not_fit",
+                value = -5,
+                pot_task_id = "crying",
+                path_icon = "ui/Icons/iconCrying",
+                ignored_by_psychopaths = false,
+                pot_amount = 1,
+                show_change_happiness_effect = true,
+                dialogs_amount = 1
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "insulted_for_orientation",
+                value = -15,
+                pot_task_id = "crying",
+                path_icon = "ui/Icons/iconCrying",
+                ignored_by_psychopaths = false,
+                pot_amount = 1,
+                show_change_happiness_effect = true,
+                dialogs_amount = 1
+            });
         }
 
         private static void Add(HappinessAsset asset)

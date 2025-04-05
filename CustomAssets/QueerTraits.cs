@@ -55,7 +55,7 @@ namespace Better_Loving
                 trait.opposite_traits = new HashSet<ActorTrait>();
                 foreach (var traitToAdd in _sexualityTraits)
                 {
-                    if (trait == traitToAdd) continue;
+                    if (trait == traitToAdd || traitToAdd.preference == Preference.Inapplicable) continue;
                     trait.opposite_traits.Add(traitToAdd);
                 }
 
@@ -218,7 +218,7 @@ namespace Better_Loving
                     return trait.preference;
             }
 
-            return Preference.Neither; // if they have no preference, then they like neither
+            return Preference.Inapplicable; // if they have no preference, then they like neither
         }
 
         public static bool IsConsideredHomo(Actor pActor, bool sexual)

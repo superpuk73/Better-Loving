@@ -16,6 +16,15 @@
   "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
   "happiness_dialog_true_self_2": "I'm going to own myself and I won't hide it!",
   "happiness_dialog_true_self_3": "I wouldn't have it any other way.",
+
+  "happiness_orientation_fits": "I am happy that my orientation is not judged!",
+  "happiness_dialog_orientation_fits_0": "It's nice that I can talk about my orientation without being berated for it.",
+
+  "happiness_orientation_does_not_fit": "My orientation is despised in my culture!",
+  "happiness_dialog_orientation_does_not_fit_0": "Why did I have to be born this way?",
+
+  "happiness_insulted_for_orientation": "I was insulted for my orientation!",
+  "happiness_dialog_insulted_for_orientation_0": "They are so rude!",
   
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",
