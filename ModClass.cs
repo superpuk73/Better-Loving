@@ -157,8 +157,10 @@ namespace Better_Loving
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             
             if (
-                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless"))
-                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless"))
+                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless") 
+                                                                            && (!Util.IsDyingOut(__instance) || !__instance.hasSubspeciesTrait("preservation")))
+                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless") 
+                    && (!Util.IsDyingOut(pTarget) || !pTarget.hasSubspeciesTrait("preservation")))
                 
                 // homophobic cultural trait
                 // ||(__instance.data.sex == pTarget.data.sex && (__instance.hasCultureTrait("homophobic") || pTarget.hasCultureTrait("homophobic")))
@@ -364,7 +366,7 @@ namespace Better_Loving
 
             if ((!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
                 || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
-                && !Util.IsDyingOut(pParentA) && !Util.IsDyingOut(pParentB))
+                && (!Util.IsDyingOut(pParentA) || !pParentA.hasSubspeciesTrait("preservation")) && (!Util.IsDyingOut(pParentB) || !pParentA.hasSubspeciesTrait("preservation")))
                 return false;
             
             var subspeciesA = pParentA.subspecies;

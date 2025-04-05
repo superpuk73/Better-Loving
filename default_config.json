@@ -15,17 +15,5 @@
       "Type": "SWITCH",
       "BoolVal": true
     }
-  ],
-  "Misc": [
-    {
-      "Id": "ForbiddenLove",
-      "Type": "SLIDER",
-      "FloatVal": 0.20
-    },
-    {
-      "Id": "Incest",
-      "Type": "SWITCH",
-      "BoolVal": true
-    }
   ]
 }

@@ -97,8 +97,8 @@
   "culture_trait_mature_dating_info_2": "No more 18 year olds dating 90 year olds!",
 
   "subspecies_trait_preservation": "Preservation",
-  "subspecies_trait_preservation_info": "If their relative population count to their max limits are low, they will try to find lovers that they can reproduce with no matter what, disregarding what their culture may deem appropriate.",
-  "subspecies_trait_preservation_info_2": "When the going gets tough, you do what you must can to keep your legacies.",
+  "subspecies_trait_preservation_info": "If their relative population count to their max limits are low, they will try to find lovers that they can reproduce with no matter what, disregarding what their culture or orientation may deem appropriate.",
+  "subspecies_trait_preservation_info_2": "When the going gets tough, you do what you must to keep your legacies.",
   
   "CrossSpecies": "Cross Species",
   "AllowCrossSpeciesLove": "Allow Cross Species Love",
