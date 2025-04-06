@@ -8,7 +8,7 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
-// TODO: fix decision tasks
+// TODO: mismatched orientatiosn will make ppl sad when they have sex or in a relationship that doesnt match
 // TODO: add sex task which allows units to go around fucking other ppl (with traits that determine if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (is cheating!)
 // TODO: prostitution which is a similar task to above but payment! :o
 namespace Better_Loving
@@ -50,7 +50,7 @@ namespace Better_Loving
         }
         private void Awake()
         {
-            var harmony = new Harmony("netdot.mian.patch");
+            var harmony = new Harmony("netdot.mian.betterloving");
             harmony.PatchAll();
         }
     }
@@ -194,7 +194,7 @@ namespace Better_Loving
                 return false;
             }
 
-            if ((__instance.isChildOf(pTarget) || __instance.isParentOf(pTarget)) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
+            if ((__instance.isRelatedTo(pTarget)) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
             {
                 __result = false;
                 return false;
@@ -341,7 +341,7 @@ namespace Better_Loving
             }
         }
     }
-
+    
     // this patch handles who the mother is when it comes to sexual reproduction and if it should even happen
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
