@@ -1,7 +1,7 @@
 ﻿{
-  "name": "Better Loving",
+  "name": "Topic of Loving",
   "author": "MianReplicate",
   "version": "1.0.0",
-  "description": "Extend the capabilities of loving in the game! Allows for different species to love each other & additionally allows units to love one another even if they cannot reproduce",
-  "GUID": "betterloving"
+  "description": "An entire revamp of the love system in the game featuring orientations, cross species love and more!",
+  "GUID": "topicofloving"
 }

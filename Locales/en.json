@@ -98,6 +98,10 @@
   "culture_trait_incest_info": "Biologically related members may fall in love and have sex",
   "culture_trait_incest_info_2": "Awkward!",
 
+  "culture_trait_scar_of_incest": "Scar of Incest",
+  "culture_trait_scar_of_incest_info": "Permanently prevents the incest trait from being removed or added",
+  "culture_trait_scar_of_incest_info_2": "Civilizations won't evolve past this..",
+
   "culture_trait_orientationless": "Orientationless",
   "culture_trait_orientationless_info": "The idea of orientations do not exist. They will only find lovers that they can breed with.",
   "culture_trait_orientationless_info_2": "What's a sexuality or romantic orientation? That's witchcraft thinking!",

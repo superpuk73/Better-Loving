@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 namespace Better_Loving
 {
@@ -6,7 +7,18 @@ namespace Better_Loving
     {
         public static void Init()
         {
-            Add(new CultureTrait
+            var orientationLess = new CultureTrait
+            {
+                id = "orientationless",
+                group_id = "miscellaneous",
+                needs_to_be_explored = true,
+                rarity = Rarity.R1_Rare,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            };
+
+            var homophobic = new CultureTrait
             {
                 id = "homophobic",
                 group_id = "worldview",
@@ -15,9 +27,9 @@ namespace Better_Loving
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, "orc", "demon");
-            
-            Add(new CultureTrait
+            };
+
+            var heterophobic = new CultureTrait
             {
                 id = "heterophobic",
                 group_id = "worldview",
@@ -26,7 +38,23 @@ namespace Better_Loving
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, "flower_bud", "garl");
+            };
+
+            homophobic.opposite_traits = new HashSet<CultureTrait>();
+            homophobic.opposite_traits.Add(orientationLess);
+            homophobic.opposite_traits.Add(heterophobic);
+            
+            heterophobic.opposite_traits = new HashSet<CultureTrait>();
+            heterophobic.opposite_traits.Add(orientationLess);
+            heterophobic.opposite_traits.Add(homophobic);
+            
+            orientationLess.opposite_traits = new HashSet<CultureTrait>();
+            orientationLess.opposite_traits.Add(homophobic);
+            orientationLess.opposite_traits.Add(heterophobic);
+            
+            Add(homophobic, "orc", "demon");
+            Add(heterophobic, "flower_bud", "garl");
+            Add(orientationLess, "angle", "snowman");
             
             Add(new CultureTrait
             {
@@ -60,17 +88,16 @@ namespace Better_Loving
                 can_be_removed = true,
                 can_be_given = true
             }, "human", "elf", "dwarf");
-            
+
             Add(new CultureTrait
             {
-                id = "orientationless",
+                id = "scar_of_incest",
                 group_id = "miscellaneous",
-                needs_to_be_explored = true,
                 rarity = Rarity.R1_Rare,
-                can_be_in_book = true,
+                can_be_given = true,
+                can_be_in_book = false,
                 can_be_removed = true,
-                can_be_given = true
-            }, "angle", "snowman");
+            }, "orc", "demon");
         }
 
         private static void Add(CultureTrait trait, params string[] assets)

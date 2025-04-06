@@ -29,7 +29,7 @@ namespace Better_Loving
                 path_icon = "ui/Icons/culture_traits/orientationless",
                 cooldown = 30,
                 action_check_launch = actor => actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic"),
-                weight = 0.5f,
+                weight = 0.75f,
                 list_civ = true
             });
             AssetManager.subspecies_traits.get("wernicke_area").addDecision("insult_orientation_try");
@@ -37,7 +37,7 @@ namespace Better_Loving
             Finish();
         }
 
-        public static void Finish()
+        private static void Finish()
         {
             foreach (var decisionAsset in _decisionAssets)
             {
@@ -80,7 +80,7 @@ namespace Better_Loving
             pActor.beh_actor_target = closestActorWithMismatchedOrientation;
             return BehResult.Continue;
         }
-        public Actor GetClosestActorMismatchOrientation(Actor pActor)
+        private static Actor GetClosestActorMismatchOrientation(Actor pActor)
         {
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
@@ -96,12 +96,19 @@ namespace Better_Loving
                     unfitPreferences.Add(Preference.DifferentSex);
                 }
                 
-                bool pRandom = Randy.randomBool();
-                int pChunkRadius = Randy.randomInt(1, 4);
-                int num = Randy.randomInt(1, 4);
+                var pActorTraits = QueerTraits.GetQueerTraits(pActor, true);
+                if (pActorTraits.Count < 2) return null;
+
+                if (unfitPreferences.Contains(pActorTraits[0].preference) ||
+                    unfitPreferences.Contains(pActorTraits[1].preference)) return null;
+                // don't insult someone else
+                
+                var pRandom = Randy.randomBool();
+                var pChunkRadius = Randy.randomInt(1, 4);
+                var num = Randy.randomInt(1, 4);
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {
-                    if (pTarget != pActor && pActor.isSameIslandAs(pTarget) && pTarget.hasAnyCash())
+                    if (pTarget != pActor && pActor.isSameIslandAs(pTarget))
                     {
                         var queerTraits = QueerTraits.GetQueerTraits(pTarget, true);
                         if (queerTraits.Count < 2) continue;
@@ -116,23 +123,33 @@ namespace Better_Loving
                             break;
                     }
                 }
+                
                 return Toolbox.getClosestActor(pCollection, pActor.current_tile);
             }
         }
     }
-
-    // Let's go one step further and allow the aggressor to attack ppl for their orientation or for the aggressed to fight back or cry
     public class BehInsultOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
         {
             var target = pActor.beh_actor_target?.a;
-            // LogService.LogInfo("LETS GO INSULT SOMEONE");
             if (target == null || Toolbox.DistTile(target.current_tile, pActor.current_tile) > 4.0)
                 return BehResult.Stop;
-            
             target.changeHappiness("insulted_for_orientation");
-            LogService.LogInfo("INSULTED!");
+
+            if (Randy.randomChance(0.25f))
+            {
+                pActor.addAggro(target);
+                pActor.startFightingWith(target);
+            }
+            else if (Randy.randomChance(0.8f))
+            {
+                target.addStatusEffect("crying");
+            } else if (Randy.randomChance(0.8f))
+            {
+                target.addAggro(pActor);
+                target.startFightingWith(pActor);
+            }
 
             return BehResult.Stop;
         }
