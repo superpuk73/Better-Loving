@@ -8,7 +8,9 @@ using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
-// TODO: improve homophobic & heterophobic trait, they are lacking. (maybe add task to insult?)
+// TODO: fix decision tasks
+// TODO: add sex task which allows units to go around fucking other ppl (with traits that determine if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (is cheating!)
+// TODO: prostitution which is a similar task to above but payment! :o
 namespace Better_Loving
 {
     public class ModClass : BasicMod<ModClass>

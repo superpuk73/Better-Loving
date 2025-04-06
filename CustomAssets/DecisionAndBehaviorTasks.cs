@@ -2,7 +2,6 @@
 using ai.behaviours;
 using HarmonyLib;
 using NeoModLoader.services;
-using UnityEngine;
 
 namespace Better_Loving
 {
@@ -71,6 +70,7 @@ namespace Better_Loving
         }
     }
 
+    // Let's go one step further and allow the aggressor to attack ppl for their orientation or for the aggressed to fight back or cry
     public class BehInsultOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
