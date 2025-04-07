@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using ai;
 using ai.behaviours;
 using NeoModLoader.api;
 using NeoModLoader.services;
@@ -177,8 +178,11 @@ namespace Better_Loving
         }
         static void Postfix(Actor pTarget, Actor __instance)
         {
-            if(!__instance.hasFamily() && !pTarget.hasFamily())
+            __instance.setFamily(null);
+            pTarget.setFamily(null);
+            // if(!__instance.hasFamily() && !pTarget.hasFamily())
                 BehaviourActionBase<Actor>.world.families.newFamily(__instance, __instance.current_tile, pTarget);
+                // they become new family lovers
         }
     }
     
@@ -319,10 +323,28 @@ namespace Better_Loving
                 actorFromData.setParent1(dominantParent);
                 if (nonDominantParent != null)
                     actorFromData.setParent2(nonDominantParent);
-                if (pAddToFamily && !dominantParent.hasFamily() && (nonDominantParent == null || !nonDominantParent.hasFamily()))
-                    World.world.families.newFamily(dominantParent, dominantParent.current_tile, nonDominantParent);
-                else if(pAddToFamily && dominantParent.hasFamily())
-                    actorFromData.setFamily(dominantParent.family);
+                if (pAddToFamily)
+                {
+                    // families are no longer created based on babies, but based on lovers
+                    var randomParentToGoTo = dominantParent.hasFamily() 
+                                             && (Randy.randomChance(0.5f) || nonDominantParent == null) ? dominantParent : nonDominantParent;
+                    if(randomParentToGoTo != null && randomParentToGoTo.hasFamily())
+                        actorFromData.setFamily(randomParentToGoTo.family);
+                    
+                    // if (!dominantParent.hasFamily())
+                    // {
+                    //     var actor = nonDominantParent == null || nonDominantParent.hasFamily() ? null : nonDominantParent;
+                    //     World.world.families.newFamily(dominantParent, dominantParent.current_tile, actor);
+                    //     // don't kick non dominant parent out of their family if they have a child. Dominant parent gets the family
+                    // } else if (dominantParent.hasFamily())
+                    // {
+                    //     actorFromData.setFamily(dominantParent.family);
+                    // }
+                }
+                // if (pAddToFamily && !dominantParent.hasFamily() && (nonDominantParent == null || !nonDominantParent.hasFamily()))
+                //     World.world.families.newFamily(dominantParent, dominantParent.current_tile, nonDominantParent);
+                // else if(pAddToFamily && dominantParent.hasFamily())
+                //     actorFromData.setFamily(dominantParent.family);
                 BabyHelper.applyParentsMeta(dominantParent, nonDominantParent, actorFromData);
                 // the game seems to have some sort of code that chooses a baby's subspecies based on generation? not really sure how it works tbh
                 actorFromData.setSubspecies(dominantParent.subspecies);
@@ -391,22 +413,41 @@ namespace Better_Loving
         }
     }
 
+    [HarmonyPatch(typeof(Actor), nameof(Actor.setTask))]
+    class SetTaskPatch
+    {
+        static bool Prefix(string pTaskId, Actor __instance)
+        {
+            if (__instance.last_decision_id.Equals("invite_for_sex"))
+            {
+                LogService.LogInfo("last decision is invite for sex");
+
+                if (pTaskId.Equals("sexual_reproduction_outside") || pTaskId.Equals("sexual_reproduction_civ_action"))
+                {
+                    LogService.LogInfo("Set chances because this is casual sex");
+                    __instance.data.set("chanceOfPregnancy", 0.1F);
+                }
+            }
+
+            return true;
+        }
+    }
+
     // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
-    // may prevent babies from being made for now when ppl have no houses and it's just two gay ppl with opposite sexes
-    // we need to find a way to fix the above
     [HarmonyPatch(typeof(DecisionAsset), nameof(DecisionAsset.isPossible))]
-    class IsPossiblePatch
+    class DecisionPatch
     {
         static bool Prefix(Actor pActor, DecisionAsset __instance, ref bool __result)
         {
             // this is for decision asset: sexual_reproduction_try, this basically cancels sex with their partner
-            if (__instance.id == "sexual_reproduction_try")
+            if (__instance.id.Equals("sexual_reproduction_try"))
             {
                 var pParentA = pActor;
                 var pParentB = pActor.lover;
                 if (pActor.hasLover() && 
                     (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
                      || !QueerTraits.PreferenceMatches(pParentB, pParentA, true)))
+                    
                     // below can now happen with casual sex and be allowed
                     // && (!Util.IsDyingOut(pParentA) || !pParentA.hasSubspeciesTrait("preservation")) && (!Util.IsDyingOut(pParentB) || !pParentA.hasSubspeciesTrait("preservation")))
                 {
@@ -428,17 +469,28 @@ namespace Better_Loving
             var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
             if (target == null)
             {
-                LogService.LogInfo("INVALID TARGET");
                 __result = BehResult.Stop;
                 return false;
             }
-            LogService.LogInfo("Valid target! Moving on..");
-            pActor.addAfterglowStatus();
-            target.addAfterglowStatus();
-            pActor.changeHappiness("just_kissed");
-            target.changeHappiness("just_kissed");
+            LogService.LogInfo("Target is: " + target.getName()+". Lover: "+ (target == pActor.lover).ToString());
+           
+            Util.JustHadSex(pActor, target);
+            if (pActor.lover == target)
+            {
+                pActor.addAfterglowStatus();
+                target.addAfterglowStatus();   
+            }
+            
+            // make kissing a random chance
+            if (Randy.randomChance(pActor.lover == target ? 1f : QueerTraits.BothPreferencesMatch(pActor, target, true) ? 0.25f : 0f))
+            {
+                pActor.changeHappiness("just_kissed");
+                target.changeHappiness("just_kissed");   
+            }
             
             pActor.subspecies.counter_reproduction_acts?.registerEvent();
+            if(target.subspecies != pActor.subspecies)
+                target.subspecies.counter_reproduction_acts?.registerEvent();
             __instance.checkForBabies(pActor, target);
             __result = BehResult.Continue;
             return false;
@@ -450,21 +502,9 @@ namespace Better_Loving
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
     class CheckForBabiesPatch
     {
-        // custom method specifically to avoid population limit checks because we do our own custom code for that
-        static bool CanMakeBabies(Actor pActor)
-        {
-            // make it configurable so they have to be adults or not
-            return pActor.isBreedingAge() 
-                   && !pActor.hasReachedOffspringLimit() 
-                   && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit() && (pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()))
-                   && pActor.haveNutritionForNewBaby();
-        }
         static bool Prefix(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)
         {
-            // had sex
-            Util.JustHadSex(pParentA, pParentB);
-
-            if (!CanMakeBabies(pParentA) || !CanMakeBabies(pParentB))
+            if (!Util.CanMakeBabies(pParentA) || !Util.CanMakeBabies(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
@@ -475,6 +515,7 @@ namespace Better_Loving
             var subspeciesB = pParentB.subspecies;
 
             Actor mother = null;
+            Actor nonMother;
             
             if (subspeciesA.hasTraitReproductionSexual() && subspeciesB.hasTraitReproductionSexual())
             {
@@ -514,27 +555,72 @@ namespace Better_Loving
             
             if (mother == null)
                 return false;
-            
+            nonMother = mother == pParentA ? pParentB : pParentA;
             // this creates a new family to assign with each other. This should be CALLED after checking to see if they can make babies together
-            __instance.checkFamily(pParentA, pParentB);
+            // __instance.checkFamily(pParentA, pParentB);
             
             float maturationTimeSeconds = pParentA.getMaturationTimeSeconds();
             
-            ReproductiveStrategy reproductionStrategy = mother.subspecies.getReproductionStrategy();
-            switch (reproductionStrategy)
+            mother.data.get("chanceOfPregnancy", out var chanceOfPregnancy, -1F);
+            if (chanceOfPregnancy == -1F)
             {
-                case ReproductiveStrategy.Egg:
-                case ReproductiveStrategy.SpawnUnitImmediate:
-                    BabyMaker.makeBabiesViaSexual(mother, pParentA, pParentB);
-                    mother.subspecies.counterReproduction();
-                    break;
-                case ReproductiveStrategy.Pregnancy:
-                    BabyHelper.babyMakingStart(mother);
-                    mother.addStatusEffect("pregnant", maturationTimeSeconds);
-                    mother.subspecies.counterReproduction();
-                    break;
+                nonMother.data.get("chanceOfPregnancy", out chanceOfPregnancy, -1F);
+            }
+
+            if (chanceOfPregnancy != -1F)
+            {
+                LogService.LogInfo("random pregnancy..");
             }
             
+            mother.data.removeFloat("chanceOfPregnancy");
+            nonMother.data.removeFloat("chanceOfPregnancy");
+
+            bool success = chanceOfPregnancy == -1F ? true : Randy.randomChance(chanceOfPregnancy);
+
+            if (success)
+            {
+                ReproductiveStrategy reproductionStrategy = mother.subspecies.getReproductionStrategy();
+                switch (reproductionStrategy)
+                {
+                    case ReproductiveStrategy.Egg:
+                    case ReproductiveStrategy.SpawnUnitImmediate:
+                        BabyMaker.makeBabiesViaSexual(mother, pParentA, pParentB);
+                        mother.subspecies.counterReproduction();
+                        break;
+                    case ReproductiveStrategy.Pregnancy:
+                        mother.data.set("impregnatedBy", nonMother.getID());
+
+                        BabyHelper.babyMakingStart(mother);
+                        mother.addStatusEffect("pregnant", maturationTimeSeconds);
+                        mother.subspecies.counterReproduction();
+                        break;
+                }   
+            }
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(BabyMaker), nameof(BabyMaker.makeBabyFromPregnancy))]
+    class MakeBabyFromPregnancyPatch
+    {
+        static bool Prefix(Actor pActor)
+        {
+            var mother = pActor;
+            mother.data.get("impregnatedBy", out long otherParentID);
+            var otherParent = MapBox.instance.units.get(otherParentID);
+            mother.data.removeLong("impregnatedBy");
+
+            mother.birthEvent();
+            BabyHelper.countMakeChild(mother, otherParent);
+            BabyMaker.makeBaby(mother, otherParent);
+            var pVal = 0.5f;
+            var stat = (int) mother.stats["birth_rate"];
+            for (var index = 0; index < stat && Randy.randomChance(pVal); ++index)
+            {
+                BabyMaker.makeBaby(mother, otherParent);
+                pVal *= 0.85f;
+            }
+
             return false;
         }
     }

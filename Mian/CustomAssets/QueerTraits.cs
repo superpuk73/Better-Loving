@@ -242,6 +242,11 @@ namespace Better_Loving
             }
         }
 
+        public static bool BothPreferencesMatch(Actor actor1, Actor actor2, bool sexual)
+        {
+            return PreferenceMatches(actor1, actor2, sexual) && PreferenceMatches(actor2, actor1, sexual);
+        }
+
         internal static void AddQueerTrait(string name, Preference preference, bool sexual)
         {
             var trait = new QueerTrait

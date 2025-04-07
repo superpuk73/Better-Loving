@@ -45,7 +45,7 @@ namespace Better_Loving
         {
             if (!pActor.hasSubspecies()) return false;
             int limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
-            return pActor.subspecies.countCurrentFamilies() <= 3 
+            return pActor.subspecies.countCurrentFamilies() <= 3
                    || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50);
         }
 
@@ -61,20 +61,27 @@ namespace Better_Loving
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
             LogService.LogInfo("just had sex");
-            if (QueerTraits.PreferenceMatches(actor1, actor2, true))
-                actor1.addStatusEffect("enjoyed_sex");
-            else
-                actor1.addStatusEffect("disliked_sex");
-            if (QueerTraits.PreferenceMatches(actor2, actor1, true))
-                actor2.addStatusEffect("enjoyed_sex");
-            else
-                actor2.addStatusEffect("disliked_sex");
+            if (actor1.hasSubspeciesTrait("amygdala"))
+            {
+                if (QueerTraits.PreferenceMatches(actor1, actor2, true))
+                    actor1.addStatusEffect("enjoyed_sex");
+                else
+                    actor1.addStatusEffect("disliked_sex");   
+            }
+
+            if (actor2.hasSubspeciesTrait("amygdala"))
+            {
+                if (QueerTraits.PreferenceMatches(actor2, actor1, true))
+                    actor2.addStatusEffect("enjoyed_sex");
+                else
+                    actor2.addStatusEffect("disliked_sex");   
+            }
 
             if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor1))
             {
                 PotentiallyCheatedWith(actor1, actor2);
             }
-            
+
             if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor2))
             {
                 PotentiallyCheatedWith(actor2, actor1);
@@ -83,10 +90,11 @@ namespace Better_Loving
 
         public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor)
         {
-            return !actor.hasLover() || (actor.hasLover() 
+            return !actor.hasLover() || (actor.hasLover()
                                          && !QueerTraits.PreferenceMatches(actor, actor.lover, true)
-                                         && ((actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations")) 
-                                             || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor))));
+                                         && ((actor.hasCultureTrait("sexual_expectations") &&
+                                              actor.lover.hasCultureTrait("sexual_expectations"))
+                                             || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) && !CanMakeBabies(actor.lover))));
         }
 
         public static void PotentiallyCheatedWith(Actor actor, Actor actor2)
@@ -106,5 +114,15 @@ namespace Better_Loving
             actor.setLover(null);
             actor.changeHappiness("breakup");
         }
-}
+
+        public static bool CanMakeBabies(Actor pActor)
+        {
+            // make it configurable so they have to be adults or not
+            return pActor.isBreedingAge()
+                   && !pActor.hasReachedOffspringLimit()
+                   && (!pActor.hasCity() || !pActor.city.hasReachedWorldLawLimit() &&
+                       (pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()))
+                   && pActor.haveNutritionForNewBaby() && !pActor.hasStatus("pregnant");
+        }
+    }
 }
