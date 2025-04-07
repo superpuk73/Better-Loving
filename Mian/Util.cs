@@ -66,7 +66,7 @@ namespace Better_Loving
         public static void ChangeSexualHappinessBy(Actor actor, float happiness)
         {
             actor.data.get("sexual_happiness", out float init);
-            actor.data.set("sexual_happiness", happiness + init);
+            actor.data.set("sexual_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
         }
 
         private static void OpinionOnSex(Actor actor1, Actor actor2)
@@ -83,13 +83,13 @@ namespace Better_Loving
             }
         }
 
-        public static bool WillDoSex(Actor pActor, bool withLover=true)
+        public static bool WillDoSex(Actor pActor, string sexReason, bool withLover=true)
         {
             LogService.LogInfo("Will "+pActor.getName()+ " do sex?");
             if (QueerTraits.GetPreferenceFromActor(pActor, true) == Preference.Neither)
                 return false;
             
-            var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor);
+            var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason);
             var reduceChances = 0f;
             pActor.data.get("sexual_happiness", out float sexualHappiness);
             
@@ -117,12 +117,14 @@ namespace Better_Loving
 
             var doSex = Randy.randomChance(1f - reduceChances);
             if (!doSex)
+            {
+                LogService.LogInfo("Will not do sex");
                 return false;
-            
+            }
+
             LogService.LogInfo("Will do sex");
             if(!allowedToHaveSex)
                 LogService.LogInfo(pActor.getName() + " is cheating!");
-
             return true;
         }
         
@@ -135,15 +137,20 @@ namespace Better_Loving
             actor2.data.set("last_had_sex_with", actor1.getID());
             OpinionOnSex(actor1, actor2);
             OpinionOnSex(actor2, actor1);
-            
-            if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor1))
-            {
-                PotentiallyCheatedWith(actor1, actor2);
-            }
 
-            if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor2))
+            if (actor1.lover != actor2)
             {
-                PotentiallyCheatedWith(actor2, actor1);
+                actor1.data.get("sex_reason", out var sexReason, "");
+                LogService.LogInfo("Sex Reason: "+sexReason);
+                if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor1, sexReason))
+                {
+                    PotentiallyCheatedWith(actor1, actor2);
+                }
+
+                if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor2, sexReason))
+                {
+                    PotentiallyCheatedWith(actor2, actor1);
+                }   
             }
 
             if (actor1.hasLover() && actor1.lover != actor2)
@@ -157,14 +164,14 @@ namespace Better_Loving
             }
         }
 
-        public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor)
+        public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor, string sexReason)
         {
-            return !actor.hasLover() || (actor.hasLover()
-                                         && !QueerTraits.PreferenceMatches(actor, actor.lover, true)
-                                         && ((actor.hasCultureTrait("sexual_expectations") &&
-                                              actor.lover.hasCultureTrait("sexual_expectations"))
-                                             || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
-                                                 && (!CanMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
+            return !actor.hasLover()
+                   || (actor.hasLover() && ((!QueerTraits.PreferenceMatches(actor, actor.lover, true)
+                                                              && actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations"))
+                                                              || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor) 
+                                                                  && sexReason.Equals("reproduction")
+                                                                  && (!CanMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
         }
 
         public static void PotentiallyCheatedWith(Actor actor, Actor actor2)

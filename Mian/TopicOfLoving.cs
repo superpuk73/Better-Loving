@@ -118,7 +118,7 @@ namespace Better_Loving
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
-            __instance.data.set("sexual_happiness", 0f);
+            __instance.data.set("sexual_happiness", 50f);
         }
     }
 
@@ -154,7 +154,7 @@ namespace Better_Loving
                         __instance.changeHappiness("true_self");
                 }
                 if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither)
-                    Util.ChangeSexualHappinessBy(__instance.a, -10f);
+                    Util.ChangeSexualHappinessBy(__instance.a, -5f);
                 else
                     __instance.data.set("sexual_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations

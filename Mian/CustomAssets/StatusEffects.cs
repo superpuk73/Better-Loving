@@ -15,8 +15,10 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (actor, _) =>
             {
-                Util.ChangeSexualHappinessBy(actor.a, 15f);
+                Util.ChangeSexualHappinessBy(actor.a, 40f);
                 actor.a.changeHappiness("enjoyed_sex");
+                actor.a.finishStatusEffect("disliked_sex");
+                actor.a.finishStatusEffect("okay_sex");
                 return true;
             }
         });
@@ -28,6 +30,8 @@ public class StatusEffects
             {
                 Util.ChangeSexualHappinessBy(actor.a, -15f);
                 actor.a.changeHappiness("disliked_sex");
+                actor.a.finishStatusEffect("enjoyed_sex");
+                actor.a.finishStatusEffect("okay_sex");
                 return true;
             }
         });
@@ -37,8 +41,10 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (actor, _) =>
             {
-                Util.ChangeSexualHappinessBy(actor.a, 5f);
+                Util.ChangeSexualHappinessBy(actor.a, 20f);
                 actor.a.changeHappiness("okay_sex");
+                actor.a.finishStatusEffect("enjoyed_sex");
+                actor.a.finishStatusEffect("disliked_sex");
                 return true;
             }
         });
