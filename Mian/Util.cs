@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NeoModLoader.services;
 
 namespace Better_Loving
 {
@@ -59,6 +60,7 @@ namespace Better_Loving
         // handle cheating here too
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
+            LogService.LogInfo("just had sex");
             if (QueerTraits.PreferenceMatches(actor1, actor2, true))
                 actor1.addStatusEffect("enjoyed_sex");
             else
@@ -68,12 +70,12 @@ namespace Better_Loving
             else
                 actor2.addStatusEffect("disliked_sex");
 
-            if (!actor1.hasCultureTrait("sexual_expectation"))
+            if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor1))
             {
                 PotentiallyCheatedWith(actor1, actor2);
             }
             
-            if (!actor2.hasCultureTrait("sexual_expectation"))
+            if (!CanHaveSexWithoutRepercussionsWithSomeoneElse(actor2))
             {
                 PotentiallyCheatedWith(actor2, actor1);
             }

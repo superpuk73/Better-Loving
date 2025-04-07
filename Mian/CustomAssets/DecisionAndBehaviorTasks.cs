@@ -44,7 +44,8 @@ namespace Better_Loving
                 cooldown = 30,
                 action_check_launch = actor => Util.IsSmart(actor) && (Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor) || (actor.hasTrait("unfaithful") && Randy.randomChance(0.1f))),
                 list_civ = true,
-                weight = 0.75f
+                weight = 0.75f,
+                only_adult = true
             });
             foreach (var actorAsset in AssetManager.actor_library.list)
             {
@@ -54,17 +55,41 @@ namespace Better_Loving
             AddDecision(new DecisionAsset
             {
                 id = "prostitution",
-                priority = NeuroLayer.Layer_4_Critical,
+                priority = NeuroLayer.Layer_2_Moderate,
                 path_icon = "ui/Icons/status/disliked_sex",
-                cooldown = 15,
-                action_check_launch = actor => Util.IsSmart(actor) && Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor) && !actor.hasAnyCash(),
+                cooldown = 60,
+                action_check_launch = actor => Util.IsSmart(actor) && actor.hasKingdom() && Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor) && actor.money < 25, // maybe determine money amount in da future
                 list_civ = true,
-                weight = 1f
+                weight = 0.25f,
+                only_adult = true
             });
             foreach (var actorAsset in AssetManager.actor_library.list)
             {
                 actorAsset.addDecision("prostitution");
             }
+            
+            AddDecision(new DecisionAsset
+            {
+                id = "reproduce_preservation",
+                priority = NeuroLayer.Layer_3_High,
+                path_icon = "ui/Icons/status/disliked_sex",
+                cooldown = 30,
+                action_check_launch = actor => Util.IsDyingOut(actor) && actor.hasSubspeciesTrait("preservation") && Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor),
+                weight = 0.8f,
+                only_adult = true
+            });
+            AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("reproduce_preservation");
+            AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("reproduce_preservation");
+
+            var reproduceForPreservation = new BehaviourTaskActor
+            {
+                id = "reproduce_preservation",
+                locale_key = "task_reproduce_preservation",
+                path_icon = "ui/Icons/status/disliked_sex",
+            };
+            reproduceForPreservation.addBeh(new BehFindReproduceableSex());
+            reproduceForPreservation.addBeh(new BehSetNextTask("have_sex_go"));
+            AddBehavior(reproduceForPreservation);
 
             var inviteForSex = new BehaviourTaskActor
             {
@@ -73,8 +98,6 @@ namespace Better_Loving
                 path_icon = "ui/Icons/status/enjoyed_sex",
             };
             inviteForSex.addBeh(new BehFindMatchingPreference(true));
-            inviteForSex.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
-            inviteForSex.addBeh(new BehCheckNearActorTarget());
             inviteForSex.addBeh(new BehSetNextTask("have_sex_go"));
             AddBehavior(inviteForSex);
 
@@ -85,9 +108,7 @@ namespace Better_Loving
                 locale_key = "task_prostitution",
                 path_icon = "ui/Icons/status/disliked_sex",
             };
-            inviteForSex.addBeh(new BehFindMatchingPreference(false));
-            inviteForSex.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
-            inviteForSex.addBeh(new BehCheckNearActorTarget());
+            prostitution.addBeh(new BehFindMatchingPreference(false, paymentForProstitution));
             prostitution.addBeh(new BehSetNextTask("have_sex_go"));
             prostitution.addBeh(new BehRecievePaymentFromTarget(paymentForProstitution));
             AddBehavior(prostitution);
@@ -98,12 +119,15 @@ namespace Better_Loving
                 locale_key = "task_have_sex_go",
                 path_icon = "ui/Icons/status/enjoyed_sex",
             };
-            haveSexGo.addBeh(new BehGetTargetBuildingMainTile());
+            haveSexGo.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
+            haveSexGo.addBeh(new BehCheckNearActorTarget());
+            haveSexGo.addBeh(new BehGetPossibleTileForSex());
+            // haveSexGo.addBeh(new BehGetTargetBuildingMainTile());
             haveSexGo.addBeh(new BehGoToTileTarget());
             for (int index = 0; index < 6; ++index)
             {
                 haveSexGo.addBeh(new BehRandomWait(1f, 2f));
-                haveSexGo.addBeh(new BehCheckForSexTarget()); // replace with check with actor to have sex with
+                haveSexGo.addBeh(new BehCheckForSexTarget());
                 haveSexGo.addBeh(new BehRandomWait(1f, 2f));
             }
             AddBehavior(haveSexGo);
@@ -144,6 +168,29 @@ namespace Better_Loving
         }
     }
 
+    public class BehGetPossibleTileForSex : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pActor)
+        {
+            if (pActor.beh_actor_target == null)
+                return BehResult.Stop;
+            LogService.LogInfo("Looking for their homes..");
+            var homeBuilding = GetHomeBuilding(pActor, pActor.beh_actor_target.a);
+            // if (homeBuilding == null)
+            //     return BehResult.Stop;
+            pActor.beh_actor_target = homeBuilding;
+            pActor.beh_tile_target = homeBuilding != null ? homeBuilding.current_tile : pActor.current_tile;
+            return BehResult.Continue;
+        }
+
+        private static Building GetHomeBuilding(Actor pActor1, Actor pActor2)
+        {
+            if (pActor1.hasHouse())
+                return pActor1.getHomeBuilding();
+            return pActor2.hasHouse() ? pActor2.getHomeBuilding() : null;
+        }
+    }
+
     public class BehRecievePaymentFromTarget : BehaviourActionActor
     {
         private int _payment;
@@ -178,7 +225,10 @@ namespace Better_Loving
                 return BehResult.Stop;
             LogService.LogInfo("Checking to see if we can have sex soon..");
             Actor sexActor = pActor.beh_actor_target.a;
-            if (sexActor.isTask("have_sex_go") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 3)
+            if (sexActor.isTask("have_sex_go") && sexActor.ai.action_index > 3 && pActor.beh_building_target == null)
+            {
+                return forceTask(pActor, "sexual_reproduction_outside", false, true);
+            } else if (sexActor.isTask("have_sex_go") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 3)
             {
                 pActor.stayInBuilding(pActor.beh_building_target);
                 sexActor.stayInBuilding(sexActor.beh_building_target);
@@ -188,14 +238,48 @@ namespace Better_Loving
             return !sexActor.isTask("have_sex_go") ? BehResult.Stop : BehResult.Continue;
         }
     }
+    public class BehFindReproduceableSex : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pActor)
+        {
+            Actor closestActor = GetClosestPossibleMatchingActor(pActor);
+            if (closestActor == null)
+                return BehResult.Stop;
+            pActor.beh_actor_target = closestActor;
+            return BehResult.Continue;
+        }
+        
+        private Actor GetClosestPossibleMatchingActor(Actor pActor)
+        {
+            using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
+            {
+                var pRandom = Randy.randomBool();
+                var pChunkRadius = Randy.randomInt(1, 2);
+                var num = Randy.randomInt(5, 10);
+                foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
+                {
+                    if (pTarget != pActor && pActor.isSameIslandAs(pTarget) && Util.CanReproduce(pActor, pTarget) && pTarget.isAdult()
+                        && (pActor.subspecies == pTarget.subspecies || QueerTraits.PreferenceMatches(pTarget, pActor, true)))
+                    {
+                        pCollection.Add(pTarget);
+                        if (((ICollection) pCollection).Count >= num)
+                            break;
+                    }
+                }
 
+                return Toolbox.getClosestActor(pCollection, pActor.current_tile);
+            }
+        }
+    }
     public class BehFindMatchingPreference : BehaviourActionActor
     {
         private bool _preferenceMustMatch;
+        private int _payment;
 
-        public BehFindMatchingPreference(bool preferenceMustMatch)
+        public BehFindMatchingPreference(bool preferenceMustMatch, int payment=0)
         {
             _preferenceMustMatch = preferenceMustMatch;
+            _payment = payment;
         }
         public override BehResult execute(Actor pActor)
         {
@@ -209,7 +293,7 @@ namespace Better_Loving
         private Actor GetClosestPossibleMatchingActor(Actor pActor)
         {
             var bestFriendIsValid = pActor.hasBestFriend() && pActor.isSameIslandAs(pActor.getBestFriend()) 
-                                                           && pActor.distanceToActorTile(pActor.getBestFriend()) < 50f; 
+                                                           && pActor.distanceToActorTile(pActor.getBestFriend()) < 50f && pActor.hasEnoughMoney(_payment); 
             
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
@@ -218,11 +302,11 @@ namespace Better_Loving
                     return pActor.getBestFriend();
                 
                 var pRandom = Randy.randomBool();
-                var pChunkRadius = Randy.randomInt(1, 4);
+                var pChunkRadius = Randy.randomInt(1, 2);
                 var num = Randy.randomInt(5, 10);
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {
-                    if (pTarget != pActor && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pActor, pTarget, true) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
+                    if (pTarget != pActor && pTarget.hasEnoughMoney(_payment) && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pActor, pTarget, true) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
                     {
                         pCollection.Add(pTarget);
                         if (((ICollection) pCollection).Count >= num)
@@ -236,7 +320,7 @@ namespace Better_Loving
                         return pActor.getBestFriend();
                     foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                     {
-                        if (pTarget != pActor && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
+                        if (pTarget != pActor && pTarget.hasEnoughMoney(_payment) && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
                         {
                             pCollection.Add(pTarget);
                             if (((ICollection) pCollection).Count >= num)
@@ -285,7 +369,7 @@ namespace Better_Loving
                 // don't insult someone else
                 
                 var pRandom = Randy.randomBool();
-                var pChunkRadius = Randy.randomInt(1, 4);
+                var pChunkRadius = Randy.randomInt(1, 2);
                 var num = Randy.randomInt(1, 4);
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {

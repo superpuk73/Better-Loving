@@ -16,8 +16,17 @@ using NeoModLoader.General;
 - expressing sexuality should be decision based which will then lead to later sex tasks below (done)
 - people will have mood based on the sex they did and their sexual orientations (if they are straight but have sex with same sex, they may dislike the sex) (done)
 - adjust behaviours for sexual orientations for the behaviors that the game has like "BehCheckForBabiesFromSexualReproduction". This will pave the way for sex tasks outside of making babies (done)
+
+(seems to be bugged, hopefully fixed)
 - add sex task which allows units to go around fucking other ppl (with a trait that determines if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (FWB moment) (done)
+^^ need to make a task so they can do it outside as well (done?)
+
+(seems to be bugged, hopefully fixed)
 - prostitution which is a similar task to above but payment required! :o (units that are poor may do this) (done)
+
+- need to make it possible for units to have sex even without a house so they can make babies with non-lovers
+
+(wip)
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
 
 - alter sex method to be considered cheating if done with two other actors if a certain cultural trait isn’t there (done)
@@ -310,8 +319,10 @@ namespace Better_Loving
                 actorFromData.setParent1(dominantParent);
                 if (nonDominantParent != null)
                     actorFromData.setParent2(nonDominantParent);
-                if (pAddToFamily && !dominantParent.hasFamily())
+                if (pAddToFamily && !dominantParent.hasFamily() && (nonDominantParent == null || !nonDominantParent.hasFamily()))
                     World.world.families.newFamily(dominantParent, dominantParent.current_tile, nonDominantParent);
+                else if(pAddToFamily && dominantParent.hasFamily())
+                    actorFromData.setFamily(dominantParent.family);
                 BabyHelper.applyParentsMeta(dominantParent, nonDominantParent, actorFromData);
                 // the game seems to have some sort of code that chooses a baby's subspecies based on generation? not really sure how it works tbh
                 actorFromData.setSubspecies(dominantParent.subspecies);
@@ -381,6 +392,8 @@ namespace Better_Loving
     }
 
     // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
+    // may prevent babies from being made for now when ppl have no houses and it's just two gay ppl with opposite sexes
+    // we need to find a way to fix the above
     [HarmonyPatch(typeof(DecisionAsset), nameof(DecisionAsset.isPossible))]
     class IsPossiblePatch
     {
@@ -403,6 +416,32 @@ namespace Better_Loving
             }
 
             return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
+        nameof(BehCheckForBabiesFromSexualReproduction.execute))]
+    class SexPatch
+    {
+        static bool Prefix(Actor pActor, ref BehResult __result, BehCheckForBabiesFromSexualReproduction __instance)
+        {
+            var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
+            if (target == null)
+            {
+                LogService.LogInfo("INVALID TARGET");
+                __result = BehResult.Stop;
+                return false;
+            }
+            LogService.LogInfo("Valid target! Moving on..");
+            pActor.addAfterglowStatus();
+            target.addAfterglowStatus();
+            pActor.changeHappiness("just_kissed");
+            target.changeHappiness("just_kissed");
+            
+            pActor.subspecies.counter_reproduction_acts?.registerEvent();
+            __instance.checkForBabies(pActor, target);
+            __result = BehResult.Continue;
+            return false;
         }
     }
     
