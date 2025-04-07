@@ -13,14 +13,14 @@ using NeoModLoader.General;
 # Upcoming features for the mod. TLDR: Reworking the sexuality system to be more advanced
 
 ## The below are big ideas that will massively refactor sexuality orientations to be more advanced than they currently are
-- expressing sexuality should be decision based which will then lead to later sex tasks below
-- people will have mood based on the sex they did and their sexual orientations (if they are straight but have sex with same sex, they may dislike the sex)
-- adjust behaviours for sexual orientations for the behaviors that the game has like "BehCheckForBabiesFromSexualReproduction". This will pave the way for sex tasks outside of making babies
-- add sex task which allows units to go around fucking other ppl (with a trait that determines if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (FWB moment)
-- prostitution which is a similar task to above but payment required! :o (units that are poor may do this)
+- expressing sexuality should be decision based which will then lead to later sex tasks below (done)
+- people will have mood based on the sex they did and their sexual orientations (if they are straight but have sex with same sex, they may dislike the sex) (done)
+- adjust behaviours for sexual orientations for the behaviors that the game has like "BehCheckForBabiesFromSexualReproduction". This will pave the way for sex tasks outside of making babies (done)
+- add sex task which allows units to go around fucking other ppl (with a trait that determines if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (FWB moment) (done)
+- prostitution which is a similar task to above but payment required! :o (units that are poor may do this) (done)
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
 
-- alter sex method to be considered cheating if done with two other actors if a certain cultural trait isn’t there
+- alter sex method to be considered cheating if done with two other actors if a certain cultural trait isn’t there (done)
 */
 namespace Better_Loving
 {
@@ -54,6 +54,7 @@ namespace Better_Loving
             ActorTraits.Init();
             CultureTraits.Init();
             SubspeciesTraits.Init();
+            StatusEffects.Init();
             Happiness.Init();
             CommunicationTopics.Init();
             DecisionAndBehaviorTasks.Init();
@@ -145,11 +146,12 @@ namespace Better_Loving
                 __instance.changeHappiness("true_self");
             }
             
-            // Randomize breaking up (0.1% if preferences match. 5% if preferences do not match. 50% if they are dying out and they cannot reproduce with their lover) 
+            // Randomize breaking up (1% if preferences match. 25% if preferences do not match. 50% if they are dying out and they cannot reproduce with their lover) 
             if (__instance.hasLover() && 
                 Randy.randomChance(
-                    Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, __instance.lover) ? 0.5f 
-                    : !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.05f : 0.001f))
+                    // not needed since normal sex can happen now
+                    // Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, __instance.lover) ? 0.5f : 
+                    !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f))
             {
                 Util.BreakUp(__instance);
             }
@@ -162,12 +164,7 @@ namespace Better_Loving
         // removes past lovers for cheating purposes
         static void Prefix(Actor pTarget, Actor __instance)
         {
-            if (__instance.hasLover() && __instance.lover != pTarget)
-            {
-                var cheatedActor = __instance.lover;
-                cheatedActor.setLover(null);
-                cheatedActor.changeHappiness("cheated_on");
-            }
+            Util.PotentiallyCheatedWith(__instance, pTarget);
         }
         static void Postfix(Actor pTarget, Actor __instance)
         {
@@ -196,13 +193,15 @@ namespace Better_Loving
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             
             if (
-                (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless") 
-                                                                            && (!Util.IsDyingOut(__instance) || !__instance.hasSubspeciesTrait("preservation")))
-                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless") 
-                    && (!Util.IsDyingOut(pTarget) || !pTarget.hasSubspeciesTrait("preservation")))
+                // the code below was for preservation, however ppl can now have sex without lovers so this is not necessary
                 
-                // homophobic cultural trait
-                // ||(__instance.data.sex == pTarget.data.sex && (__instance.hasCultureTrait("homophobic") || pTarget.hasCultureTrait("homophobic")))
+                // (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless") 
+                //                                                             && (!Util.IsDyingOut(__instance) || !__instance.hasSubspeciesTrait("preservation")))
+                //  || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless") 
+                //     && (!Util.IsDyingOut(pTarget) || !pTarget.hasSubspeciesTrait("preservation")))
+                //
+                 (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless"))
+                 || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless"))
                 
                 || (__instance.hasLover() && (!Randy.randomChance(
                         (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
@@ -238,14 +237,15 @@ namespace Better_Loving
                 return false;
             }
 
-            if (
-                (__instance.hasSubspeciesTrait("preservation") && Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, pTarget))
-                ||
-                (pTarget.hasSubspeciesTrait("preservation") && Util.IsDyingOut(pTarget) && !Util.CanReproduce(pTarget, __instance))
-                ) {
-                __result = false;
-                return false;
-            }
+            // was for preservation but now people can have sex outside of this
+            // if (
+            //     (__instance.hasSubspeciesTrait("preservation") && Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, pTarget))
+            //     ||
+            //     (pTarget.hasSubspeciesTrait("preservation") && Util.IsDyingOut(pTarget) && !Util.CanReproduce(pTarget, __instance))
+            //     ) {
+            //     __result = false;
+            //     return false;
+            // }
             
             __result = true;
 
@@ -379,8 +379,34 @@ namespace Better_Loving
             }
         }
     }
+
+    // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
+    [HarmonyPatch(typeof(DecisionAsset), nameof(DecisionAsset.isPossible))]
+    class IsPossiblePatch
+    {
+        static bool Prefix(Actor pActor, DecisionAsset __instance, ref bool __result)
+        {
+            // this is for decision asset: sexual_reproduction_try, this basically cancels sex with their partner
+            if (__instance.id == "sexual_reproduction_try")
+            {
+                var pParentA = pActor;
+                var pParentB = pActor.lover;
+                if (pActor.hasLover() && 
+                    (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
+                     || !QueerTraits.PreferenceMatches(pParentB, pParentA, true)))
+                    // below can now happen with casual sex and be allowed
+                    // && (!Util.IsDyingOut(pParentA) || !pParentA.hasSubspeciesTrait("preservation")) && (!Util.IsDyingOut(pParentB) || !pParentA.hasSubspeciesTrait("preservation")))
+                {
+                    __result = false;
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
     
-    // this patch handles who the mother is when it comes to sexual reproduction and if it should even happen
+    // this patch handles who the mother is when it comes to sexual reproduction
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.checkForBabies))]
     class CheckForBabiesPatch
@@ -396,17 +422,14 @@ namespace Better_Loving
         }
         static bool Prefix(Actor pParentA, Actor pParentB, BehCheckForBabiesFromSexualReproduction __instance)
         {
+            // had sex
+            Util.JustHadSex(pParentA, pParentB);
+
             if (!CanMakeBabies(pParentA) || !CanMakeBabies(pParentB))
                 return false;
 
             // ensures that both subspecies HAVE not reached population limit
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
-                return false;
-            
-            // TODO: this is not really perfect, we will edit this later cuz they still had sex they just dont make baby. We need to change this when we make sex updates!!
-            if ((!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
-                || !QueerTraits.PreferenceMatches(pParentB, pParentA, true))
-                && (!Util.IsDyingOut(pParentA) || !pParentA.hasSubspeciesTrait("preservation")) && (!Util.IsDyingOut(pParentB) || !pParentA.hasSubspeciesTrait("preservation")))
                 return false;
             
             var subspeciesA = pParentA.subspecies;

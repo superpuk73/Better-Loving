@@ -52,9 +52,9 @@ namespace Better_Loving
             orientationLess.opposite_traits.Add(homophobic);
             orientationLess.opposite_traits.Add(heterophobic);
             
-            Add(homophobic, "orc", "demon");
-            Add(heterophobic, "flower_bud", "garl");
-            Add(orientationLess, "angle", "snowman");
+            Add(homophobic, List.Of("orc", "demon"), List.Of("biome_swamp", "biome_infernal", "biome_corrupted"));
+            Add(heterophobic, List.Of("flower_bud", "garl"), List.Of("biome_candy"));
+            Add(orientationLess, List.Of("angle", "snowman"), List.Of("biome_crystal"));
             
             Add(new CultureTrait
             {
@@ -65,7 +65,7 @@ namespace Better_Loving
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, "orc", "demon");
+            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
             
             Add(new CultureTrait
             {
@@ -76,7 +76,7 @@ namespace Better_Loving
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, "elf", "coolbeak");
+            }, List.Of("elf", "coolbeak"), List.Of("biome_celestial", "biome_flower"));
             
             Add(new CultureTrait
             {
@@ -87,8 +87,19 @@ namespace Better_Loving
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, "human", "elf", "dwarf");
+            }, List.Of("human", "elf", "dwarf"), List.Of("biome_grass", "biome_maple"));
 
+            Add(new CultureTrait
+            {
+                id = "sexual_expectations",
+                group_id = "miscellaneous",
+                needs_to_be_explored = true,
+                rarity = Rarity.R1_Rare,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("elf"), List.Of("biome_maple"));
+            
             Add(new CultureTrait
             {
                 id = "scar_of_incest",
@@ -97,19 +108,28 @@ namespace Better_Loving
                 can_be_given = true,
                 can_be_in_book = false,
                 can_be_removed = true,
-            }, "orc", "demon");
+            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
         }
 
-        private static void Add(CultureTrait trait, params string[] assets)
+        private static void Add(CultureTrait trait, List<string> actorAssets=null, List<string> biomeAssets=null)
         {
             trait.path_icon = "ui/Icons/culture_traits/" + trait.id;
             AssetManager.culture_traits.add(trait);
-            foreach (var asset in assets)
-            {
-                var actorAsset = AssetManager.actor_library.get(asset);
-                if(actorAsset != null)
-                    actorAsset.addCultureTrait(trait.id);
-            }
+            if(actorAssets != null)
+                foreach (var asset in actorAssets)
+                {
+                    var actorAsset = AssetManager.actor_library.get(asset);
+                    if(actorAsset != null)
+                        actorAsset.addCultureTrait(trait.id);
+                }
+            
+            if(biomeAssets != null)
+                foreach (var asset in biomeAssets)
+                {
+                    var biomeAsset = AssetManager.biome_library.get(asset);
+                    if(biomeAsset != null)
+                        biomeAsset.addCultureTrait(trait.id);
+                }
         }
     }
 }

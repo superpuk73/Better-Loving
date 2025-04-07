@@ -59,7 +59,42 @@ namespace Better_Loving
         // handle cheating here too
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
+            if (QueerTraits.PreferenceMatches(actor1, actor2, true))
+                actor1.addStatusEffect("enjoyed_sex");
+            else
+                actor1.addStatusEffect("disliked_sex");
+            if (QueerTraits.PreferenceMatches(actor2, actor1, true))
+                actor2.addStatusEffect("enjoyed_sex");
+            else
+                actor2.addStatusEffect("disliked_sex");
+
+            if (!actor1.hasCultureTrait("sexual_expectation"))
+            {
+                PotentiallyCheatedWith(actor1, actor2);
+            }
             
+            if (!actor2.hasCultureTrait("sexual_expectation"))
+            {
+                PotentiallyCheatedWith(actor2, actor1);
+            }
+        }
+
+        public static bool CanHaveSexWithoutRepercussionsWithSomeoneElse(Actor actor)
+        {
+            return !actor.hasLover() || (actor.hasLover() 
+                                         && !QueerTraits.PreferenceMatches(actor, actor.lover, true)
+                                         && ((actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations")) 
+                                             || (actor.hasSubspeciesTrait("preservation") && IsDyingOut(actor))));
+        }
+
+        public static void PotentiallyCheatedWith(Actor actor, Actor actor2)
+        {
+            if (actor.hasLover() && actor.lover != actor2)
+            {
+                var cheatedActor = actor.lover;
+                cheatedActor.setLover(null);
+                cheatedActor.changeHappiness("cheated_on");
+            }
         }
 
         public static void BreakUp(Actor actor)

@@ -37,7 +37,7 @@ namespace Better_Loving
                 pot_task_id = "singing",
                 path_icon = "ui/Icons/iconAge",
                 ignored_by_psychopaths = false,
-                pot_amount = 1,
+                pot_amount = 5,
                 show_change_happiness_effect = true
             });
             
@@ -48,7 +48,7 @@ namespace Better_Loving
                 pot_task_id = "singing",
                 path_icon = "ui/Icons/iconAge",
                 ignored_by_psychopaths = false,
-                pot_amount = 1,
+                pot_amount = 5,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
             });
@@ -60,7 +60,7 @@ namespace Better_Loving
                 pot_task_id = "crying",
                 path_icon = "ui/Icons/iconCrying",
                 ignored_by_psychopaths = false,
-                pot_amount = 1,
+                pot_amount = 5,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
             });
@@ -72,7 +72,27 @@ namespace Better_Loving
                 pot_task_id = "crying",
                 path_icon = "ui/Icons/iconCrying",
                 ignored_by_psychopaths = false,
-                pot_amount = 1,
+                pot_amount = 5,
+                show_change_happiness_effect = true,
+                dialogs_amount = 2
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "enjoyed_sex",
+                value = 15,
+                path_icon = "ui/Icons/status/enjoyed_sex",
+                ignored_by_psychopaths = false,
+                show_change_happiness_effect = true,
+                dialogs_amount = 2
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "disliked_sex",
+                value = -15,
+                path_icon = "ui/Icons/status/disliked_sex",
+                ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
             });

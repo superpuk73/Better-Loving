@@ -31,12 +31,12 @@
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\QueerTraits.cs" />
+        <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\SubspeciesTraits.cs" />
         <Compile Include="Mian\TopicOfLoving.cs" />
         <Compile Include="Mian\Util.cs" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="GameResources\"/>
       <Content Include="default_config.json" />
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
