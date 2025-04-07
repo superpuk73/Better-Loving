@@ -12,20 +12,65 @@ public class StatusEffects
         Add(new StatusAsset
         {
             id="enjoyed_sex",
-            locale_id = "status_title_enjoyed_sex",
-            locale_description = "status_description_enjoyed_sex",
             duration = 60f,
-            path_icon = "ui/Icons/status/enjoyed_sex",
-            action_on_receive = (actor, _) => actor.a.changeHappiness("enjoyed_sex")
+            action_on_receive = (actor, _) =>
+            {
+                Util.ChangeSexualHappinessBy(actor.a, 15f);
+                actor.a.changeHappiness("enjoyed_sex");
+                return true;
+            }
         });
         Add(new StatusAsset
         {
             id="disliked_sex",
-            locale_id = "status_title_disliked_sex",
-            locale_description = "status_description_disliked_sex",
             duration = 60f,
-            path_icon = "ui/Icons/status/disliked_sex",
-            action_on_receive = (actor, _) => actor.a.changeHappiness("disliked_sex")
+            action_on_receive = (actor, _) => 
+            {
+                Util.ChangeSexualHappinessBy(actor.a, -15f);
+                actor.a.changeHappiness("disliked_sex");
+                return true;
+            }
+        });
+        Add(new StatusAsset
+        {
+            id="okay_sex",
+            duration = 60f,
+            action_on_receive = (actor, _) =>
+            {
+                Util.ChangeSexualHappinessBy(actor.a, 5f);
+                actor.a.changeHappiness("okay_sex");
+                return true;
+            }
+        });
+        Add(new StatusAsset
+        {
+            id="cheated_on",
+            duration = 60f,
+            action_on_receive = (cheatedActor, _) =>
+            {
+                if (Randy.randomChance(0.5f))
+                {
+                    cheatedActor.a.addStatusEffect("crying");
+                } else
+                {
+                    cheatedActor.a.addAggro(cheatedActor.a.lover);
+                    cheatedActor.a.lover.data.get("last_had_sex_with", out long id);
+                    var otherActorInvolved = MapBox.instance.units.get(id);
+                    if (otherActorInvolved != null)
+                    {
+                        cheatedActor.a.addAggro(otherActorInvolved);
+                        if(otherActorInvolved.isOnSameIsland(cheatedActor.a))
+                            cheatedActor.a.startFightingWith(otherActorInvolved);
+                    }
+                    else
+                    {
+                        if(cheatedActor.a.lover.isOnSameIsland(cheatedActor.a))
+                            cheatedActor.a.startFightingWith(cheatedActor.a.lover);
+                    }
+                }
+                cheatedActor.a.changeHappiness("cheated_on");
+                return true;
+            }
         });
         Finish();
     }
@@ -54,6 +99,9 @@ public class StatusEffects
     private static void Add(StatusAsset asset)
     {
         AssetManager.status.add(asset);
+        asset.locale_id = "status_title_" + asset.id;
+        asset.locale_description = "status_description_" + asset.id;
+        asset.path_icon = "ui/Icons/status/" + asset.id;
         _assets.Add(asset);
     }
 }

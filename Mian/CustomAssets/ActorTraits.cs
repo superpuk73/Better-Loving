@@ -1,12 +1,14 @@
-﻿namespace Better_Loving
+﻿using System.Collections.Generic;
+
+namespace Better_Loving
 {
     public class ActorTraits
     {
         public static void Init()
         {
-            Add(new ActorTrait
+            var faithful = new ActorTrait
             {
-                id="faithful",
+                id = "faithful",
                 group_id = "mind",
                 rate_birth = 2,
                 rate_acquire_grow_up = 4,
@@ -15,11 +17,12 @@
                 rarity = Rarity.R1_Rare,
                 needs_to_be_explored = true,
                 affects_mind = true,
-            });
-            
-            Add(new ActorTrait
+                opposite_traits = new HashSet<ActorTrait>()
+            };
+
+            var unfaithful = new ActorTrait
             {
-                id="unfaithful",
+                id = "unfaithful",
                 group_id = "mind",
                 rate_birth = 2,
                 rate_acquire_grow_up = 4,
@@ -28,7 +31,13 @@
                 rarity = Rarity.R1_Rare,
                 needs_to_be_explored = true,
                 affects_mind = true,
-            });
+                opposite_traits = new HashSet<ActorTrait>()
+            };
+            faithful.opposite_traits.Add(unfaithful);
+            unfaithful.opposite_traits.Add(faithful);
+            
+            Add(faithful);
+            Add(unfaithful);
         }
 
         private static void Add(ActorTrait trait)

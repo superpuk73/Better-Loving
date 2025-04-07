@@ -1,17 +1,24 @@
 ﻿{
-  "status_title_disliked_sex": "Disliked Sex",
+  "status_title_disliked_sex": "Disliked Coupling",
   "status_description_disliked_sex": "Sexual preferences were not met",
 
-  "status_title_enjoyed_sex": "Enjoyed Sex",
+  "status_title_enjoyed_sex": "Enjoyed Coupling",
   "status_description_enjoyed_sex": "Sexual preferences were met",
+
+  "status_title_okay_sex": "Mildly Enjoyed Coupling",
+  "status_description_okay_sex": "Sexual preferences were met but it wasn't the best",
+
+  "happiness_okay_sex": "Mildly enjoyed coupling",
+  "happiness_dialog_okay_sex_0": "That was alright, they weren't the best at it.",
+  "happiness_dialog_okay_sex_1": "Meh, at least it was okay",
   
-  "happiness_enjoyed_sex": "Enjoyed sex",
+  "happiness_enjoyed_sex": "Enjoyed coupling",
   "happiness_dialog_enjoyed_sex_0": "I loved that! I would be down to do them again.",
   "happiness_dialog_enjoyed_sex_1": "Perfect, just how I like doing it.",
 
-  "happiness_disliked_sex": "Disliked sex",
-  "happiness_dialog_disliked_sex_0": "I hated that sex.",
-  "happiness_dialog_disliked_sex_1": "That sex was terrible.",
+  "happiness_disliked_sex": "Disliked coupling",
+  "happiness_dialog_disliked_sex_0": "I did not like any single bit of that.",
+  "happiness_dialog_disliked_sex_1": "Ugh that was terrible, I regret doing that.",
   
   "happiness_cheated_on": "Cheated on",
   "happiness_dialog_cheated_on_0": "Why does this always happen to me..?",

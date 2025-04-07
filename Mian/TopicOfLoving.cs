@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using ai;
 using ai.behaviours;
 using NeoModLoader.api;
 using NeoModLoader.services;
@@ -22,10 +20,14 @@ using NeoModLoader.General;
 - add sex task which allows units to go around fucking other ppl (with a trait that determines if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (FWB moment) (done)
 ^^ need to make a task so they can do it outside as well (done?)
 
-(seems to be bugged, hopefully fixed)
-- prostitution which is a similar task to above but payment required! :o (units that are poor may do this) (done)
+(needs to be a job, but prob not gonna get added anymore)
+- prostitution which is a similar task to above but payment required! :o (units that are poor may do this)
 
-- need to make it possible for units to have sex even without a house so they can make babies with non-lovers
+- need to make it possible for units to have sex even without a house so they can make babies with non-lovers (done)
+
+- status effects are not always applying on sex!
+
+- add status for cheating on (done)
 
 (wip)
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
@@ -116,6 +118,7 @@ namespace Better_Loving
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
+            __instance.data.set("sexual_happiness", 0f);
         }
     }
 
@@ -150,6 +153,10 @@ namespace Better_Loving
                     if(changed)
                         __instance.changeHappiness("true_self");
                 }
+                if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither)
+                    Util.ChangeSexualHappinessBy(__instance.a, -10f);
+                else
+                    __instance.data.set("sexual_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
                 QueerTraits.GiveQueerTraits(__instance, false, true);
@@ -420,13 +427,12 @@ namespace Better_Loving
         {
             if (__instance.last_decision_id.Equals("invite_for_sex"))
             {
-                LogService.LogInfo("last decision is invite for sex");
-
-                if (pTaskId.Equals("sexual_reproduction_outside") || pTaskId.Equals("sexual_reproduction_civ_action"))
-                {
-                    LogService.LogInfo("Set chances because this is casual sex");
-                    __instance.data.set("chanceOfPregnancy", 0.1F);
-                }
+                LogService.LogInfo("Set chances because this is casual sex");
+                __instance.data.set("chanceOfPregnancy", 0.1F);
+            }
+            else
+            {
+                __instance.data.removeFloat("chanceOfPregnancy");
             }
 
             return true;

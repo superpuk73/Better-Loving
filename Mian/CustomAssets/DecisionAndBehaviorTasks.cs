@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ai.behaviours;
 using HarmonyLib;
@@ -44,8 +45,8 @@ namespace Better_Loving
                 priority = NeuroLayer.Layer_1_Low, // set to low priority later
                 path_icon = "ui/Icons/status/enjoyed_sex",
                 cooldown = 120,
-                action_check_launch = actor => Util.IsSmart(actor) && QueerTraits.GetQueerTraits(actor).Count >= 2
-                                               && (Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor) || (actor.hasTrait("unfaithful") && Randy.randomChance(0.1f))),
+                action_check_launch = actor => Util.IsSmart(actor) && QueerTraits.GetQueerTraits(actor).Count >= 2 
+                                                                   && !Util.IsSexualHappinessEnough(actor, 100f),
                 list_civ = true,
                 weight = 0.1f,
                 only_adult = true
@@ -245,11 +246,8 @@ namespace Better_Loving
     {
         public override BehResult execute(Actor pActor)
         {
-            LogService.LogInfo("Is target null: "+(pActor.beh_actor_target==null));
-
             if (pActor.beh_actor_target == null)
                 return BehResult.Stop;
-            LogService.LogInfo("Checking to see if we can have sex soon..");
             
             Actor sexActor = pActor.beh_actor_target.a;
             if (sexActor.isTask("have_sex_go") && sexActor.ai.action_index > 3 && sexActor.beh_building_target == null)
@@ -276,10 +274,26 @@ namespace Better_Loving
     {
         public override BehResult execute(Actor pActor)
         {
+            var lover = pActor.lover;
+            Actor closestActor = null;
+
+            if (lover != null)
+            {
+                if (lover.isSameIslandAs(pActor)
+                    && Util.WillDoSex(lover) && Util.CanReproduce(pActor, lover))
+                {
+                    closestActor = lover;
+                }
+            }
+
+            // try to do it with lover first
             LogService.LogInfo(pActor.getName()+ ": Trying to find closest actor for reproduction");
-            Actor closestActor = GetClosestPossibleMatchingActor(pActor);
             if (closestActor == null)
-                return BehResult.Stop;
+            {
+                closestActor = GetClosestPossibleMatchingActor(pActor);
+                if (closestActor == null)
+                    return BehResult.Stop;   
+            }
             LogService.LogInfo("Success! " + closestActor.getName());
             pActor.beh_actor_target = closestActor;
             return BehResult.Continue;
@@ -296,7 +310,10 @@ namespace Better_Loving
                 {
                     if (pTarget != pActor && Util.CanMakeBabies(pTarget)
                         && pActor.isSameIslandAs(pTarget) && Util.CanReproduce(pActor, pTarget) && pTarget.isAdult()
-                        && pActor.subspecies == pTarget.subspecies)
+                        && (pActor.subspecies == pTarget.subspecies 
+                            || (Util.IsSmart(pTarget) && Util.IsSmart(pActor) 
+                                                      && QueerTraits.PreferenceMatches(pTarget, pActor, true)
+                                                      && Util.WillDoSex(pTarget, false))))
                     {
                         pCollection.Add(pTarget);
                         if (((ICollection) pCollection).Count >= num)
@@ -318,12 +335,37 @@ namespace Better_Loving
             _preferenceMustMatch = preferenceMustMatch;
             _payment = payment;
         }
+        
         public override BehResult execute(Actor pActor)
         {
-            LogService.LogInfo(pActor.getName() + " is looking for casual sex with someone matching my preference");
-            Actor closestActor = GetClosestPossibleMatchingActor(pActor);
-            if (closestActor == null)
+            var lover = pActor.lover;
+            var withLover = false;
+            Actor closestActor = null;
+
+            if (lover != null)
+            {
+                if (lover.isSameIslandAs(pActor)
+                    && QueerTraits.PreferenceMatches(pActor, lover, true)
+                    && QueerTraits.PreferenceMatches(lover, pActor, true)
+                    && Util.WillDoSex(lover))
+                {
+                    closestActor = lover;
+                    withLover = true;
+                }
+            }
+            
+            if (!Util.WillDoSex(pActor, withLover))
                 return BehResult.Stop;
+                
+            LogService.LogInfo(pActor.getName() + " is looking for casual sex with someone matching my preference");
+
+            if (closestActor == null)
+            {
+                closestActor = GetClosestPossibleMatchingActor(pActor);
+                if (closestActor == null)
+                    return BehResult.Stop;   
+            }
+            
             LogService.LogInfo("Success! "+closestActor.getName());
             pActor.beh_actor_target = closestActor;
             return BehResult.Continue;
@@ -337,7 +379,8 @@ namespace Better_Loving
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
                 if (bestFriendIsValid && QueerTraits.PreferenceMatches(pActor, pActor.getBestFriend(), true) &&
-                    QueerTraits.PreferenceMatches(pActor.getBestFriend(), pActor, true))
+                    QueerTraits.PreferenceMatches(pActor.getBestFriend(), pActor, true)
+                    && Util.WillDoSex(pActor.getBestFriend(), false))
                     return pActor.getBestFriend();
                 
                 var pRandom = Randy.randomBool();
@@ -345,29 +388,34 @@ namespace Better_Loving
                 var num = Randy.randomInt(5, 10);
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {
-                    if (pTarget != pActor && pTarget.hasEnoughMoney(_payment) && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pActor, pTarget, true) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
+                    if (pTarget != pActor 
+                        && pTarget.hasEnoughMoney(_payment) 
+                        && pActor.isSameIslandAs(pTarget) 
+                        && QueerTraits.PreferenceMatches(pActor, pTarget, true) 
+                        && QueerTraits.PreferenceMatches(pTarget, pActor, true)
+                        && Util.WillDoSex(pTarget, false))
                     {
                         pCollection.Add(pTarget);
                         if (((ICollection) pCollection).Count >= num)
                             break;
                     }
                 }
-
-                if (((ICollection) pCollection).Count <= 0 && !_preferenceMustMatch)
-                {
-                    if (bestFriendIsValid && QueerTraits.PreferenceMatches(pActor.getBestFriend(), pActor, true))
-                        return pActor.getBestFriend();
-                    foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
-                    {
-                        if (pTarget != pActor && pTarget.hasEnoughMoney(_payment) && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
-                        {
-                            pCollection.Add(pTarget);
-                            if (((ICollection) pCollection).Count >= num)
-                                break;
-                        }
-                    }
-
-                }
+                //
+                // if (((ICollection) pCollection).Count <= 0 && !_preferenceMustMatch)
+                // {
+                //     if (bestFriendIsValid && QueerTraits.PreferenceMatches(pActor.getBestFriend(), pActor, true))
+                //         return pActor.getBestFriend();
+                //     foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
+                //     {
+                //         if (pTarget != pActor && pTarget.hasEnoughMoney(_payment) && pActor.isSameIslandAs(pTarget) && QueerTraits.PreferenceMatches(pTarget, pActor, true))
+                //         {
+                //             pCollection.Add(pTarget);
+                //             if (((ICollection) pCollection).Count >= num)
+                //                 break;
+                //         }
+                //     }
+                //
+                // }
                 
                 return Toolbox.getClosestActor(pCollection, pActor.current_tile);
             }
@@ -441,12 +489,12 @@ namespace Better_Loving
                 return BehResult.Stop;
             target.changeHappiness("insulted_for_orientation");
 
-            if (Randy.randomChance(0.25f))
+            if (Randy.randomChance(0.5f))
             {
                 pActor.addAggro(target);
                 pActor.startFightingWith(target);
             }
-            else if (Randy.randomChance(0.8f))
+            else if (Randy.randomChance(0.6f))
             {
                 target.addStatusEffect("crying");
             } else if (Randy.randomChance(0.8f))

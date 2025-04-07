@@ -81,7 +81,6 @@ namespace Better_Loving
             {
                 id = "enjoyed_sex",
                 value = 15,
-                path_icon = "ui/Icons/status/enjoyed_sex",
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
@@ -91,7 +90,15 @@ namespace Better_Loving
             {
                 id = "disliked_sex",
                 value = -15,
-                path_icon = "ui/Icons/status/disliked_sex",
+                ignored_by_psychopaths = false,
+                show_change_happiness_effect = true,
+                dialogs_amount = 2
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "okay_sex",
+                value = 5,
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
@@ -101,6 +108,8 @@ namespace Better_Loving
         private static void Add(HappinessAsset asset)
         {
             AssetManager.happiness_library.add(asset);
+            if(asset.path_icon == null)
+                asset.path_icon = "ui/Icons/status"+asset.id;
             asset.index = AssetManager.happiness_library.list.Count-1;
         }
     }
