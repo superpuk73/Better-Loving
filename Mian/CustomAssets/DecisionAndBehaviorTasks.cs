@@ -108,6 +108,47 @@ namespace Better_Loving
 
         private static void Finish()
         {
+            // using (ListPool<DecisionAsset> list1 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_civ))
+            // {
+            //     using (ListPool<DecisionAsset> list2 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_children))
+            //     {
+            //         using (ListPool<DecisionAsset> list3 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_city))
+            //         {
+            //             using (ListPool<DecisionAsset> list4 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_animal))
+            //             {
+            //                 using (ListPool<DecisionAsset> list5 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_others))
+            //                 {
+            //                     int num = 0;
+            //                     for(int i = 0; i < _decisionAssets.Count; i++)
+            //                     {
+            //                         DecisionAsset decisionAsset = _decisionAssets[i];
+            //                         decisionAsset.decision_index = num++;
+            //                         decisionAsset.priority_int_cached = (int) decisionAsset.priority;
+            //                         decisionAsset.has_weight_custom = decisionAsset.weight_calculate_custom != null;
+            //                         if (!decisionAsset.unique)
+            //                         {
+            //                             if (decisionAsset.list_baby)
+            //                                 list2.Add(decisionAsset);
+            //                             else if (decisionAsset.list_animal)
+            //                                 list4.Add(decisionAsset);
+            //                             else if (decisionAsset.list_civ)
+            //                                 list1.Add(decisionAsset);
+            //                             else
+            //                                 list5.Add(decisionAsset);
+            //                         }
+            //                     }
+            //                     this.list_only_civ = list1.ToArray<DecisionAsset>();
+            //                     this.list_only_children = list2.ToArray<DecisionAsset>();
+            //                     this.list_only_city = list3.ToArray<DecisionAsset>();
+            //                     this.list_only_animal = list4.ToArray<DecisionAsset>();
+            //                     this.list_others = list5.ToArray<DecisionAsset>();
+            //                     base.linkAssets();
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            
             for(int i = 0; i < _decisionAssets.Count; i++)
             {
                 var decisionAsset = _decisionAssets[i];
@@ -312,8 +353,9 @@ namespace Better_Loving
         
         private Actor GetClosestPossibleMatchingActor(Actor pActor)
         {
-            var bestFriendIsValid = pActor.hasBestFriend() && pActor.isSameIslandAs(pActor.getBestFriend()) 
-                                                           && pActor.distanceToActorTile(pActor.getBestFriend()) < 50f; 
+            var bestFriendIsValid = pActor.hasBestFriend() 
+                                    && pActor.isSameIslandAs(pActor.getBestFriend()) 
+                                    && pActor.distanceToActorTile(pActor.getBestFriend()) < 50f; 
             
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {

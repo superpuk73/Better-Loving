@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Better_Loving;
@@ -15,7 +16,21 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (actor, _) =>
             {
-                Util.ChangeSexualHappinessBy(actor.a, 40f);
+                actor.a.data.get("sexual_happiness", out float happiness);
+                actor.a.data.get("last_had_sex_with", out long partnerID);
+                var changeBy = 0f;
+                
+                var sexPartner = MapBox.instance.units.get(partnerID);
+                if (sexPartner != null && sexPartner == actor.a.lover)
+                    changeBy += 30f;
+                
+                if (happiness <= 0)
+                {
+                    changeBy += Math.Abs(happiness / 2);
+                }
+                
+                Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                
                 actor.a.changeHappiness("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
                 actor.a.finishStatusEffect("okay_sex");
@@ -28,7 +43,15 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (actor, _) => 
             {
-                Util.ChangeSexualHappinessBy(actor.a, -15f);
+                actor.a.data.get("sexual_happiness", out float happiness);
+                var changeBy = -20f;
+                
+                if (happiness <= 0)
+                {
+                    changeBy += happiness / 3; // become more deprived if the sex was bad
+                }
+
+                Util.ChangeSexualHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("disliked_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("okay_sex");
@@ -41,7 +64,14 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (actor, _) =>
             {
-                Util.ChangeSexualHappinessBy(actor.a, 20f);
+                actor.a.data.get("last_had_sex_with", out long partnerID);
+                var changeBy = 10f;
+                
+                var sexPartner = MapBox.instance.units.get(partnerID);
+                if (sexPartner != null && sexPartner == actor.a.lover)
+                    changeBy += 10f; // okay sex but add extra if with lover at least
+                
+                Util.ChangeSexualHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("okay_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -75,6 +105,7 @@ public class StatusEffects
                     }
                 }
                 cheatedActor.a.changeHappiness("cheated_on");
+                cheatedActor.a.data.set("cheated_" +cheatedActor.a.lover.getID(),true);
                 return true;
             }
         });

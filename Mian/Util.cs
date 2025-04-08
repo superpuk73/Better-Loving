@@ -75,7 +75,17 @@ namespace Better_Loving
             {
                 if (QueerTraits.PreferenceMatches(actor1, actor2, true))
                 {
-                    var type = Randy.randomChance(actor1.lover == actor2 ? 1f : 0.75f) ? "enjoyed_sex" : "okay_sex"; 
+                    var normal = 0.3f;
+                    if (actor1.lover == actor2)
+                        normal += 0.5f;
+
+                    actor1.a.data.get("sexual_happiness", out float happiness);
+                    if (happiness < 0)
+                    {
+                        normal += Math.Abs((happiness / 100) / 2);
+                    }
+
+                    var type = Randy.randomChance(Math.Max(1, normal)) ? "enjoyed_sex" : "okay_sex"; 
                     actor1.addStatusEffect(type);
                 }
                 else
@@ -155,12 +165,12 @@ namespace Better_Loving
 
             if (actor1.hasLover() && actor1.lover != actor2)
             {
-                ChangeSexualHappinessBy(actor1.lover, -20f);
+                ChangeSexualHappinessBy(actor1.lover, -25f);
             }
 
             if (actor2.hasLover() && actor2.lover != actor1)
             {
-                ChangeSexualHappinessBy(actor2.lover, -20f);
+                ChangeSexualHappinessBy(actor2.lover, -25f);
             }
         }
 
@@ -183,6 +193,14 @@ namespace Better_Loving
                 cheatedActor.setLover(null);
                 actor.setLover(null);
             }
+        }
+
+        public static bool OnceCheated(Actor actor, Actor actor2)
+        {
+            actor.data.get("cheated_"+actor2.getID(), out bool actor2Cheated);
+            actor2.data.get("cheated_"+actor.getID(), out bool actorCheated);
+
+            return actor2Cheated || actorCheated;
         }
 
         public static void BreakUp(Actor actor)

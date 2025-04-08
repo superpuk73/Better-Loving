@@ -154,7 +154,7 @@ namespace Better_Loving
                         __instance.changeHappiness("true_self");
                 }
                 if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither)
-                    Util.ChangeSexualHappinessBy(__instance.a, -5f);
+                    Util.ChangeSexualHappinessBy(__instance.a, -10f);
                 else
                     __instance.data.set("sexual_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
@@ -213,13 +213,8 @@ namespace Better_Loving
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             
             if (
-                // the code below was for preservation, however ppl can now have sex without lovers so this is not necessary
-                
-                // (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless") 
-                //                                                             && (!Util.IsDyingOut(__instance) || !__instance.hasSubspeciesTrait("preservation")))
-                //  || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless") 
-                //     && (!Util.IsDyingOut(pTarget) || !pTarget.hasSubspeciesTrait("preservation")))
-                //
+                Util.OnceCheated(pTarget, __instance)
+                ||
                  (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless"))
                  || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless"))
                 
@@ -256,16 +251,6 @@ namespace Better_Loving
                 __result = false;
                 return false;
             }
-
-            // was for preservation but now people can have sex outside of this
-            // if (
-            //     (__instance.hasSubspeciesTrait("preservation") && Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, pTarget))
-            //     ||
-            //     (pTarget.hasSubspeciesTrait("preservation") && Util.IsDyingOut(pTarget) && !Util.CanReproduce(pTarget, __instance))
-            //     ) {
-            //     __result = false;
-            //     return false;
-            // }
             
             __result = true;
 
@@ -453,9 +438,6 @@ namespace Better_Loving
                 if (pActor.hasLover() && 
                     (!QueerTraits.PreferenceMatches(pParentA, pParentB, true)
                      || !QueerTraits.PreferenceMatches(pParentB, pParentA, true)))
-                    
-                    // below can now happen with casual sex and be allowed
-                    // && (!Util.IsDyingOut(pParentA) || !pParentA.hasSubspeciesTrait("preservation")) && (!Util.IsDyingOut(pParentB) || !pParentA.hasSubspeciesTrait("preservation")))
                 {
                     __result = false;
                     return false;
