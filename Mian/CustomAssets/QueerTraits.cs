@@ -66,7 +66,7 @@ namespace Better_Loving
                 trait.opposite_traits = new HashSet<ActorTrait>();
                 foreach (var traitToAdd in _romanticTraits)
                 {
-                    if (trait == traitToAdd) continue;
+                    if (trait == traitToAdd || traitToAdd.preference == Preference.Inapplicable) continue;
                     trait.opposite_traits.Add(traitToAdd);
                 }
                 

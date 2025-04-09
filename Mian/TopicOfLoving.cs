@@ -9,13 +9,8 @@ using HarmonyLib;
 using NeoModLoader.General;
 
 /*
-(idk if i should fix this, i mean it's kinda funny)
-- someone became lover right as they started fucking with someone else so the person got mad LOL
-
-- abroromantic/abrorsexual trait arent working perfectly. They wont add new traits for whatever reason
 
 - make a sexual reproduction trait that allows two ppl of the same sex to reproduce (done maybe, just need icon and to test)
-- adjust how ppl get their sexuality chances based on reproduction method (done)
 
 (wip)
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)

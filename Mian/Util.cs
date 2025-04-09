@@ -107,7 +107,7 @@ namespace Better_Loving
         {
             // if (QueerTraits.GetPreferenceFromActor(pActor, true) == Preference.Neither)
             //     return false;
-            if (pActor.hasTask() && !pActor.ai.task.cancellable_by_reproduction && !isInit)
+            if (pActor.hasTask() && !pActor.isLying() && !pActor.ai.task.cancellable_by_reproduction && !isInit)
                 return false;
             var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason);
             var reduceChances = 0f;

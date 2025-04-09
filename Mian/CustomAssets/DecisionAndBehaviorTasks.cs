@@ -266,7 +266,6 @@ namespace Better_Loving
             return !sexActor.isTask("have_sex_go") ? BehResult.Stop : BehResult.Continue;
         }
     }
-    // pregnancy is not working 100% (maybe fixed, i did a canMakeBaby check for init actor)
     public class BehFindReproduceableSex : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
@@ -333,7 +332,6 @@ namespace Better_Loving
             }
         }
     }
-    // people stopped doing casual sex for some reason (tho maybe im just unlucky and ppl are getting their fulfilled needds)
     public class BehFindMatchingPreference : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
@@ -415,7 +413,7 @@ namespace Better_Loving
             }
         }
     }
-
+    // needs to be retested, this mightve broke in the newest updates
     public class BehFindMismatchedOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
