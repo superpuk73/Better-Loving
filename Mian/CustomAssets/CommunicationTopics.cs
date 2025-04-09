@@ -14,7 +14,8 @@ namespace Better_Loving
                 rate = 0.5f,
                 check = pActor => QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
                                   && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
-                                  && QueerTraits.GetQueerTraits(pActor, true).Count >= 2,
+                                  && QueerTraits.GetQueerTraits(pActor, true).Count >= 2
+                                  && !pActor.hasCultureTrait("orientationless"),
                 pot_fill = (actor, sprites) =>
                 {
                     var unfitPreferences = new List<Preference>();

@@ -141,12 +141,14 @@ namespace Better_Loving
 
         public static Preference GetSexualPrefBasedOnReproduction(Actor pActor)
         {
-            if (!pActor.hasSubspecies()) return Preference.All;
+            if (!pActor.hasSubspecies()) return Preference.Neither;
             if (pActor.subspecies.hasTraitReproductionSexual())
                 return Preference.DifferentSex;
             if (pActor.subspecies.hasTraitReproductionSexualHermaphroditic())
                 return Preference.SameOrDifferentSex;
-            return Preference.All;
+            if (pActor.hasSubspeciesTrait("reproduction_same_sexual")) // same sexual reproduction coming up!
+                return Preference.SameSex;
+            return Preference.Neither;
         }
 
         // randomizes chances based on what actor's reproduction methods
@@ -161,9 +163,9 @@ namespace Better_Loving
             {
                 if (exclude.Contains(trait) || trait.preference.Equals(Preference.Inapplicable)) continue;
                 
-                if (trait.preference.Equals(matchingPreference) && !matchingPreference.Equals(Preference.All))
+                if (trait.preference.Equals(matchingPreference))
                 {
-                    for (int i = 0; i < 20; i++)
+                    for (int i = 0; i < 27; i++)
                     {
                         randomPool.Add(trait);
                     }

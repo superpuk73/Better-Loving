@@ -18,15 +18,15 @@ public class StatusEffects
             {
                 actor.a.data.get("sexual_happiness", out float happiness);
                 actor.a.data.get("last_had_sex_with", out long partnerID);
-                var changeBy = 0f;
+                var changeBy = 20f;
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
                 if (sexPartner != null && sexPartner == actor.a.lover)
-                    changeBy += 30f;
+                    changeBy += 15f;
                 
                 if (happiness <= 0)
                 {
-                    changeBy += Math.Abs(happiness / 2);
+                    changeBy += Math.Abs(happiness / 3);
                 }
                 
                 Util.ChangeSexualHappinessBy(actor.a, changeBy);
@@ -44,7 +44,7 @@ public class StatusEffects
             action_on_receive = (actor, _) => 
             {
                 actor.a.data.get("sexual_happiness", out float happiness);
-                var changeBy = -20f;
+                var changeBy = -35f;
                 
                 if (happiness <= 0)
                 {
@@ -69,7 +69,7 @@ public class StatusEffects
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
                 if (sexPartner != null && sexPartner == actor.a.lover)
-                    changeBy += 10f; // okay sex but add extra if with lover at least
+                    changeBy += 5f; // okay sex but add extra if with lover at least
                 
                 Util.ChangeSexualHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("okay_sex");

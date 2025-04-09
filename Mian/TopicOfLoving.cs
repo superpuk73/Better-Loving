@@ -9,32 +9,18 @@ using HarmonyLib;
 using NeoModLoader.General;
 
 /*
-# Upcoming features for the mod. TLDR: Reworking the sexuality system to be more advanced
+(idk if i should fix this, i mean it's kinda funny)
+- someone became lover right as they started fucking with someone else so the person got mad LOL
 
-## The below are big ideas that will massively refactor sexuality orientations to be more advanced than they currently are
-- expressing sexuality should be decision based which will then lead to later sex tasks below (done)
-- people will have mood based on the sex they did and their sexual orientations (if they are straight but have sex with same sex, they may dislike the sex) (done)
-- adjust behaviours for sexual orientations for the behaviors that the game has like "BehCheckForBabiesFromSexualReproduction". This will pave the way for sex tasks outside of making babies (done)
+- abroromantic/abrorsexual trait arent working perfectly. They wont add new traits for whatever reason
 
-(seems to be bugged, hopefully fixed)
-- add sex task which allows units to go around fucking other ppl (with a trait that determines if they can do it even with a lover) (they will be happier!) (may result in pregnancies) (FWB moment) (done)
-^^ need to make a task so they can do it outside as well (done?)
-
-(needs to be a job, but prob not gonna get added anymore)
-- prostitution which is a similar task to above but payment required! :o (units that are poor may do this)
-
-- need to make it possible for units to have sex even without a house so they can make babies with non-lovers (done)
-
-- status effects are not always applying on sex!
-
-- add status for cheating on (done)
+- make a sexual reproduction trait that allows two ppl of the same sex to reproduce (done maybe, just need icon and to test)
+- adjust how ppl get their sexuality chances based on reproduction method (done)
 
 (wip)
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
-
-- alter sex method to be considered cheating if done with two other actors if a certain cultural trait isn’t there (done)
 */
-namespace Better_Loving
+namespace Better_Loving.Mian
 {
     public class TopicOfLoving : BasicMod<TopicOfLoving>
     {
@@ -79,6 +65,44 @@ namespace Better_Loving
         }
     }
 
+    [HarmonyPatch(typeof(Subspecies), nameof(Subspecies.isPartnerSuitableForReproduction))]
+    class SuitableReproductionPatch
+    {
+        static bool Prefix(Actor pActor, Actor pTarget, Subspecies __instance, ref bool __result)
+        {
+            if (!pActor.hasSubspecies() || !pTarget.hasSubspecies())
+            {
+                __result = false;
+                return false;
+            }
+
+            if (Util.CanDoAnySexType(pActor))
+            {
+                __result = true;
+                return false;
+            }
+            
+            if (__instance.needOppositeSexTypeForReproduction())
+            {
+                if ((pActor.data.sex != pTarget.data.sex && pTarget.subspecies.isReproductionSexual()) || Util.CanDoAnySexType(pTarget))
+                {
+                    __result = true;
+                    return false;
+                }
+            } else if (Util.NeedSameSexTypeForReproduction(pActor))
+            {
+                if ((pActor.data.sex == pTarget.data.sex && Util.NeedSameSexTypeForReproduction(pTarget)) || Util.CanDoAnySexType(pTarget))
+                {
+                    __result = true;
+                    return false;
+                }
+            }
+
+            __result = false;
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(MapBox), nameof(MapBox.updateObjectAge))]
     class OnAgePatch
     {
@@ -118,7 +142,7 @@ namespace Better_Loving
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
-            __instance.data.set("sexual_happiness", 50f);
+            __instance.data.set("sexual_happiness", 10f);
         }
     }
 
@@ -154,7 +178,7 @@ namespace Better_Loving
                         __instance.changeHappiness("true_self");
                 }
                 if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither)
-                    Util.ChangeSexualHappinessBy(__instance.a, -10f);
+                    Util.ChangeSexualHappinessBy(__instance.a, -Randy.randomFloat(10, 20f));
                 else
                     __instance.data.set("sexual_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
@@ -163,7 +187,7 @@ namespace Better_Loving
                 __instance.changeHappiness("true_self");
             }
             
-            // Randomize breaking up (1% if preferences match. 25% if preferences do not match. 50% if they are dying out and they cannot reproduce with their lover) 
+            // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
             if (__instance.hasLover() && 
                 Randy.randomChance(
                     // not needed since normal sex can happen now
@@ -178,18 +202,12 @@ namespace Better_Loving
     [HarmonyPatch(typeof(Actor), nameof(Actor.becomeLoversWith))]
     class BecomeLoversWithPatch
     {
-        // removes past lovers for cheating purposes
-        static void Prefix(Actor pTarget, Actor __instance)
-        {
-            Util.PotentiallyCheatedWith(__instance, pTarget);
-        }
         static void Postfix(Actor pTarget, Actor __instance)
         {
             __instance.setFamily(null);
             pTarget.setFamily(null);
-            // if(!__instance.hasFamily() && !pTarget.hasFamily())
-                BehaviourActionBase<Actor>.world.families.newFamily(__instance, __instance.current_tile, pTarget);
-                // they become new family lovers
+            
+            BehaviourActionBase<Actor>.world.families.newFamily(__instance, __instance.current_tile, pTarget);
         }
     }
     
@@ -218,14 +236,18 @@ namespace Better_Loving
                  (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && !__instance.hasCultureTrait("orientationless"))
                  || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && !pTarget.hasCultureTrait("orientationless"))
                 
-                || (__instance.hasLover() && (!Randy.randomChance(
-                        (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
-                        + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                                              || __instance.hasTrait("faithful") || __instance.hasCultureTrait("committed"))) 
-                || (pTarget.hasLover() && (!Randy.randomChance(
-                                               (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
-                                               + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                                           || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("committed")))
+                || __instance.hasLover()
+                || pTarget.hasLover()
+                // replaced by the newer sex cheating system (we'll probably do a flirting task in the future for romance?)
+
+                // || (__instance.hasLover() && (!Randy.randomChance(
+                //         (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
+                //         + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
+                //                               || __instance.hasTrait("faithful") || __instance.hasCultureTrait("committed"))) 
+                // || (pTarget.hasLover() && (!Randy.randomChance(
+                //                                (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
+                //                                + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
+                //                            || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("committed")))
                 
                 // make this a cultural trait to configure
                 || !WithinOfAge(__instance, pTarget)
@@ -405,25 +427,6 @@ namespace Better_Loving
         }
     }
 
-    [HarmonyPatch(typeof(Actor), nameof(Actor.setTask))]
-    class SetTaskPatch
-    {
-        static bool Prefix(string pTaskId, Actor __instance)
-        {
-            if (__instance.last_decision_id.Equals("invite_for_sex"))
-            {
-                LogService.LogInfo("Set chances because this is casual sex");
-                __instance.data.set("chanceOfPregnancy", 0.1F);
-            }
-            else
-            {
-                __instance.data.removeFloat("chanceOfPregnancy");
-            }
-
-            return true;
-        }
-    }
-
     // stops people with mismatching sexual preferences from attempting sex in the vanilla game 
     [HarmonyPatch(typeof(DecisionAsset), nameof(DecisionAsset.isPossible))]
     class DecisionPatch
@@ -448,8 +451,29 @@ namespace Better_Loving
         }
     }
 
+    [HarmonyPatch(typeof(BehSpawnHeartsFromBuilding), nameof(BehSpawnHeartsFromBuilding.execute))]
+    class SpawnHeartsPatch
+    {
+        static bool Prefix(Actor pActor, ref BehResult __result, BehSpawnHeartsFromBuilding __instance)
+        {
+            var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
+            if (target == null)
+            {
+                LogService.LogInfo(pActor.getName()+": Cant do sex because target is null");
+                __result = BehResult.Stop;
+                return false;
+            }
+            pActor.addAfterglowStatus();
+            target.addAfterglowStatus();
+            __instance.spawnHearts(pActor);
+            __result = BehResult.Continue;
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(BehCheckForBabiesFromSexualReproduction),
         nameof(BehCheckForBabiesFromSexualReproduction.execute))]
+    // code is running twice??
     class SexPatch
     {
         static bool Prefix(Actor pActor, ref BehResult __result, BehCheckForBabiesFromSexualReproduction __instance)
@@ -457,29 +481,16 @@ namespace Better_Loving
             var target = pActor.beh_actor_target != null ? pActor.beh_actor_target.a : pActor.lover;
             if (target == null)
             {
+                LogService.LogInfo(pActor.getName()+": Cant do sex because target is null");
                 __result = BehResult.Stop;
                 return false;
-            }
-            LogService.LogInfo("Target is: " + target.getName()+". Lover: "+ (target == pActor.lover).ToString());
-           
-            Util.JustHadSex(pActor, target);
-            if (pActor.lover == target)
-            {
-                pActor.addAfterglowStatus();
-                target.addAfterglowStatus();   
-            }
-            
-            // make kissing a random chance
-            if (Randy.randomChance(pActor.lover == target ? 1f : QueerTraits.BothPreferencesMatch(pActor, target, true) ? 0.25f : 0f))
-            {
-                pActor.changeHappiness("just_kissed");
-                target.changeHappiness("just_kissed");   
             }
             
             pActor.subspecies.counter_reproduction_acts?.registerEvent();
             if(target.subspecies != pActor.subspecies)
                 target.subspecies.counter_reproduction_acts?.registerEvent();
             __instance.checkForBabies(pActor, target);
+            Util.JustHadSex(pActor, target);
             __result = BehResult.Continue;
             return false;
         }
@@ -498,89 +509,70 @@ namespace Better_Loving
             // ensures that both subspecies HAVE not reached population limit
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
-            
-            var subspeciesA = pParentA.subspecies;
-            var subspeciesB = pParentB.subspecies;
 
-            Actor mother = null;
-            Actor nonMother;
+            // var subspeciesA = pParentA.subspecies;
+            // var subspeciesB = pParentB.subspecies;
+
+            Actor pregnantActor = null;
+            Actor nonPregnantActor;
             
-            if (subspeciesA.hasTraitReproductionSexual() && subspeciesB.hasTraitReproductionSexual())
+            if (Util.NeedDifferentSexTypeForReproduction(pParentA) && Util.NeedDifferentSexTypeForReproduction(pParentB))
             {
-                // for gay ppl
                 if (pParentA.data.sex == pParentB.data.sex) return false;
                 
                 if (pParentA.isSexFemale())
-                    mother = pParentA;
+                    pregnantActor = pParentA;
                 else if (pParentB.isSexFemale())
-                    mother = pParentB;
+                    pregnantActor = pParentB;
             }
-            else if ((
-                         subspeciesA.hasTraitReproductionSexualHermaphroditic() ||
-                     subspeciesB.hasTraitReproductionSexualHermaphroditic()) 
-                     && ((subspeciesA.hasTraitReproductionSexual() || subspeciesB.hasTraitReproductionSexual()) 
-                         || (subspeciesA.hasTraitReproductionSexualHermaphroditic() && subspeciesB.hasTraitReproductionSexualHermaphroditic())))
+            else if(Util.NeedSameSexTypeForReproduction(pParentA) && Util.NeedSameSexTypeForReproduction(pParentB))
             {
+                if (pParentA.data.sex != pParentB.data.sex) return false;
+                pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
                 
-                if (subspeciesA.hasTraitReproductionSexualHermaphroditic() &&
-                    subspeciesB.hasTraitReproductionSexualHermaphroditic())
+            } else if (Util.CanDoAnySexType(pParentA) || Util.CanDoAnySexType(pParentB))
+            {
+                if(Util.CanDoAnySexType(pParentA) && Util.CanDoAnySexType(pParentB))
+                    pregnantActor = !Randy.randomBool() ? pParentB : pParentA;
+                else if (Util.CanDoAnySexType(pParentA))
                 {
-                    mother = !Randy.randomBool() ? pParentB : pParentA;
-                } 
-                else if (subspeciesA.hasTraitReproductionSexualHermaphroditic())
-                {
-                    mother = pParentA;
+                    pregnantActor = pParentA;
                 }
                 else
                 {
-                    mother = pParentB;
+                    pregnantActor = pParentB;
                 }
             }
-            else
-            {
-                return false; // this means that they don't have the same reproduction methods WHICH we WILL refuse! Example: a sheep with mitosis should not be able to be bred from a rabbit with sexual reproduction!
-            }
-            
-            if (mother == null)
+
+            if (pregnantActor == null)
                 return false;
-            nonMother = mother == pParentA ? pParentB : pParentA;
+            nonPregnantActor = pregnantActor == pParentA ? pParentB : pParentA;
             // this creates a new family to assign with each other. This should be CALLED after checking to see if they can make babies together
             // __instance.checkFamily(pParentA, pParentB);
-            
+
             float maturationTimeSeconds = pParentA.getMaturationTimeSeconds();
             
-            mother.data.get("chanceOfPregnancy", out var chanceOfPregnancy, -1F);
-            if (chanceOfPregnancy == -1F)
-            {
-                nonMother.data.get("chanceOfPregnancy", out chanceOfPregnancy, -1F);
-            }
-
-            if (chanceOfPregnancy != -1F)
-            {
-                LogService.LogInfo("random pregnancy..");
-            }
+            pParentA.data.get("sex_reason", out var sexReason, "");
+            pParentB.data.get("sex_reason", out var sexReason1, "");
             
-            mother.data.removeFloat("chanceOfPregnancy");
-            nonMother.data.removeFloat("chanceOfPregnancy");
-
-            bool success = chanceOfPregnancy == -1F ? true : Randy.randomChance(chanceOfPregnancy);
-
+            bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? Randy.randomChance(0.1F) : true;
+            
             if (success)
             {
-                ReproductiveStrategy reproductionStrategy = mother.subspecies.getReproductionStrategy();
+                ReproductiveStrategy reproductionStrategy = pregnantActor.subspecies.getReproductionStrategy();
                 switch (reproductionStrategy)
                 {
                     case ReproductiveStrategy.Egg:
                     case ReproductiveStrategy.SpawnUnitImmediate:
-                        BabyMaker.makeBabiesViaSexual(mother, pParentA, pParentB);
-                        mother.subspecies.counterReproduction();
+                        BabyMaker.makeBabiesViaSexual(pregnantActor, pParentA, pParentB);
+                        pregnantActor.subspecies.counterReproduction();
                         break;
                     case ReproductiveStrategy.Pregnancy:
-                        mother.data.set("impregnatedBy", nonMother.getID());
+                        pregnantActor.data.set("otherParent", nonPregnantActor.getID());
 
-                        BabyHelper.babyMakingStart(mother);
-                        mother.addStatusEffect("pregnant", maturationTimeSeconds);
-                        mother.subspecies.counterReproduction();
+                        BabyHelper.babyMakingStart(pregnantActor);
+                        pregnantActor.addStatusEffect("pregnant", maturationTimeSeconds);
+                        pregnantActor.subspecies.counterReproduction();
                         break;
                 }   
             }
@@ -594,9 +586,9 @@ namespace Better_Loving
         static bool Prefix(Actor pActor)
         {
             var mother = pActor;
-            mother.data.get("impregnatedBy", out long otherParentID);
+            mother.data.get("otherParent", out long otherParentID);
             var otherParent = MapBox.instance.units.get(otherParentID);
-            mother.data.removeLong("impregnatedBy");
+            mother.data.removeLong("otherParent");
 
             mother.birthEvent();
             BabyHelper.countMakeChild(mother, otherParent);

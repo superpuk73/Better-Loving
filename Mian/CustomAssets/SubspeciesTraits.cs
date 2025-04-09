@@ -21,6 +21,28 @@ namespace Better_Loving
             {
                 actorAsset.addSubspeciesTrait("preservation");
             }
+            //
+            // SubspeciesTrait reproductionSameSex = new SubspeciesTrait
+            // {
+            //     id = "reproduction_same_sex",
+            //     group_id = "reproductive_methods",
+            //     rarity = Rarity.R0_Normal,
+            //     priority = 100,
+            //     in_mutation_pool_add = true,
+            //     remove_for_zombies = true
+            // };
+            // reproductionSameSex.base_stats["birth_rate"] = 3f;
+            // reproductionSameSex.addDecision("sexual_reproduction_try");
+            // reproductionSameSex.addDecision("find_lover");
+            // reproductionSameSex.base_stats_meta.addTag("needs_mate");
+            // reproductionSameSex.opposite_traits = new HashSet<SubspeciesTrait>();
+            // reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_sexual"));
+            // reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_hermaphroditic"));
+            //
+            // AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
+            // AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
+            //
+            // Add(reproductionSameSex);
             
             Finish();
         }
