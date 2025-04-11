@@ -42,19 +42,22 @@ namespace Better_Loving
 
             homophobic.opposite_traits = new HashSet<CultureTrait>();
             homophobic.opposite_traits.Add(orientationLess);
-            homophobic.opposite_traits.Add(heterophobic);
             
             heterophobic.opposite_traits = new HashSet<CultureTrait>();
             heterophobic.opposite_traits.Add(orientationLess);
-            heterophobic.opposite_traits.Add(homophobic);
             
             orientationLess.opposite_traits = new HashSet<CultureTrait>();
             orientationLess.opposite_traits.Add(homophobic);
             orientationLess.opposite_traits.Add(heterophobic);
             
-            Add(homophobic, List.Of("orc", "demon"), List.Of("biome_swamp", "biome_infernal", "biome_corrupted"));
-            Add(heterophobic, List.Of("flower_bud", "garl"), List.Of("biome_candy"));
-            Add(orientationLess, List.Of("angle", "snowman"), List.Of("biome_crystal"));
+            // Add(homophobic, List.Of("orc", "demon"), List.Of("biome_swamp", "biome_infernal", "biome_corrupted"));
+            // Add(heterophobic, List.Of("flower_bud", "garl"), List.Of("biome_candy"));
+            // Add(orientationLess, List.Of("angle", "snowman"), List.Of("biome_crystal"));
+            
+            Add(homophobic, List.Of("orc", "demon"));
+            Add(heterophobic, List.Of("flower_bud", "garl"));
+            Add(orientationLess, List.Of("angle", "snowman"));
+            // now influenced by reproduction methods
             
             Add(new CultureTrait
             {

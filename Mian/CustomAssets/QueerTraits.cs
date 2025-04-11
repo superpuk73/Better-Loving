@@ -146,7 +146,7 @@ namespace Better_Loving
                 return Preference.DifferentSex;
             if (pActor.subspecies.hasTraitReproductionSexualHermaphroditic())
                 return Preference.SameOrDifferentSex;
-            if (pActor.hasSubspeciesTrait("reproduction_same_sexual")) // same sexual reproduction coming up!
+            if (pActor.hasSubspeciesTrait("reproduction_same_sex"))
                 return Preference.SameSex;
             return Preference.Neither;
         }

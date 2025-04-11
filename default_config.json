@@ -15,5 +15,17 @@
       "Type": "SWITCH",
       "BoolVal": true
     }
+  ],
+  "Misc": [
+    {
+      "Id": "Debug",
+      "Type": "SWITCH",
+      "BoolVal": false
+    },
+    {
+      "Id": "SlowOnLog",
+      "Type": "SWITCH",
+      "BoolVal": false
+    }
   ]
 }

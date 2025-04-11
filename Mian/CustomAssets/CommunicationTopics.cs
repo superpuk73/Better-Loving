@@ -10,7 +10,6 @@ namespace Better_Loving
             Add(new CommunicationAsset
             {
                 id = "orientation",
-                show_topic = true,
                 rate = 0.5f,
                 check = pActor => QueerTraits.GetPreferenceFromActor(pActor, false) != Preference.Inapplicable 
                                   && QueerTraits.GetPreferenceFromActor(pActor, true) != Preference.Inapplicable
@@ -18,6 +17,7 @@ namespace Better_Loving
                                   && !pActor.hasCultureTrait("orientationless"),
                 pot_fill = (actor, sprites) =>
                 {
+                    if (QueerTraits.GetQueerTraits(actor, true).Count < 2) return;
                     var unfitPreferences = new List<Preference>();
                     if (actor.hasCultureTrait("homophobic"))
                     {

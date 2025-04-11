@@ -21,28 +21,34 @@ namespace Better_Loving
             {
                 actorAsset.addSubspeciesTrait("preservation");
             }
-            //
-            // SubspeciesTrait reproductionSameSex = new SubspeciesTrait
-            // {
-            //     id = "reproduction_same_sex",
-            //     group_id = "reproductive_methods",
-            //     rarity = Rarity.R0_Normal,
-            //     priority = 100,
-            //     in_mutation_pool_add = true,
-            //     remove_for_zombies = true
-            // };
-            // reproductionSameSex.base_stats["birth_rate"] = 3f;
-            // reproductionSameSex.addDecision("sexual_reproduction_try");
-            // reproductionSameSex.addDecision("find_lover");
-            // reproductionSameSex.base_stats_meta.addTag("needs_mate");
-            // reproductionSameSex.opposite_traits = new HashSet<SubspeciesTrait>();
-            // reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_sexual"));
-            // reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_hermaphroditic"));
-            //
-            // AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
-            // AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
-            //
-            // Add(reproductionSameSex);
+            
+            SubspeciesTrait reproductionSameSex = new SubspeciesTrait
+            {
+                id = "reproduction_same_sex",
+                group_id = "reproductive_methods",
+                rarity = Rarity.R1_Rare,
+                priority = 100,
+                in_mutation_pool_add = true,
+                remove_for_zombies = true
+            };
+            reproductionSameSex.base_stats = new BaseStats();
+            reproductionSameSex.base_stats["birth_rate"] = 3f;
+            reproductionSameSex.addDecision("sexual_reproduction_try");
+            reproductionSameSex.addDecision("find_lover");
+            
+            reproductionSameSex.base_stats_meta = new BaseStats();
+            reproductionSameSex.base_stats_meta.addTag("needs_mate");
+            
+            reproductionSameSex.opposite_traits = new HashSet<SubspeciesTrait>();
+            reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_sexual"));
+            reproductionSameSex.opposite_traits.Add(AssetManager.subspecies_traits.get("reproduction_hermaphroditic"));
+            
+            AssetManager.subspecies_traits.get("reproduction_sexual").opposite_traits.Add(reproductionSameSex);
+            AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
+
+            reproductionSameSex.unlock(); // for now it's unlocked auto cuz i dont know what to put this on
+            
+            Add(reproductionSameSex);
             
             Finish();
         }
@@ -60,15 +66,18 @@ namespace Better_Loving
             }
         }
         
-        private static void Add(SubspeciesTrait trait, params string[] assets)
+        private static void Add(SubspeciesTrait trait, List<string> assets = null)
         {
             trait.path_icon = "ui/Icons/subspecies_traits/" + trait.id;
             AssetManager.subspecies_traits.add(trait);
-            foreach (var asset in assets)
+            if (assets != null)
             {
-                var actorAsset = AssetManager.actor_library.get(asset);
-                if(actorAsset != null)
-                    actorAsset.addSubspeciesTrait(trait.id);
+                foreach (var asset in assets)
+                {
+                    var actorAsset = AssetManager.actor_library.get(asset);
+                    if(actorAsset != null)
+                        actorAsset.addSubspeciesTrait(trait.id);
+                }   
             }
             traits.Add(trait);
         }

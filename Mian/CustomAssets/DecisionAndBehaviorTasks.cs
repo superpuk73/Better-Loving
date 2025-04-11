@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using ai.behaviours;
 using HarmonyLib;
 using NeoModLoader.services;
@@ -27,12 +28,13 @@ namespace Better_Loving
             {
                 id = "insult_orientation_try",
                 task_id = "insult_orientation",
-                priority = NeuroLayer.Layer_1_Low,
+                priority = NeuroLayer.Layer_2_Moderate,
                 path_icon = "ui/Icons/culture_traits/orientationless",
                 cooldown = 30,
-                action_check_launch = actor => actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic"),
-                weight = 0.75f,
-                list_civ = true
+                action_check_launch = actor => (actor.hasCultureTrait("homophobic") || actor.hasCultureTrait("heterophobic")) && Util.IsOrientationSystemEnabledFor(actor),
+                weight = 0.5f,
+                list_civ = true,
+                only_safe = true
             });
             AssetManager.subspecies_traits.get("wernicke_area").addDecision("insult_orientation_try");
             
@@ -40,17 +42,22 @@ namespace Better_Loving
             AddDecision(new DecisionAsset
             {
                 id = "invite_for_sex",
-                priority = NeuroLayer.Layer_3_High,
+                priority = NeuroLayer.Layer_2_Moderate,
                 path_icon = "ui/Icons/status/enjoyed_sex",
-                cooldown = 40,
+                cooldown = 30,
                 action_check_launch = actor => Util.IsSmart(actor)
                                                && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                                && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
                                                && !Util.IsSexualHappinessEnough(actor, 100f)
-                                                && !actor.hasCultureTrait("orientationless"),
+                                               && !Util.HasHadSexRecently(actor)
+                                                && Util.IsOrientationSystemEnabledFor(actor),
                 list_civ = true,
-                weight = 0.1f,
-                only_adult = true
+                weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.25f: 
+                    Util.IsSexualHappinessEnough(actor, 50f) ? 0.5f : Util.IsSexualHappinessEnough(actor, 0) ? .75f : 
+                    Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+                only_adult = true,
+                only_safe = true,
+                cooldown_on_launch_failure = true
             });
 
             // will force all units to make babies regardless of orientation if they have preservation
@@ -59,17 +66,24 @@ namespace Better_Loving
                 id = "reproduce_preservation",
                 priority = NeuroLayer.Layer_3_High,
                 path_icon = "ui/Icons/status/disliked_sex",
-                cooldown = 50,
-                action_check_launch = actor => Util.IsDyingOut(actor)
-                                               && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                               && Util.CanMakeBabies(actor)
-                                               && actor.hasSubspeciesTrait("preservation")
-                                               && (!actor.hasLover() || (actor.hasLover() && !Util.CanReproduce(actor, actor.lover)))
-                                               && Util.CanHaveSexWithoutRepercussionsWithSomeoneElse(actor, "reproduction"),
-                weight = 0.8f,
-                only_adult = true
+                cooldown = 20,
+                action_check_launch = actor =>
+                {
+                    actor.subspecies.countReproductionNeuron();
+                    return Util.IsDyingOut(actor)
+                           && QueerTraits.GetQueerTraits(actor).Count >= 2
+                           && Util.CanMakeBabies(actor)
+                           && !Util.HasHadSexRecently(actor)
+                           && actor.hasSubspeciesTrait("preservation")
+                           && Util.IsOrientationSystemEnabledFor(actor);
+                },
+                weight_calculate_custom = actor => Util.CanMakeBabies(actor) ? 2f : 0.1f,
+                only_adult = true,
+                only_safe = true,
+                cooldown_on_launch_failure = true
             });
             AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("reproduce_preservation");
+            AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("reproduce_preservation");
             AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("reproduce_preservation");
 
             var reproduceForPreservation = new BehaviourTaskActor
@@ -82,6 +96,16 @@ namespace Better_Loving
             reproduceForPreservation.addBeh(new BehGetPossibleTileForSex());
 
             AddBehavior(reproduceForPreservation);
+
+            var doKissWithLover = new BehaviourTaskActor
+            {
+                id = "kiss_lover",
+                locale_key = "task_kiss_lover",
+                path_icon = "ui/Icons/status/enjoyed_sex"
+            };
+            doKissWithLover.addBeh(new BehGetLoverForKiss());
+            
+            AddBehavior(doKissWithLover);
 
             var inviteForSex = new BehaviourTaskActor
             {
@@ -102,7 +126,7 @@ namespace Better_Loving
             haveSexGo.addBeh(new BehGoToTileTarget());
             for (int index = 0; index < 6; ++index)
             {
-                haveSexGo.addBeh(new BehRandomWait(1f, 2f));
+                haveSexGo.addBeh(new BehRandomWait(2f, 3f));
                 haveSexGo.addBeh(new BehCheckForSexTarget());
                 haveSexGo.addBeh(new BehRandomWait(1f, 2f));
             }
@@ -186,6 +210,18 @@ namespace Better_Loving
         }
     }
 
+    public class BehGetLoverForKiss : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pObject)
+        {
+            if (!pObject.hasLover() || !pObject.isOnSameIsland(pObject.lover) || pObject.lover.isLying())
+                return BehResult.Stop;
+            
+            pObject.beh_actor_target = pObject.lover;
+            return BehResult.Continue;
+        }
+    }
+    
     public class BehGetPossibleTileForSex : BehaviourActionActor
     {
         public bool isPlacePrivateForBreeding(Actor actor, WorldTile tile)
@@ -200,7 +236,7 @@ namespace Better_Loving
         {
             if (pActor.beh_actor_target == null)
             {
-                LogService.LogInfo(pActor.getName()+": Cancelled because actor was null");
+                Util.Debug(pActor.getName()+": Cancelled because actor was null");
 
                 return BehResult.Stop;
             }
@@ -210,7 +246,7 @@ namespace Better_Loving
             pActor.beh_tile_target = homeBuilding != null ? homeBuilding.current_tile : pActor.beh_actor_target.current_tile;
             if (!isPlacePrivateForBreeding(pActor, pActor.beh_tile_target))
             {
-                LogService.LogInfo("Cancelled because of lack of privacy");
+                Util.Debug("Cancelled because of lack of privacy");
                 return BehResult.Stop;
             }
             
@@ -236,15 +272,13 @@ namespace Better_Loving
             return pActor2.hasHouse() ? pActor2.getHomeBuilding() : null;
         }
     }
-
-    // inside sex isnt working properly (actors go in, one actor leaves for some reason?)
     public class BehCheckForSexTarget : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
         {
             if (pActor.beh_actor_target == null)
             {
-                LogService.LogInfo(pActor.getName()+": Cancelled from checking for sex target because actor was null");
+                Util.Debug(pActor.getName()+": Cancelled from checking for sex target because actor was null");
                 return BehResult.Stop;
             }
 
@@ -273,6 +307,7 @@ namespace Better_Loving
             var lover = pActor.lover;
             Actor closestActor = null;
             var withLover = false;
+            Util.Debug(pActor.getName() + " is requesting reproduction");
 
             if (lover != null)
             {
@@ -284,11 +319,17 @@ namespace Better_Loving
                     closestActor = lover;
                     withLover = true;
                 }
+
+                if (Util.CanReproduce(pActor, lover) && !withLover)
+                    return BehResult.Stop;
+            }
+
+            if (!Util.WillDoSex(pActor, "reproduction", withLover, isInit: true))
+            {
+                Util.Debug("They decided that they will not do it.");
+                return BehResult.Stop;
             }
             
-            if (!Util.WillDoSex(pActor, "reproduction", withLover, isInit:true))
-                return BehResult.Stop;
-
             // try to do it with lover first
             if (closestActor == null)
             {
@@ -296,35 +337,34 @@ namespace Better_Loving
                 if (closestActor == null)
                     return BehResult.Stop;   
             }
-            LogService.LogInfo(pActor.getName()+ " is going to reproduce with: "+closestActor.getName()+". They are lovers: "+(pActor.lover==closestActor));
+            Util.Debug(pActor.getName()+ " is going to reproduce with: "+closestActor.getName()+". They are lovers: "+(pActor.lover==closestActor));
             pActor.beh_actor_target = closestActor;
             
             pActor.data.set("sex_reason", "reproduction");
             closestActor.data.set("sex_reason", "reproduction");
+            
+            Util.Debug($"\nAble to make a baby for task?\n{pActor.getName()}: "+(Util.CanMakeBabies(pActor)+$"\n${closestActor.getName()}: "+(Util.CanMakeBabies(closestActor))));
+            
             return BehResult.Continue;
         }
         
         private Actor GetClosestPossibleMatchingActor(Actor pActor)
         {
-            using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
+            using (ListPool<Actor> pCollection = new ListPool<Actor>(5))
             {
-                var pRandom = Randy.randomBool();
-                var pChunkRadius = Randy.randomInt(1, 2);
-                var num = Randy.randomInt(5, 10);
-                foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
+                foreach (var pTarget in Finder.getUnitsFromChunk(pActor.current_tile, 4))
                 {
-                    if (pTarget != pActor && Util.CanMakeBabies(pTarget)
+                    if (pTarget != pActor 
+                        && Util.CanMakeBabies(pTarget)
                         && pActor.isSameIslandAs(pTarget) 
                         && Util.CanReproduce(pActor, pTarget) 
                         && pTarget.isAdult()
                         && Util.WillDoSex(pTarget, "reproduction", pTarget.lover == pActor)
-                        && (pActor.subspecies == pTarget.subspecies 
+                        && (pActor.isSameSubspecies(pTarget.subspecies) 
                             || (Util.IsSmart(pTarget) && Util.IsSmart(pActor) 
                                                       && QueerTraits.PreferenceMatches(pTarget, pActor, true))))
                     {
                         pCollection.Add(pTarget);
-                        if (((ICollection) pCollection).Count >= num)
-                            break;
                     }
                 }
 
@@ -340,6 +380,8 @@ namespace Better_Loving
             var withLover = false;
             Actor closestActor = null;
 
+            Util.Debug(pActor.getName() + " is requesting casual sex");
+            
             if (lover != null)
             {
                 if (lover.isSameIslandAs(pActor)
@@ -352,11 +394,9 @@ namespace Better_Loving
                 }
             }
             
-            Util.SlowOnLog(pActor.getName() + " is requesting casual sex: are they planning to do it with lover: "+withLover);
-
             if (!Util.WillDoSex(pActor, "casual", withLover, isInit: true))
             {
-                LogService.LogInfo("They decided that they will not do it.");
+                Util.Debug("They decided that they will not do it.");
                 return BehResult.Stop;
             }
             
@@ -365,12 +405,12 @@ namespace Better_Loving
                 closestActor = GetClosestPossibleMatchingActor(pActor);
                 if (closestActor == null)
                 {
-                    LogService.LogInfo("No actor found");
+                    Util.Debug("No actor found");
                     return BehResult.Stop;   
                 }
             }
             
-            Util.SlowOnLog(pActor.getName() + " is going to do casual sex with: "+closestActor.getName() + ". They are lovers: "+(pActor.lover==closestActor));
+            Util.Debug(pActor.getName() + " is going to do casual sex with: "+closestActor.getName() + ". They are lovers: "+(pActor.lover==closestActor));
             pActor.beh_actor_target = closestActor;
             
             pActor.data.set("sex_reason", "casual");
@@ -392,7 +432,7 @@ namespace Better_Loving
                     return pActor.getBestFriend();
                 
                 var pRandom = Randy.randomBool();
-                var pChunkRadius = Randy.randomInt(2, 4);
+                var pChunkRadius = Randy.randomInt(2, 3);
                 var num = Randy.randomInt(5, 10);
                 foreach (Actor pTarget in Finder.getUnitsFromChunk(pActor.current_tile, pChunkRadius, pRandom: pRandom))
                 {
@@ -413,7 +453,6 @@ namespace Better_Loving
             }
         }
     }
-    // needs to be retested, this mightve broke in the newest updates
     public class BehFindMismatchedOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)
