@@ -380,5 +380,27 @@ namespace Better_Loving
         {
             return pActor.hasSubspeciesTrait("reproduction_sexual");
         }
+
+        public static bool CanCommitIncest(Actor pActor)
+        {
+            if (IsDyingOut(pActor))
+                return true;
+
+            if (!pActor.hasSubspeciesTrait("incest"))
+                return false;
+
+            if (pActor.hasCultureTrait("incest_taboo") && random.Next(1, 60) == 1)
+                return true;
+
+            if (pActor.hasCultureTrait("scar_of_incest") && random.Next(1, 5) == 1)
+                return true;
+
+            if (random.Next(1, 2) == 1)
+                return true;
+
+            return false;
+        }
+        
+        private static readonly Random random = new();
     }
 }

@@ -16,12 +16,23 @@ namespace Better_Loving
                 in_mutation_pool_remove = true,
                 remove_for_zombies = true
             });
+
             // preservation is a mustttttttt for preventing population collapse
             foreach (var actorAsset in AssetManager.actor_library.list)
             {
                 actorAsset.addSubspeciesTrait("preservation");
             }
-            
+
+            Add(new SubspeciesTrait
+            {
+                id = "incest",
+                group_id = "mind",
+                rarity = Rarity.R1_Rare,
+                in_mutation_pool_add = true,
+                in_mutation_pool_remove = true,
+                remove_for_zombies = true
+            }, List.Of("human", "dog", "orc", "demon", "barkfolk", "rabbit", "hopper", "hyena", "lulclaw", "druid", "rat", "nibling"));
+
             SubspeciesTrait reproductionSameSex = new SubspeciesTrait
             {
                 id = "reproduction_same_sex",
@@ -72,9 +83,9 @@ namespace Better_Loving
             AssetManager.subspecies_traits.add(trait);
             if (assets != null)
             {
-                foreach (var asset in assets)
+                foreach (string asset in assets)
                 {
-                    var actorAsset = AssetManager.actor_library.get(asset);
+                    ActorAsset actorAsset = AssetManager.actor_library.get(asset);
                     if(actorAsset != null)
                         actorAsset.addSubspeciesTrait(trait.id);
                 }   

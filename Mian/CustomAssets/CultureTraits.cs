@@ -61,15 +61,25 @@ namespace Better_Loving
             
             Add(new CultureTrait
             {
-                id = "incest",
+                id = "incest taboo",
                 group_id = "miscellaneous",
                 needs_to_be_explored = true,
                 rarity = Rarity.R1_Rare,
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
-            
+            }, List.Of("human", "barkfolk", "elf", "white_mage", "druid", "coolbeak", "chillbara"), List.Of("biome_celestial"));
+
+            Add(new CultureTrait
+            {
+                id = "scar_of_incest",
+                group_id = "miscellaneous",
+                rarity = Rarity.R1_Rare,
+                can_be_given = true,
+                can_be_in_book = false,
+                can_be_removed = true,
+            }, List.Of("orc", "demon", "dog", "rat", "nibling", "rabbit", "hyena", "lulclaw", "evil_mage"), List.Of("biome_infernal", "biome_corrupted"));
+
             Add(new CultureTrait
             {
                 id = "committed",
@@ -102,16 +112,6 @@ namespace Better_Loving
                 can_be_removed = true,
                 can_be_given = true
             }, List.Of("elf"), List.Of("biome_maple"));
-            
-            Add(new CultureTrait
-            {
-                id = "scar_of_incest",
-                group_id = "miscellaneous",
-                rarity = Rarity.R1_Rare,
-                can_be_given = true,
-                can_be_in_book = false,
-                can_be_removed = true,
-            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
         }
 
         private static void Add(CultureTrait trait, List<string> actorAssets=null, List<string> biomeAssets=null)

@@ -17,6 +17,15 @@
         <Reference Include="0Harmony, Version=2.3.5.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>packages\Lib.Harmony.2.3.5\lib\net48\0Harmony.dll</HintPath>
         </Reference>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>..\..\..\Steam\steamapps\common\worldbox\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
+        </Reference>
+        <Reference Include="NeoModLoader">
+          <HintPath>..\..\..\Steam\steamapps\common\worldbox\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
+        </Reference>
+        <Reference Include="NeoModLoader.AutoUpdate">
+          <HintPath>..\..\..\Steam\steamapps\common\worldbox\worldbox_Data\StreamingAssets\mods\NeoModLoader.AutoUpdate_memload.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
@@ -46,19 +55,5 @@
       <Folder Include="Locales\" />
       <Content Include="mod.json" />
       <Folder Include="Properties\" />
-    </ItemGroup>
-    <ItemGroup>
-        <Reference Include="NeoModLoader">
-            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
-        </Reference>
-        <Reference Include="Assembly-CSharp">
-            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine">
-            <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-            <HintPath>..\..\worldbox_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
     </ItemGroup>
 </Project>

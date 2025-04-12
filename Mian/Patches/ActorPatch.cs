@@ -142,12 +142,12 @@ public class ActorPatch
                 return false;
             }
 
-            if ((__instance.isRelatedTo(pTarget)) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
+            if (__instance.isRelatedTo(pTarget) && !Util.CanCommitIncest(__instance) && !Util.CanCommitIncest(pTarget))
             {
                 __result = false;
                 return false;
             }
-            
+
             __result = true;
 
             // LogService.LogInfo($"Success! They in love :D");
