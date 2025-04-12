@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "D:\\Git\\GitRepos\\TOL\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\queertraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\queertraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\patches\\culturemanagerpatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\patches\\culturemanagerpatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\culturetraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\culturetraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\patches\\actorpatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\patches\\actorpatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,14 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\subspeciestraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\subspeciestraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\culturetraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\culturetraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\util.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +38,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "QueerTraits.cs",
+              "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\QueerTraits.cs",
+              "RelativeDocumentMoniker": "Mian\\CustomAssets\\QueerTraits.cs",
+              "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\QueerTraits.cs",
+              "RelativeToolTip": "Mian\\CustomAssets\\QueerTraits.cs",
+              "ViewState": "AgIAAPQAAAAAAAAAAAAAABIBAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-12T08:29:48.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "CultureManagerPatch.cs",
+              "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\Patches\\CultureManagerPatch.cs",
+              "RelativeDocumentMoniker": "Mian\\Patches\\CultureManagerPatch.cs",
+              "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\Patches\\CultureManagerPatch.cs",
+              "RelativeToolTip": "Mian\\Patches\\CultureManagerPatch.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-12T08:22:09.511Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "TopicOfLoving.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\TopicOfLoving.cs",
               "RelativeDocumentMoniker": "Mian\\TopicOfLoving.cs",
@@ -42,58 +76,55 @@
               "RelativeToolTip": "Mian\\TopicOfLoving.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T07:28:44.919Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T07:28:44.919Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "ActorPatch.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\Patches\\ActorPatch.cs",
               "RelativeDocumentMoniker": "Mian\\Patches\\ActorPatch.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\Patches\\ActorPatch.cs",
               "RelativeToolTip": "Mian\\Patches\\ActorPatch.cs",
-              "ViewState": "AgIAAHsAAAAAAAAAAAAAAJwAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAAJwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T06:41:50.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T06:41:50.662Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Util.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\Util.cs",
               "RelativeDocumentMoniker": "Mian\\Util.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\Util.cs",
               "RelativeToolTip": "Mian\\Util.cs",
-              "ViewState": "AgIAAHUBAAAAAAAAAAAuwIIBAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAA8AAAAAAAAAAAArwCIAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-12T06:35:01.435Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "CultureTraits.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\CultureTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\CultureTraits.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\CultureTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\CultureTraits.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAAAFEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAAAIgAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-12T05:57:44.252Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "SubspeciesTraits.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\SubspeciesTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\SubspeciesTraits.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\SubspeciesTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\SubspeciesTraits.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAuwFwAAAAeAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACoAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T05:55:08.947Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T05:55:08.947Z"
             }
           ]
         }

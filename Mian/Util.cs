@@ -410,5 +410,14 @@ namespace Better_Loving
         }
         
         private static readonly Random random = new();
+
+        public static void GiveIncestCommitmentTrait(Actor actor1, Actor actor2)
+        {
+            if (actor1.isRelatedTo(actor2))
+            {
+                actor1.addTrait("committed_incest");
+                actor2.addTrait("committed_incest");
+            }
+        }
     }
 }
