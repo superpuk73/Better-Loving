@@ -403,12 +403,12 @@ namespace Better_Loving
             if (pActor.hasCultureTrait("incest_taboo") && random.Next(1, 60) == 1)
                 return true;
 
-            if (pActor.hasCultureTrait("scar_of_incest") && random.Next(1, 5) == 1)
+            if (pActor.hasCultureTrait("scar_of_incest") && random.Next(1, 2) == 1)
                 return true;
 
-            if (random.Next(1, 2) == 1)
+            if (random.Next(1, 5) == 1)
                 return true;
-
+        
             return false;
         }
         

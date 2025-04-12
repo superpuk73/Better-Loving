@@ -61,7 +61,7 @@ namespace Better_Loving
 
             CultureTrait incestTaboo = new CultureTrait
             {
-                id = "incest taboo",
+                id = "incest_taboo",
                 group_id = "miscellaneous",
                 needs_to_be_explored = true,
                 rarity = Rarity.R1_Rare,
