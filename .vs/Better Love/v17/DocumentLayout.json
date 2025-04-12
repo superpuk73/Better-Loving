@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\Git\\GitRepos\\TOL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\decisionandbehaviortasks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,30 +50,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ClanTraits.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\ClanTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\ClanTraits.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\ClanTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\ClanTraits.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAAAsAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAqwA4AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-12T13:42:40.2Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "en.json",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Locales\\en.json",
               "RelativeDocumentMoniker": "Locales\\en.json",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Locales\\en.json",
               "RelativeToolTip": "Locales\\en.json",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAAAKgAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAAAJ8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2025-04-12T10:10:55.85Z",
               "EditorCaption": ""
@@ -88,8 +88,7 @@
               "RelativeToolTip": "Mian\\CustomAssets\\DecisionAndBehaviorTasks.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFkBAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T08:55:48.829Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T08:55:48.829Z"
             },
             {
               "$type": "Document",
@@ -101,8 +100,7 @@
               "RelativeToolTip": "Mian\\CustomAssets\\ActorTraits.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T08:40:32.058Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T08:40:32.058Z"
             },
             {
               "$type": "Document",
@@ -114,8 +112,7 @@
               "RelativeToolTip": "Mian\\CustomAssets\\QueerTraits.cs",
               "ViewState": "AgIAABUAAAAAAAAAAAAgwAwBAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T08:29:48.508Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T08:29:48.508Z"
             },
             {
               "$type": "Document",
@@ -127,8 +124,7 @@
               "RelativeToolTip": "Mian\\TopicOfLoving.cs",
               "ViewState": "AgIAADAAAAAAAAAAAAAAAEsAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T07:28:44.919Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T07:28:44.919Z"
             },
             {
               "$type": "Document",
@@ -140,8 +136,7 @@
               "RelativeToolTip": "Mian\\Patches\\ActorPatch.cs",
               "ViewState": "AgIAAH4AAAAAAAAAAAAAAJkAAABtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T06:41:50.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T06:41:50.662Z"
             },
             {
               "$type": "Document",
@@ -153,8 +148,7 @@
               "RelativeToolTip": "Mian\\Util.cs",
               "ViewState": "AgIAAIQBAAAAAAAAAAAAAJ0BAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T06:35:01.435Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T06:35:01.435Z"
             },
             {
               "$type": "Document",
@@ -166,8 +160,7 @@
               "RelativeToolTip": "Mian\\CustomAssets\\CultureTraits.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-12T05:57:44.252Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-12T05:57:44.252Z"
             },
             {
               "$type": "Document",

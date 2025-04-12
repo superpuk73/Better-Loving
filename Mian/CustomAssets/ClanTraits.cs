@@ -10,7 +10,7 @@ namespace Better_Loving
             Add(new ClanTrait
             {
                 id = "clanbound_isolation",
-                group_id = "miscellaneous",
+                group_id = "special",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
