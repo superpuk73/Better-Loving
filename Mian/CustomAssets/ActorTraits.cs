@@ -57,6 +57,7 @@ namespace Better_Loving
         private static void Add(ActorTrait trait, List<string> actorAssets)
         {
             trait.path_icon = "ui/Icons/actor_traits/"+trait.id;
+
             Util.AddActorTrait(trait, actorAssets);
         }
     }

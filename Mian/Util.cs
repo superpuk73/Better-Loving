@@ -43,11 +43,11 @@ namespace Better_Loving
             AssetManager.traits.add(trait);
 
             if (actorAssets != null)
-                foreach (var asset in actorAssets)
+                foreach (string asset in actorAssets)
                 {
-                    var actorAsset = AssetManager.actor_library.get(asset);
+                    ActorAsset actorAsset = AssetManager.actor_library.get(asset);
                     if (actorAsset != null)
-                        actorAsset.addCultureTrait(trait.id);
+                        actorAsset.addTrait(trait.id);
                 }
         }
 
