@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\Git\\GitRepos\\TOL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|solutionrelative:mian\\customassets\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CBB18749-ABB2-4C47-B228-E3AFC9A46EC8}|Better Love.csproj|d:\\git\\gitrepos\\tol\\mian\\customassets\\decisionandbehaviortasks.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,32 +50,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ClanTraits.cs",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\ClanTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\ClanTraits.cs",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Mian\\CustomAssets\\ClanTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\ClanTraits.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAA+wA4AAAAoAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAqwA4AAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-12T13:42:40.2Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "en.json",
               "DocumentMoniker": "D:\\Git\\GitRepos\\TOL\\Locales\\en.json",
               "RelativeDocumentMoniker": "Locales\\en.json",
               "ToolTip": "D:\\Git\\GitRepos\\TOL\\Locales\\en.json",
               "RelativeToolTip": "Locales\\en.json",
-              "ViewState": "AgIAAJIAAAAAAAAAAAAAAKgAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAAAJ8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-12T10:10:55.85Z"
+              "WhenOpened": "2025-04-12T10:10:55.85Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

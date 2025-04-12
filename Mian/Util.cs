@@ -397,6 +397,9 @@ namespace Better_Loving
             if (!pActor.hasSubspeciesTrait("incest"))
                 return false;
 
+            if (pActor.clan.hasTrait(Util.clanboundIsolation))
+                return true;
+
             if (pActor.hasCultureTrait("incest_taboo") && random.Next(1, 60) == 1)
                 return true;
 
@@ -410,6 +413,8 @@ namespace Better_Loving
         }
         
         private static readonly Random random = new();
+
+        public static ClanTrait clanboundIsolation = AssetManager.clan_traits.get("clanbound_isolation");
 
         public static void GiveIncestCommitmentTrait(Actor actor1, Actor actor2)
         {
