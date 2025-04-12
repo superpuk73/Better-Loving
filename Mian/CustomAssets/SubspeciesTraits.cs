@@ -31,7 +31,7 @@ namespace Better_Loving
                 in_mutation_pool_add = true,
                 in_mutation_pool_remove = true,
                 remove_for_zombies = true
-            }, List.Of("human", "dog", "orc", "demon", "barkfolk", "rabbit", "hopper", "hyena", "lulclaw", "druid", "rat", "nibling"));
+            }, List.Of("human", "dog", "orc", "demon", "civ_dog", "rabbit", "civ_rabbit", "hyena", "civ_hyena", "druid", "rat", "civ_rat"));
 
             SubspeciesTrait reproductionSameSex = new SubspeciesTrait
             {
@@ -88,7 +88,7 @@ namespace Better_Loving
                     ActorAsset actorAsset = AssetManager.actor_library.get(asset);
                     if(actorAsset != null)
                         actorAsset.addSubspeciesTrait(trait.id);
-                }   
+                }
             }
             traits.Add(trait);
         }

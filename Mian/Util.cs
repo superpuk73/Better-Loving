@@ -31,7 +31,7 @@ namespace Better_Loving
                    && actor.hasSubspeciesTrait("wernicke_area");
         }
 
-        public static void AddActorTrait(ActorTrait trait)
+        public static void AddActorTrait(ActorTrait trait, List<string> actorAssets)
         {
             for (int index = 0; index < trait.rate_birth; ++index)
                 AssetManager.traits.pot_traits_birth.Add(trait);
@@ -41,6 +41,14 @@ namespace Better_Loving
                 AssetManager.traits.pot_traits_combat.Add(trait);
 
             AssetManager.traits.add(trait);
+
+            if (actorAssets != null)
+                foreach (var asset in actorAssets)
+                {
+                    var actorAsset = AssetManager.actor_library.get(asset);
+                    if (actorAsset != null)
+                        actorAsset.addCultureTrait(trait.id);
+                }
         }
 
         public static bool HasHadSexRecently(Actor actor)

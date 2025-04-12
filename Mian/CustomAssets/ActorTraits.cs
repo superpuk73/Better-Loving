@@ -36,14 +36,14 @@ namespace Better_Loving
             faithful.opposite_traits.Add(unfaithful);
             unfaithful.opposite_traits.Add(faithful);
             
-            Add(faithful);
-            Add(unfaithful);
+            Add(faithful, List.Of("civ_dog"));
+            Add(unfaithful, null);
         }
 
-        private static void Add(ActorTrait trait)
+        private static void Add(ActorTrait trait, List<string> actorAssets)
         {
             trait.path_icon = "ui/Icons/actor_traits/"+trait.id;
-            Util.AddActorTrait(trait);
+            Util.AddActorTrait(trait, actorAssets);
         }
     }
 }
