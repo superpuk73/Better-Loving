@@ -162,6 +162,10 @@
   "subspecies_trait_reproduction_same_sex_info": "Two of the same sex are required to reproduce",
   "subspecies_trait_reproduction_same_sex_info_2": "Two indeed become more",
 
+  "clan_trait_clanbound_isolation": "Clanbound Isolation",
+  "clan_trait_clanbound_isolation_info": "Clan members will only date with other clan members",
+  "clan_trait_clanbound_isolation_info_2": "We cant let any plebeians rule our lands!",
+
   "Misc": "Developer Settings",
   "SlowOnLog": "Slow on Log",
   "SlowOnLog Description": "Slows the game automatically when logs happen when enabled. You can ignore this as a player.",

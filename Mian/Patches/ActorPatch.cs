@@ -148,6 +148,11 @@ public class ActorPatch
                 return false;
             }
 
+            ClanTrait clanboundIsolation = AssetManager.clan_traits.get("clanbound_isolation");
+
+            if ((__instance.hasClan() && __instance.clan.hasTrait(clanboundIsolation) && !pTarget.hasClan())
+                || (pTarget.hasClan() && pTarget.clan.hasTrait(clanboundIsolation) && !__instance.hasClan()))
+
             __result = true;
 
             // LogService.LogInfo($"Success! They in love :D");

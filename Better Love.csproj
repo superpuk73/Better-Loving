@@ -30,6 +30,7 @@
     <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
         <Compile Include="Mian\CustomAssets\ActorTraits.cs" />
+        <Compile Include="Mian\CustomAssets\ClanTraits.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\CultureTraits.cs" />
         <Compile Include="Mian\CustomAssets\DecisionAndBehaviorTasks.cs" />
