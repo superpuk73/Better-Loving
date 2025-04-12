@@ -391,11 +391,11 @@ namespace Better_Loving
 
         public static bool CanCommitIncest(Actor pActor)
         {
-            if (IsDyingOut(pActor))
-                return true;
-
             if (!pActor.hasSubspeciesTrait("incest"))
                 return false;
+
+            if (IsDyingOut(pActor))
+                return true;
 
             if (pActor.clan.hasTrait(Util.clanboundIsolation))
                 return true;
