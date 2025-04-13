@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Better_Loving.Mian;
+using Better_Loving.Mian.CustomAssets;
 using Better_Loving.Mian.CustomManagers.Dateable;
 using NeoModLoader.services;
 
@@ -237,7 +238,7 @@ namespace Better_Loving
                 if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
                     return;
                 
-                // HandleFamilyRemoval(actor);
+                HandleFamilyRemoval(actor);
 
                 cheatedActor.addStatusEffect("cheated_on");
                 cheatedActor.setLover(null);
@@ -254,7 +255,7 @@ namespace Better_Loving
         {
             Debug(actor.getName() + " broke up with "+ actor.lover.getName());
             
-            // HandleFamilyRemoval(actor);
+            HandleFamilyRemoval(actor);
             
             // DateableManager.Manager.AddOrRemoveUndateable(actor, actor.lover);
             // DateableManager.Manager.AddOrRemoveUndateable(actor.lover, actor);
@@ -361,7 +362,7 @@ namespace Better_Loving
                 return true;
             }
             
-            Debug(pActor.getName() + " does not want a baby.");
+            // Debug(pActor.getName() + " does not want a baby.");
             return false;
         }
 

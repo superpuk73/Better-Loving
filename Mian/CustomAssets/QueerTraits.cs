@@ -2,7 +2,7 @@
 using System.Linq;
 using Random = UnityEngine.Random;
 
-namespace Better_Loving
+namespace Better_Loving.Mian.CustomAssets
 {
     public enum Preference
     {

@@ -1,7 +1,7 @@
 using System.IO;
-using Better_Loving.Mian.CustomManagers.Dateable;
+using Better_Loving.Mian.CustomAssets;
+using Better_Loving.Mian.CustomAssets.AI;
 using NeoModLoader.api;
-using NeoModLoader.services;
 using HarmonyLib;
 using NeoModLoader.General;
 
@@ -33,7 +33,7 @@ Rn the units just never date again but it should prob be altered so that they ca
 (needs testing)
 
 - add kissing task
-(slightly bugged, sometimes it wont go through)
+(needs testing)
 
 - no sexual needs trait
 (needs testing)
@@ -41,9 +41,12 @@ Rn the units just never date again but it should prob be altered so that they ca
 - add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
 (needs testing)
 
-- more romantic tasks?
+- dating romantic task
+(needs testing)
 
-- error relating to sprites and decisions??
+- queer traits arent 100% being added
+
+- sprites are offseted upwards for our speech bubbles idk why :(
 
 */
 namespace Better_Loving.Mian
@@ -59,8 +62,8 @@ namespace Better_Loving.Mian
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
             Util.LogWithId("Making people more loveable!");
             
-            var locale_dir = GetLocaleFilesDirectory(GetDeclaration());
-            foreach (var file in Directory.GetFiles(locale_dir))
+            var localeDir = GetLocaleFilesDirectory(GetDeclaration());
+            foreach (var file in Directory.GetFiles(localeDir))
             {
                 if (file.EndsWith(".json"))
                 {
@@ -81,7 +84,8 @@ namespace Better_Loving.Mian
             StatusEffects.Init();
             Happiness.Init();
             CommunicationTopics.Init();
-            DecisionAndBehaviorTasks.Init();
+            ActorBehaviorTasks.Init();
+            Decisions.Init();
             GodPowers.Init();
             
             // Managers

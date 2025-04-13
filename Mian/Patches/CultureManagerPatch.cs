@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Better_Loving.Mian.CustomAssets;
+using HarmonyLib;
 
 namespace Better_Loving.Mian.Patches;
 
@@ -15,7 +16,7 @@ public class CultureManagerPatch
                 __result.addTrait("incest");
             }
 
-            if (Randy.randomChance(0.2f))
+            if (Randy.randomChance(0.35f))
             {
                 if (Util.NeedDifferentSexTypeForReproduction(pActor))
                     __result.addTrait("homophobic");
@@ -23,7 +24,7 @@ public class CultureManagerPatch
                     __result.addTrait("heterophobic");
                 if (!Util.NeedDifferentSexTypeForReproduction(pActor) && !Util.NeedSameSexTypeForReproduction(pActor) && !Util.CanDoAnySexType(pActor))
                     __result.addTrait("orientationless");
-            } else if (Randy.randomChance(0.2f))
+            } else if (Randy.randomChance(0.35f))
             {
                 var preference = QueerTraits.GetPreferenceFromActor(pActor, false);
                 if(preference == Preference.DifferentSex)

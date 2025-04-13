@@ -47,9 +47,6 @@ public class BehCFBFSRPatch
             if (pParentA.subspecies.hasReachedPopulationLimit() || pParentB.subspecies.hasReachedPopulationLimit())
                 return false;
 
-            // var subspeciesA = pParentA.subspecies;
-            // var subspeciesB = pParentB.subspecies;
-
             Actor pregnantActor = null;
             Actor nonPregnantActor;
             
@@ -120,7 +117,7 @@ public class BehCFBFSRPatch
                 {
                     case ReproductiveStrategy.Egg:
                     case ReproductiveStrategy.SpawnUnitImmediate:
-                        BabyMaker.makeBabiesViaSexual(pregnantActor, pParentA, pParentB);
+                        BabyMaker.makeBabiesViaSexual(pregnantActor, pregnantActor, pParentB);
                         pregnantActor.subspecies.counterReproduction();
                         break;
                     case ReproductiveStrategy.Pregnancy:

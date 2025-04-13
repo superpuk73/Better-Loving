@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace Better_Loving
+namespace Better_Loving.Mian.CustomAssets
 {
     public class Happiness
     {
@@ -81,6 +81,7 @@ namespace Better_Loving
             {
                 id = "enjoyed_sex",
                 value = 15,
+                path_icon = "ui/Icons/status/enjoyed_sex",
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
@@ -90,6 +91,7 @@ namespace Better_Loving
             {
                 id = "disliked_sex",
                 value = -15,
+                path_icon = "ui/Icons/status/disliked_sex",
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
@@ -99,6 +101,7 @@ namespace Better_Loving
             {
                 id = "okay_sex",
                 value = 5,
+                path_icon = "ui/Icons/status/okay_sex",
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
@@ -108,6 +111,7 @@ namespace Better_Loving
             {
                 id = "did_not_want_baby",
                 value = -25,
+                path_icon = "ui/Icons/status/cheated_on",
                 pot_task_id = "madness_random_emotion",
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
@@ -118,7 +122,18 @@ namespace Better_Loving
                 id = "adopted_baby",
                 value = 30,
                 pot_task_id = "singing",
-                path_icon = "ui/Icons/iconChildren",
+                path_icon = "ui/Icons/status/adopted_baby",
+                pot_amount = 1,
+                ignored_by_psychopaths = true,
+                show_change_happiness_effect = true,
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "went_on_date",
+                value = 15,
+                pot_task_id = "singing",
+                path_icon = "ui/Icons/status/iconLovers",
                 pot_amount = 1,
                 ignored_by_psychopaths = true,
                 show_change_happiness_effect = true,

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Better_Loving.Mian.CustomAssets;
+using HarmonyLib;
 
 namespace Better_Loving.Mian.Patches;
 

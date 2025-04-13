@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Better_Loving.Mian.CustomAssets;
 using Better_Loving.Mian.CustomManagers.Dateable;
 using HarmonyLib;
 
@@ -98,7 +99,7 @@ public class ActorPatch
                 var actor = World.world.units.get(id);
                 if (actor != null)
                 {
-                    if (Randy.randomChance(0.2f))
+                    if (Randy.randomChance(0.05f))
                     {
                         Util.Debug(__instance.getName() + " has forgived " + actor.getName());
                         Util.AddOrRemoveUndateableActor(__instance, actor); 

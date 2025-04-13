@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Better_Loving.Mian.CustomManagers.Dateable;
 using UnityEngine;
 
-namespace Better_Loving;
+namespace Better_Loving.Mian.CustomAssets;
 
 public class StatusEffects
 {
@@ -31,7 +30,7 @@ public class StatusEffects
                         changeBy += 5f;
                 
                     if (partner == actor.a.lover)
-                        changeBy += 15f;
+                        changeBy += 10f;
                 
                     Util.ChangeSexualHappinessBy(actor.a, changeBy);
                 }

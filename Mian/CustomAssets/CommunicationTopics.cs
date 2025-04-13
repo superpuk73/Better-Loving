@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace Better_Loving
+namespace Better_Loving.Mian.CustomAssets
 {
     public class CommunicationTopics
     {
         public static void Init()
         {
-            // small bug where the sprites clip.. i dunno how to fix that tho :<
             Add(new CommunicationAsset
             {
                 id = "orientation",
@@ -32,10 +31,14 @@ namespace Better_Loving
 
                     var queerTraits = QueerTraits.GetQueerTraits(actor, true);
                     var sexualPreference = queerTraits[0].preference;
+                    var sexualSprite = queerTraits[0].getSprite();
                     var romanticPreference = queerTraits[1].preference;
+                    var romanticSprite = queerTraits[1].getSprite();
 
-                    sprites.Add(queerTraits[0].getSprite());
-                    sprites.Add(queerTraits[1].getSprite());
+                    if (sexualSprite == null || romanticSprite == null)
+                        return;
+                    sprites.Add(sexualSprite);
+                    sprites.Add(romanticSprite);
 
                     if (unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference))
                         actor.changeHappiness("orientation_does_not_fit");

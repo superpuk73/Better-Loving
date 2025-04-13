@@ -1,4 +1,4 @@
-﻿namespace Better_Loving
+﻿namespace Better_Loving.Mian.CustomAssets
 {
     public class GodPowers
     {

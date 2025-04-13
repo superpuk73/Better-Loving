@@ -14,7 +14,14 @@
   "status_title_cheated_on": "Cheated On",
   "status_description_cheated_on": "Their ex-lover cheated on them",
 
-  "happiness_adopted_baby": "Just adopted a baby!",
+  "happiness_went_on_date": "Went on date",
+  "happiness_dialog_went_on_date_0": "That was an amazing date!",
+  "happiness_dialog_went_on_date_1": "I love them so much..",
+  "happiness_dialog_went_on_date_2": "I've never been so giddy!",
+  "happiness_dialog_went_on_date_3": "I wonder what their eyes would look like at night..",
+
+
+  "happiness_adopted_baby": "Adopted a baby",
   "happiness_dialog_adopted_baby_0": "It feels so good to finally have a baby.",
   "happiness_dialog_adopted_baby_1": "My orientation is the biggest part of what makes me, me.",
   "happiness_dialog_adopted_baby_2": "I'm going to own myself and I won't hide it!",
@@ -78,6 +85,9 @@
   "task_go_and_wait_sexual_ivf": "Go and Wait Sexual IVF",
   "task_action_sexual_ivf": "Start Sexual IVF",
   "task_wait_sexual_ivf": "Wait Sexual IVF",
+  "task_try_date": "Try Date",
+  "task_action_date": "Going on Date",
+  "task_follow_action_date": "Following Date",
 
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",

@@ -21,9 +21,26 @@
     <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
         <Compile Include="Mian\CustomAssets\ActorTraits.cs" />
+        <Compile Include="Mian\CustomAssets\AI\ActorBehaviorTasks.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehCheckForSexualIvf.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehStartSexualIvf.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehTrySexualIvf.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehFindMismatchedOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehInsultOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateFinish.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateHere.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehRandomizeDateTile.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckForDate.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehFollowDate.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehGetLoverForRomanceAction.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehKissTarget.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehCheckForSexTarget.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehFindMatchingPreference.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehFindReproduceableSex.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehGetPossibleTileForSex.cs" />
+        <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\CultureTraits.cs" />
-        <Compile Include="Mian\CustomAssets\DecisionAndBehaviorTasks.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
         <Compile Include="Mian\CustomAssets\QueerTraits.cs" />
