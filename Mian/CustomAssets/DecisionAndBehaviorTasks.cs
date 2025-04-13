@@ -37,28 +37,6 @@ namespace Better_Loving
                 only_safe = true
             });
             AssetManager.subspecies_traits.get("wernicke_area").addDecision("insult_orientation_try");
-            
-            // should not always cause a pregnancy!
-            AddDecision(new DecisionAsset
-            {
-                id = "invite_for_sex",
-                priority = NeuroLayer.Layer_2_Moderate,
-                path_icon = "ui/Icons/status/enjoyed_sex",
-                cooldown = 30,
-                action_check_launch = actor => Util.IsSmart(actor)
-                                               && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                               && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
-                                               && !Util.IsSexualHappinessEnough(actor, 100f)
-                                               && !Util.HasHadSexRecently(actor)
-                                                && Util.IsOrientationSystemEnabledFor(actor),
-                list_civ = true,
-                weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.25f: 
-                    Util.IsSexualHappinessEnough(actor, 50f) ? 0.5f : Util.IsSexualHappinessEnough(actor, 0) ? .75f : 
-                    Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
-                only_adult = true,
-                only_safe = true,
-                cooldown_on_launch_failure = true
-            });
 
             // will force all units to make babies regardless of orientation if they have preservation
             AddDecision(new DecisionAsset
@@ -73,7 +51,6 @@ namespace Better_Loving
                     return Util.IsDyingOut(actor)
                            && QueerTraits.GetQueerTraits(actor).Count >= 2
                            && Util.CanMakeBabies(actor)
-                           && !Util.HasHadSexRecently(actor)
                            && actor.hasSubspeciesTrait("preservation")
                            && Util.IsOrientationSystemEnabledFor(actor);
                 },
@@ -85,7 +62,28 @@ namespace Better_Loving
             AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("reproduce_preservation");
             AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("reproduce_preservation");
             AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("reproduce_preservation");
-
+            
+            AddDecision(new DecisionAsset
+            {
+                id = "kiss_lover",
+                priority = NeuroLayer.Layer_2_Moderate,
+                path_icon = "ui/Icons/status/just_kissed",
+                cooldown = 30,
+                action_check_launch = actor => Util.IsSmart(actor)
+                                               && actor.hasLover()
+                                               && QueerTraits.GetQueerTraits(actor).Count >= 2 
+                                               && !Util.IsSexualHappinessEnough(actor, 100f)
+                                               && Util.IsOrientationSystemEnabledFor(actor)
+                                               && !actor.hasStatus("just_kissed")
+                                               && (QueerTraits.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.2f)),
+                list_civ = true,
+                weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.5f: 
+                    Util.IsSexualHappinessEnough(actor, 50f) ? 0.6f : Util.IsSexualHappinessEnough(actor, 0) ? .8f : 
+                    Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+                only_safe = true,
+                cooldown_on_launch_failure = true
+            });
+            
             var reproduceForPreservation = new BehaviourTaskActor
             {
                 id = "reproduce_preservation",
@@ -94,18 +92,53 @@ namespace Better_Loving
             };
             reproduceForPreservation.addBeh(new BehFindReproduceableSex());
             reproduceForPreservation.addBeh(new BehGetPossibleTileForSex());
-
             AddBehavior(reproduceForPreservation);
+            
+            InitRomance();
+            InitSex();
+            InitSexualIvf();
+            
+            Finish();
+        }
 
+        private static void InitRomance()
+        {
             var doKissWithLover = new BehaviourTaskActor
             {
                 id = "kiss_lover",
                 locale_key = "task_kiss_lover",
-                path_icon = "ui/Icons/status/enjoyed_sex"
+                path_icon = "ui/Icons/status/just_kissed"
             };
-            doKissWithLover.addBeh(new BehGetLoverForKiss());
+            doKissWithLover.addBeh(new BehGetLoverForRomanceAction(20f));
+            doKissWithLover.addBeh(new BehGoToActorTarget());
+            doKissWithLover.addBeh(new BehCheckNearActorTarget());
+            doKissWithLover.addBeh(new BehKissTarget());
             
             AddBehavior(doKissWithLover);
+        }
+
+        private static void InitSex()
+        {
+                        // should not always cause a pregnancy!
+            AddDecision(new DecisionAsset
+            {
+                id = "invite_for_sex",
+                priority = NeuroLayer.Layer_2_Moderate,
+                path_icon = "ui/Icons/status/enjoyed_sex",
+                cooldown = 30,
+                action_check_launch = actor => Util.IsSmart(actor)
+                                               && QueerTraits.GetQueerTraits(actor).Count >= 2 
+                                               && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
+                                               && !Util.IsSexualHappinessEnough(actor, 100f)
+                                               && Util.IsOrientationSystemEnabledFor(actor),
+                list_civ = true,
+                weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.25f: 
+                    Util.IsSexualHappinessEnough(actor, 50f) ? 0.5f : Util.IsSexualHappinessEnough(actor, 0) ? .75f : 
+                    Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+                only_adult = true,
+                only_safe = true,
+                cooldown_on_launch_failure = true
+            });
 
             var inviteForSex = new BehaviourTaskActor
             {
@@ -131,10 +164,102 @@ namespace Better_Loving
                 haveSexGo.addBeh(new BehRandomWait(1f, 2f));
             }
             AddBehavior(haveSexGo);
-            
-            Finish();
         }
 
+        private static void InitSexualIvf()
+        {
+            AddDecision(new DecisionAsset
+            {
+                id = "try_sexual_ivf",
+                priority = NeuroLayer.Layer_2_Moderate, // temporary
+                path_icon = "ui/Icons/status/adopted_baby",
+                cooldown = 15,
+                action_check_launch = actor =>
+                {
+                    if (!Util.IsSmart(actor) || !Util.WantsBaby(actor, false) || actor.hasStatus("pregnant"))
+                        return false;
+                    
+                    var bestFriend = actor.getBestFriend();
+
+                    if (actor.hasLover())
+                    {
+                        if (!Util.WantsBaby(actor.lover, false) || actor.lover.hasStatus("pregnant"))
+                            return false;
+                        
+                        if (Util.CanReproduce(actor, actor.lover) && !QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, true))
+                            return true;
+
+                        if (Util.CanReproduce(actor, actor.lover) &&
+                            QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, true))
+                            return false;
+                    }
+                    
+                    return bestFriend != null && Util.CanReproduce(actor, bestFriend) && !bestFriend.hasStatus("pregnant");
+                },
+                list_civ = true,
+                weight = 0.5f,
+                only_safe = true,
+                cooldown_on_launch_failure = true
+            });
+
+            var trySexualIvf = new BehaviourTaskActor
+            {
+                id = "try_sexual_ivf",
+                locale_key = "task_try_sexual_ivf",
+                path_icon = "ui/Icons/status/adopted_baby"
+            };
+            trySexualIvf.addBeh(new BehTrySexualIvf());
+            AddBehavior(trySexualIvf);
+
+            var goSexualIvf = new BehaviourTaskActor
+            {
+                id = "go_sexual_ivf",
+                locale_key = "task_go_sexual_ivf",
+                path_icon = "ui/Icons/status/adopted_baby"
+            };
+            goSexualIvf.addBeh(new BehGoToBuildingTarget());
+            for (int index = 0; index < 6; ++index)
+            {
+                goSexualIvf.addBeh(new BehRandomWait(1f, 2f));
+                goSexualIvf.addBeh(new BehCheckForSexualIvf());
+                goSexualIvf.addBeh(new BehRandomWait(1f, 2f));
+            }
+            AddBehavior(goSexualIvf);
+            
+            var goAndWaitSexualIvf = new BehaviourTaskActor
+            {
+                id = "go_and_wait_sexual_ivf",
+                locale_key = "task_go_and_wait_sexual_ivf",
+                path_icon = "ui/Icons/status/adopted_baby"
+            };
+            goAndWaitSexualIvf.addBeh(new BehGoToBuildingTarget());
+            for (int index = 0; index < 6; ++index)
+            {
+                goAndWaitSexualIvf.addBeh(new BehRandomWait(1f, 2f));
+            }
+            AddBehavior(goAndWaitSexualIvf);
+            
+            var actionSexualIvf = new BehaviourTaskActor
+            {
+                id = "action_sexual_ivf",
+                locale_key = "task_action_sexual_ivf",
+                path_icon = "ui/Icons/status/adopted_baby"
+            };
+            actionSexualIvf.addBeh(new BehStayInBuildingTarget(2f, 3f));
+            actionSexualIvf.addBeh(new BehStartSexualIvf());
+            actionSexualIvf.addBeh(new BehExitBuilding());
+            AddBehavior(actionSexualIvf);
+           
+            var waitSexualIvf = new BehaviourTaskActor
+            {
+                id = "wait_sexual_ivf",
+                locale_key = "task_wait_sexual_ivf",
+                path_icon = "ui/Icons/status/adopted_baby"
+            };
+            waitSexualIvf.addBeh(new BehStayInBuildingTarget(2f, 3f));
+            waitSexualIvf.addBeh(new BehExitBuilding());
+            AddBehavior(waitSexualIvf);
+        }
         private static void Finish()
         {
             // using (ListPool<DecisionAsset> list1 = new ListPool<DecisionAsset>(AssetManager.decisions_library.list_only_civ))
@@ -210,18 +335,195 @@ namespace Better_Loving
         }
     }
 
-    public class BehGetLoverForKiss : BehaviourActionActor
+    public class BehStartSexualIvf : BehaviourActionActor
     {
-        public override BehResult execute(Actor pObject)
+        private Actor _target;
+        private BehResult Cancel()
         {
-            if (!pObject.hasLover() || !pObject.isOnSameIsland(pObject.lover) || pObject.lover.isLying())
+            _target.cancelAllBeh();
+            return BehResult.Stop;
+        }
+        public override BehResult execute(Actor pActor)
+        {
+            Util.Debug("Actually starting sexual ivf for "+pActor.getName());
+            if (pActor.beh_actor_target == null || pActor.beh_building_target == null)
+            {
+                Util.Debug(pActor.getName()+": Cancelled from starting sexual ivf target because actor was null");
                 return BehResult.Stop;
+            }
+
+            _target = pActor.beh_actor_target.a;
+
+            Actor pregnantActor = null;
             
-            pObject.beh_actor_target = pObject.lover;
+            if (Util.NeedDifferentSexTypeForReproduction(pActor) && Util.NeedDifferentSexTypeForReproduction(_target))
+            {
+                if (pActor.data.sex == _target.data.sex) return Cancel();
+                
+                if (pActor.isSexFemale())
+                    pregnantActor = pActor;
+                else if (_target.isSexFemale())
+                    pregnantActor = _target;
+            }
+            else if(Util.NeedSameSexTypeForReproduction(pActor) && Util.NeedSameSexTypeForReproduction(_target))
+            {
+                if (pActor.data.sex != _target.data.sex) return Cancel();
+                pregnantActor = !Randy.randomBool() ? _target : pActor;
+            } else if (Util.CanDoAnySexType(pActor) || Util.CanDoAnySexType(_target))
+            {
+                if(Util.CanDoAnySexType(pActor) && Util.CanDoAnySexType(_target))
+                    pregnantActor = !Randy.randomBool() ? _target : pActor;
+                else if (Util.CanDoAnySexType(pActor))
+                {
+                    pregnantActor = pActor;
+                }
+                else
+                {
+                    pregnantActor = _target;
+                }
+            }
+
+            if (pregnantActor == null)
+                return Cancel();
+            
+            var nonPregnantActor = pregnantActor == pActor ? _target : pActor;
+
+            pregnantActor.data.set("familyParentA", pActor.getID());
+            if (pActor.hasLover())
+            {
+                pregnantActor.data.set("familyParentB", pActor.lover.getID());
+            }
+
+            var reproductionStrategy = pregnantActor.subspecies.getReproductionStrategy();
+            switch (reproductionStrategy)
+            {
+                case ReproductiveStrategy.Egg:
+                case ReproductiveStrategy.SpawnUnitImmediate:
+                    BabyMaker.makeBabiesViaSexual(pregnantActor, pregnantActor, _target);
+                    pregnantActor.subspecies.counterReproduction();
+                    break;
+                case ReproductiveStrategy.Pregnancy:
+                    var maturationTimeSeconds = pregnantActor.getMaturationTimeSeconds();
+                    pregnantActor.data.set("otherParent", nonPregnantActor.getID());
+
+                    BabyHelper.babyMakingStart(pregnantActor);
+                    pregnantActor.addStatusEffect("pregnant", maturationTimeSeconds);
+                    pregnantActor.subspecies.counterReproduction();
+                    break;
+            }   
+            Util.Debug("Sexual ivf successful for "+pActor.getName());
+
             return BehResult.Continue;
         }
     }
-    
+
+    public class BehCheckForSexualIvf : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pActor)
+        {
+            Util.Debug("Checking sexual ivf for "+pActor.getName());
+
+            if (pActor.beh_actor_target == null || pActor.beh_building_target == null)
+            {
+                Util.Debug(pActor.getName()+": Cancelled from checking for sexual ivf target because actor was null");
+                return BehResult.Stop;
+            }
+
+            var sexActor = pActor.beh_actor_target.a;
+            if (sexActor.isTask("go_and_wait_sexual_ivf") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 3)
+            {
+                pActor.stayInBuilding(pActor.beh_building_target);
+                sexActor.stayInBuilding(sexActor.beh_building_target);
+                sexActor.setTask("wait_sexual_ivf", false, pForceAction: true);
+                
+                return forceTask(pActor, "action_sexual_ivf", false, true);
+            }
+            return !sexActor.isTask("go_and_wait_sexual_ivf") ? BehResult.Stop : BehResult.Continue;
+        }
+    }
+
+    public class BehTrySexualIvf : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pActor)
+        {
+            Util.Debug("Trying sexual ivf for "+pActor.getName());
+
+            if (!pActor.hasHouse() || pActor.hasStatus("pregnant"))
+                return BehResult.Stop;
+            var home = pActor.getHomeBuilding();
+            
+            if(pActor.distanceToObjectTarget(home) >= 75f)
+                return BehResult.Stop;
+            
+            if (pActor.hasLover() && Util.CanReproduce(pActor, pActor.lover) 
+                                   && pActor.isSameIslandAs(pActor.lover)
+                                   && pActor.lover.distanceToObjectTarget(home) < 75f && !pActor.lover.hasStatus("pregnant"))
+                pActor.beh_actor_target = pActor.lover;
+            else if(pActor.hasBestFriend() && Util.CanReproduce(pActor, pActor.getBestFriend()) 
+                                            && pActor.isSameIslandAs(pActor.getBestFriend())
+                                            && pActor.getBestFriend().distanceToObjectTarget(home) < 75f && !pActor.getBestFriend().hasStatus("pregnant"))
+                pActor.beh_actor_target = pActor.getBestFriend();
+            
+            if (pActor.beh_actor_target == null)
+                return BehResult.Stop;
+            var target = pActor.beh_actor_target.a;
+            pActor.beh_building_target = home;
+            target.beh_actor_target = pActor;
+            target.beh_building_target = home;
+            
+            Util.Debug("Starting sexual ivf tasks for "+pActor.getName()+" and "+target.getName());
+
+            pActor.beh_actor_target.a.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
+            pActor.beh_actor_target.a.timer_action = 0.0f;
+            return forceTask(pActor, "go_sexual_ivf", pClean: false);
+        }
+    }
+
+    public class BehKissTarget : BehaviourActionActor
+    {
+        public override BehResult execute(Actor pActor)
+        {
+            if (pActor.beh_actor_target == null)
+                return BehResult.Stop;
+            Util.Debug(pActor.getName() + " is kissing "+pActor.beh_actor_target.a.getName());
+
+            pActor.makeWait(1.5f);
+            pActor.beh_actor_target.a.makeWait(1.5f);
+
+            Util.ActorsInteracted(pActor, pActor.beh_actor_target.a);
+            pActor.addStatusEffect("just_kissed");
+            pActor.beh_actor_target.addStatusEffect("just_kissed");
+            
+            EffectsLibrary.spawnAt("fx_hearts", pActor.current_position, pActor.current_scale.y);
+            EffectsLibrary.spawnAt("fx_hearts", pActor.beh_actor_target.current_position, pActor.beh_actor_target.current_scale.y);
+
+            return BehResult.Continue;
+        }
+    }
+    public class BehGetLoverForRomanceAction : BehaviourActionActor
+    {
+        private float _distance;
+        public BehGetLoverForRomanceAction(float distance=10f)
+        {
+            _distance = distance;
+        }
+        public override BehResult execute(Actor pActor)
+        {
+            Util.Debug(pActor.getName() + " is attempting to locate lover for romance!");
+            
+            if (!pActor.hasLover() || !pActor.isOnSameIsland(pActor.lover) || pActor.lover.isLying())
+                return BehResult.Stop;
+            
+            if(pActor.distanceToActorTile(pActor.lover) > _distance)
+                return BehResult.Stop;
+            
+            pActor.beh_actor_target = pActor.lover;
+            pActor.lover.makeWait(_distance * 1.5f);
+            Util.Debug("Lover found!");
+
+            return BehResult.Continue;
+        }
+    }
     public class BehGetPossibleTileForSex : BehaviourActionActor
     {
         public bool isPlacePrivateForBreeding(Actor actor, WorldTile tile)
@@ -283,14 +585,14 @@ namespace Better_Loving
             }
 
             Actor sexActor = pActor.beh_actor_target.a;
-            if (sexActor.isTask("have_sex_go") && sexActor.ai.action_index > 3 && sexActor.beh_building_target == null)
+            
+            if (sexActor.isTask("have_sex_go") && sexActor.ai.action_index > 3 && sexActor.beh_building_target != null)
             {
-                return forceTask(pActor, "sexual_reproduction_outside", false, true);
+                return forceTask(pActor, "have_sex_go", false, true);
             }  
             
-            if (sexActor.isTask("have_sex_go") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 3)
+            if (sexActor.isTask("have_sex_go") && sexActor.beh_building_target == pActor.beh_building_target && sexActor.ai.action_index > 1)
             {
-                // this is not working properly for some reason
                 pActor.stayInBuilding(pActor.beh_building_target);
                 sexActor.stayInBuilding(sexActor.beh_building_target);
                 sexActor.setTask("sexual_reproduction_civ_wait", false, pForceAction: true);

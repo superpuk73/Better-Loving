@@ -1,4 +1,7 @@
-﻿using HarmonyLib;
+﻿using Better_Loving.Mian.CustomManagers;
+using Better_Loving.Mian.CustomManagers.Dateable;
+using HarmonyLib;
+using NeoModLoader.services;
 
 namespace Better_Loving.Mian.Patches;
 
@@ -22,4 +25,16 @@ public class MapBoxPatch
             }
         }
     }
+    
+    // [HarmonyPatch(typeof(MapBox), nameof(MapBox.addUnloadResources))]
+    // class SaveDataPatch
+    // {
+    //     // save our data before addUnloadResources runs
+    //     static void Prefix()
+    //     {
+    //         LogService.LogInfo("Loading TOL Data");
+    //         if (CustomSavedData.Dateables != null)
+    //             SmoothLoader.add(() => DateableManager.Manager.loadFromSave(CustomSavedData.Dateables), "Loading Dateables");
+    //     }
+    // }
 }

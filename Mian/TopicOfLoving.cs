@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using ai.behaviours;
+using Better_Loving.Mian.CustomManagers.Dateable;
 using NeoModLoader.api;
 using NeoModLoader.services;
 using HarmonyLib;
@@ -10,12 +7,14 @@ using NeoModLoader.General;
 
 /*
 
-- test orientationless trait (may need edits)
+- rework orientationless trait with new changes
+(needs testing)
 
 - homosexuals/heterosexuals have a 50% chance of having cultures that are heterophobic/homophobic
+(needs testing)
 
 - make a sexual reproduction trait that allows two ppl of the same sex to reproduce
-(done)
+(needs testing)
 
 - test insult orientation task to make sure it still works
 (needs testing)
@@ -23,19 +22,29 @@ using NeoModLoader.General;
 - make spouses leave family when they break up (children will be shared if same subspecies. If different subspecies, the child will go to the same subspecies parent)
 (needs testing)
 
-- remove reproduction decision for smart units and and only reproduce from casual/preservation sex. 
+- make people unable to fall in love temporarily after breakups/cheating
 (needs testing)
 
-- make people unable to fall in love temporarily after breakups/cheating
+- improve breaking up and cheating post-systems. 
+Rn the units just never date again but it should prob be altered so that they can date someone again after a period of time.
+(needs testing)
+
+- lovers will defend each other task
+(needs testing)
+
+- add kissing task
+(slightly bugged, sometimes it wont go through)
+
+- no sexual needs trait
+(needs testing)
+
+- add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
+(needs testing)
+
+- more romantic tasks?
 
 - error relating to sprites and decisions??
 
-- lovers will defend each other task
-- improve breaking up and cheating post-systems. Rn the units just never date again but it should prob be altered so that they can date someone again after a period of time.
-
-(wip)
-- add sexual ivf task for units that cant get pregnant but want a baby (can lead to adoption which could be a happiness aspect!)
-- add kissing task and other romantic tasks which can improve sexual happiness
 */
 namespace Better_Loving.Mian
 {
@@ -48,7 +57,7 @@ namespace Better_Loving.Mian
             Mod = this;
             // Initialize your mod.
             // Methods are called in the order: OnLoad -> Awake -> OnEnable -> Start -> Update
-            LogService.LogInfo($"[{GetDeclaration().Name}]: Making people more loveable!");
+            Util.LogWithId("Making people more loveable!");
             
             var locale_dir = GetLocaleFilesDirectory(GetDeclaration());
             foreach (var file in Directory.GetFiles(locale_dir))
@@ -74,6 +83,9 @@ namespace Better_Loving.Mian
             CommunicationTopics.Init();
             DecisionAndBehaviorTasks.Init();
             GodPowers.Init();
+            
+            // Managers
+            // DateableManager.Init();
         }
         private void Awake()
         {

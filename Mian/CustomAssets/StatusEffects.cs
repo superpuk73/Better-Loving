@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Better_Loving.Mian.CustomManagers.Dateable;
 using UnityEngine;
 
 namespace Better_Loving;
@@ -12,12 +13,42 @@ public class StatusEffects
     {
         Add(new StatusAsset
         {
+            id="just_kissed",
+            duration = 25f,
+            action_on_receive = (actor, _) =>
+            {
+                actor.a.data.get("last_had_interaction_with", out long partnerID);
+                
+                var partner = MapBox.instance.units.get(partnerID);
+                if (partner != null)
+                {
+                    var changeBy = 0f;
+
+                    if (QueerTraits.PreferenceMatches(actor.a, partner, false))
+                        changeBy += 10f;
+                    
+                    if (QueerTraits.PreferenceMatches(actor.a, partner, true))
+                        changeBy += 5f;
+                
+                    if (partner == actor.a.lover)
+                        changeBy += 15f;
+                
+                    Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                }
+
+                actor.a.changeHappiness("just_kissed");
+                Util.Debug(actor.a.getName() + " just kissed!");
+                return true;
+            }
+        });
+        Add(new StatusAsset
+        {
             id="enjoyed_sex",
-            duration = 60f,
+            duration = 35f,
             action_on_receive = (actor, _) =>
             {
                 actor.a.data.get("sexual_happiness", out float happiness);
-                actor.a.data.get("last_had_sex_with", out long partnerID);
+                actor.a.data.get("last_had_interaction_with", out long partnerID);
                 var changeBy = 20f;
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
@@ -40,7 +71,7 @@ public class StatusEffects
         Add(new StatusAsset
         {
             id="disliked_sex",
-            duration = 60f,
+            duration = 35f,
             action_on_receive = (actor, _) => 
             {
                 actor.a.data.get("sexual_happiness", out float happiness);
@@ -61,10 +92,10 @@ public class StatusEffects
         Add(new StatusAsset
         {
             id="okay_sex",
-            duration = 60f,
+            duration = 35f,
             action_on_receive = (actor, _) =>
             {
-                actor.a.data.get("last_had_sex_with", out long partnerID);
+                actor.a.data.get("last_had_interaction_with", out long partnerID);
                 var changeBy = 10f;
                 
                 var sexPartner = MapBox.instance.units.get(partnerID);
@@ -90,7 +121,7 @@ public class StatusEffects
                 } else
                 {
                     cheatedActor.a.addAggro(cheatedActor.a.lover);
-                    cheatedActor.a.lover.data.get("last_had_sex_with", out long id);
+                    cheatedActor.a.lover.data.get("last_had_interaction_with", out long id);
                     var otherActorInvolved = MapBox.instance.units.get(id);
                     if (otherActorInvolved != null)
                     {
@@ -106,6 +137,11 @@ public class StatusEffects
                 }
                 cheatedActor.a.changeHappiness("cheated_on");
                 cheatedActor.a.data.set("cheated_" +cheatedActor.a.lover.getID(),true);
+                
+                // DateableManager.Manager.AddOrRemoveUndateable(cheatedActor.a, cheatedActor.a.lover);
+                Util.AddOrRemoveUndateableActor(cheatedActor.a, cheatedActor.a.lover);
+
+                Util.Debug(cheatedActor.a.lover.getName() + " just cheated on "+cheatedActor.a.getName());
                 return true;
             }
         });

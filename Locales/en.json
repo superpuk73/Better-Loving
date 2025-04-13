@@ -1,4 +1,7 @@
 ﻿{
+  "status_title_just_kissed": "Just Kissed",
+  "status_description_just_kissed": "So lovey dovey.",
+  
   "status_title_disliked_sex": "Disliked Coupling",
   "status_description_disliked_sex": "Sexual preferences were not met",
 
@@ -10,6 +13,18 @@
 
   "status_title_cheated_on": "Cheated On",
   "status_description_cheated_on": "Their ex-lover cheated on them",
+
+  "happiness_adopted_baby": "Just adopted a baby!",
+  "happiness_dialog_adopted_baby_0": "It feels so good to finally have a baby.",
+  "happiness_dialog_adopted_baby_1": "My orientation is the biggest part of what makes me, me.",
+  "happiness_dialog_adopted_baby_2": "I'm going to own myself and I won't hide it!",
+  "happiness_dialog_adopted_baby_3": "I wouldn't have it any other way.",
+
+  "happiness_did_not_want_baby": "Unwanted baby",
+  "happiness_dialog_did_not_want_baby_0": "Damn it! Now I have to take care of a toddler..",
+  "happiness_dialog_did_not_want_baby_1": "I do not want to take care of a baby for the rest of my life.",
+  "happiness_dialog_did_not_want_baby_2": "Are you kidding??",
+  "happiness_dialog_did_not_want_baby_3": "A baby?! Tell me you're joking.",
 
   "happiness_okay_sex": "Mildly enjoyed coupling",
   "happiness_dialog_okay_sex_0": "That was alright, they weren't the best at it.",
@@ -55,9 +70,14 @@
   
   "task_insult_orientation": "Insult Orientations",
   "task_invite_for_sex": "Invite for Sex",
-  "task_prostitution": "Prostitution",
+  "task_kiss_lover": "Kiss Lover",
   "task_have_sex_go": "Have Sex",
   "task_reproduce_preservation": "Reproduce Preservation",
+  "task_try_sexual_ivf": "Try Sexual IVF",
+  "task_go_sexual_ivf": "Go Sexual IVF",
+  "task_go_and_wait_sexual_ivf": "Go and Wait Sexual IVF",
+  "task_action_sexual_ivf": "Start Sexual IVF",
+  "task_wait_sexual_ivf": "Wait Sexual IVF",
 
   "love_selected": "Choose two units to love",
   "love_selected_first": "Now select another unit",
@@ -65,6 +85,10 @@
   "love_successful": "Force lover successful!",
   "ForceLover": "Force Lover",
   "ForceLover Description": "Force a unit to become lovers with another unit",
+
+  "trait_sex_indifferent": "Sex-Indifferent",
+  "trait_sex_indifferent_info": "Sex is not a requirement for them to be in a relationship.",
+  "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
   
   "trait_aromantic": "Aromantic",
   "trait_aromantic_info": "They do not desire love unlike most",

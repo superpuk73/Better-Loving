@@ -244,7 +244,12 @@ namespace Better_Loving
             }
         }
 
-        public static bool BothPreferencesMatch(Actor actor1, Actor actor2, bool sexual)
+        public static bool BothPreferencesMatch(Actor actor1, Actor actor2)
+        {
+            return PreferenceMatches(actor1, actor2, false) && PreferenceMatches(actor1, actor2, true);
+        }
+
+        public static bool BothActorsPreferencesMatch(Actor actor1, Actor actor2, bool sexual)
         {
             return PreferenceMatches(actor1, actor2, sexual) && PreferenceMatches(actor2, actor1, sexual);
         }

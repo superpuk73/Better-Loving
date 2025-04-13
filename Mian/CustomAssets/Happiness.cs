@@ -44,7 +44,7 @@ namespace Better_Loving
             Add(new HappinessAsset
             {
                 id = "orientation_fits",
-                value = 5,
+                value = 10,
                 pot_task_id = "singing",
                 path_icon = "ui/Icons/iconAge",
                 ignored_by_psychopaths = false,
@@ -56,7 +56,7 @@ namespace Better_Loving
             Add(new HappinessAsset
             {
                 id = "orientation_does_not_fit",
-                value = -5,
+                value = -10,
                 pot_task_id = "crying",
                 path_icon = "ui/Icons/iconCrying",
                 ignored_by_psychopaths = false,
@@ -68,7 +68,7 @@ namespace Better_Loving
             Add(new HappinessAsset
             {
                 id = "insulted_for_orientation",
-                value = -15,
+                value = -20,
                 pot_task_id = "crying",
                 path_icon = "ui/Icons/iconCrying",
                 ignored_by_psychopaths = false,
@@ -102,6 +102,26 @@ namespace Better_Loving
                 ignored_by_psychopaths = false,
                 show_change_happiness_effect = true,
                 dialogs_amount = 2
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "did_not_want_baby",
+                value = -25,
+                pot_task_id = "madness_random_emotion",
+                ignored_by_psychopaths = false,
+                show_change_happiness_effect = true,
+            });
+            
+            Add(new HappinessAsset
+            {
+                id = "adopted_baby",
+                value = 30,
+                pot_task_id = "singing",
+                path_icon = "ui/Icons/iconChildren",
+                pot_amount = 1,
+                ignored_by_psychopaths = true,
+                show_change_happiness_effect = true,
             });
         }
 

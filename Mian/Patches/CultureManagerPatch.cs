@@ -15,7 +15,7 @@ public class CultureManagerPatch
                 __result.addTrait("incest");
             }
 
-            if (Randy.randomBool())
+            if (Randy.randomChance(0.2f))
             {
                 if (Util.NeedDifferentSexTypeForReproduction(pActor))
                     __result.addTrait("homophobic");
@@ -23,7 +23,7 @@ public class CultureManagerPatch
                     __result.addTrait("heterophobic");
                 if (!Util.NeedDifferentSexTypeForReproduction(pActor) && !Util.NeedSameSexTypeForReproduction(pActor) && !Util.CanDoAnySexType(pActor))
                     __result.addTrait("orientationless");
-            } else if (Randy.randomBool())
+            } else if (Randy.randomChance(0.2f))
             {
                 var preference = QueerTraits.GetPreferenceFromActor(pActor, false);
                 if(preference == Preference.DifferentSex)

@@ -84,15 +84,35 @@ public class BehCFBFSRPatch
                 return false;
 
             nonPregnantActor = pregnantActor == pParentA ? pParentB : pParentA;
-            // this creates a new family to assign with each other. This should be CALLED after checking to see if they can make babies together
-            // __instance.checkFamily(pParentA, pParentB);
-
-            float maturationTimeSeconds = pParentA.getMaturationTimeSeconds();
+            
+            var maturationTimeSeconds = pregnantActor.getMaturationTimeSeconds();
             
             pParentA.data.get("sex_reason", out var sexReason, "");
             pParentB.data.get("sex_reason", out var sexReason1, "");
 
-            bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? Util.WantsBaby(pParentA) && Util.WantsBaby(pParentB) : true; // sexReason1.Equals("casual") || sexReason.Equals("casual") ? Randy.randomChance(0.1F) : true;
+            var aWantsBaby = Util.WantsBaby(pParentA);
+            var bWantsBaby = Util.WantsBaby(pParentB);
+            bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? 
+                aWantsBaby && bWantsBaby : true;
+            
+            if(!success)
+            {
+                success = Randy.randomChance(0.2f);
+                if (success)
+                {
+                    if (!aWantsBaby)
+                    {
+                        pParentA.changeHappiness("did_not_want_baby");
+                    }
+                    if (!bWantsBaby)
+                    {
+                        pParentA.changeHappiness("did_not_want_baby");
+                    }
+                }
+            }
+            
+            // bool success = sexReason1.Equals("casual") || sexReason.Equals("casual") ? Randy.randomChance(0.2F) : true;
+            // Util.Debug($"\nDo parents want a baby?\n{pParentA.getName()}: {Util.WantsBaby(pParentA)}\n{pParentB.getName()}: {Util.WantsBaby(pParentB)}\nSex Reason: ${sexReason}, ${sexReason1}");
             if (success)
             {
                 ReproductiveStrategy reproductionStrategy = pregnantActor.subspecies.getReproductionStrategy();
@@ -104,6 +124,9 @@ public class BehCFBFSRPatch
                         pregnantActor.subspecies.counterReproduction();
                         break;
                     case ReproductiveStrategy.Pregnancy:
+                        if (pregnantActor.hasStatus("pregnant"))
+                            return false;
+                        
                         pregnantActor.data.set("otherParent", nonPregnantActor.getID());
 
                         BabyHelper.babyMakingStart(pregnantActor);

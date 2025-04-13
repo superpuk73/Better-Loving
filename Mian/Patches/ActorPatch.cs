@@ -1,11 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using Better_Loving.Mian.CustomManagers.Dateable;
 using HarmonyLib;
 
 namespace Better_Loving.Mian.Patches;
 
 public class ActorPatch
 {
-       // gives asexual (reproduction method i mean) units the ability to find love!
+    [HarmonyPatch(typeof(Actor), nameof(Actor.getHit))]
+    class GetHitPatch
+    {
+        static void Postfix(Actor __instance)
+        {
+            if (__instance.hasLover())
+            {
+                var lover = __instance.lover;
+                if ((!lover.has_attack_target || (lover.has_attack_target && lover.attackedBy != lover.attack_target)) 
+                    && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
+                    && lover.distanceToActorTile(__instance.attackedBy.a) < 40)
+                {
+                    Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
+                    lover.startFightingWith(__instance.attackedBy);
+                }
+            }
+        }
+    }
+    
     [HarmonyPatch(typeof(Actor), nameof(Actor.create))]
     class ActorCreatePatch
     {
@@ -57,20 +78,47 @@ public class ActorPatch
                 __instance.changeHappiness("true_self");
             }
             
+            // List<Actor> undateables = DateableManager.Manager.GetUndateablesFor(__instance);
+            // if (undateables != null)
+            // {
+            //     foreach (var actor in undateables)
+            //     {
+            //         if (Randy.randomChance(0.2f))
+            //         {
+            //             Util.Debug(__instance.getName() + " has forgived " + actor.getName());
+            //             DateableManager.Manager.AddOrRemoveUndateable(__instance, actor); 
+            //         }
+            //     }   
+            // }
+            
+            __instance.data.get("amount_undateable", out var length, 0);
+            for(var i = 0; i < length; i++)
+            {
+                __instance.data.get("undateable_" + i, out var id, 0L);
+                var actor = World.world.units.get(id);
+                if (actor != null)
+                {
+                    if (Randy.randomChance(0.2f))
+                    {
+                        Util.Debug(__instance.getName() + " has forgived " + actor.getName());
+                        Util.AddOrRemoveUndateableActor(__instance, actor); 
+                    }   
+                }
+            }   
+
             // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
             
             // break up is too common rn, let's implement a system in the future to get lovers back together
-            // if (Util.IsOrientationSystemEnabledFor(__instance) && __instance.hasLover() &&
-            //     Randy.randomChance(
-            //         // not needed since normal sex can happen now
-            //         // Util.IsDyingOut(__instance) && !Util.CanReproduce(__instance, __instance.lover) ? 0.5f : 
-            //         !QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f))
-            // {
-            //     if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
-            //     {
-            //         Util.BreakUp(__instance);   
-            //     }
-            // }
+            if (__instance.hasLover() && 
+                ((Util.IsOrientationSystemEnabledFor(__instance) 
+                  && Randy.randomChance(!QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
+                 || (!Util.IsOrientationSystemEnabledFor(__instance) && !Util.CanReproduce(__instance, __instance.lover))))
+            {
+                if (!__instance.hasCultureTrait("committed") || !__instance.lover.hasCultureTrait("committed"))
+                {
+                    Util.BreakUp(__instance);   
+                }
+            }
         }
 }
 
@@ -79,9 +127,6 @@ public class ActorPatch
     {
         static void Postfix(Actor pTarget, Actor __instance)
         {
-            __instance.setFamily(null);
-            pTarget.setFamily(null);
-            
             BehaviourActionBase<Actor>.world.families.newFamily(__instance, __instance.current_tile, pTarget);
         }
     }
@@ -106,25 +151,15 @@ public class ActorPatch
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
             
             if (
-                Util.OnceDated(pTarget, __instance)
+                // DateableManager.Manager.IsActorUndateable(pTarget, __instance)
+                Util.CannotDate(pTarget, __instance)
                 ||
                  (!QueerTraits.PreferenceMatches(__instance, pTarget, false) && Util.IsOrientationSystemEnabledFor(__instance))
                  || (!QueerTraits.PreferenceMatches(pTarget, __instance, false) && Util.IsOrientationSystemEnabledFor(pTarget))
                 
                 || __instance.hasLover()
                 || pTarget.hasLover()
-                // replaced by the newer sex cheating system (we'll probably do a flirting task in the future for romance?)
 
-                // || (__instance.hasLover() && (!Randy.randomChance(
-                //         (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
-                //         + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                //                               || __instance.hasTrait("faithful") || __instance.hasCultureTrait("committed"))) 
-                // || (pTarget.hasLover() && (!Randy.randomChance(
-                //                                (pTarget.hasTrait("unfaithful") ? 0.1f : 0f) 
-                //                                + (QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.005f: 0.1f))
-                //                            || pTarget.hasTrait("faithful") || pTarget.hasCultureTrait("committed")))
-                
-                // make this a cultural trait to configure
                 || !WithinOfAge(__instance, pTarget)
                 
                 || __instance.areFoes(pTarget)
@@ -142,7 +177,7 @@ public class ActorPatch
                 return false;
             }
 
-            if ((__instance.isRelatedTo(pTarget)) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
+            if (__instance.isRelatedTo(pTarget) && (!__instance.hasCultureTrait("incest") || !pTarget.hasCultureTrait("incest")))
             {
                 __result = false;
                 return false;

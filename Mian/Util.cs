@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Better_Loving.Mian;
+using Better_Loving.Mian.CustomManagers.Dateable;
 using NeoModLoader.services;
 
 namespace Better_Loving
@@ -41,19 +42,6 @@ namespace Better_Loving
                 AssetManager.traits.pot_traits_combat.Add(trait);
 
             AssetManager.traits.add(trait);
-        }
-
-        public static bool HasHadSexRecently(Actor actor)
-        {
-            return actor.hasStatus("enjoyed_sex") || actor.hasStatus("okay_sex") || actor.hasStatus("disliked_sex");
-        }
-
-    public static bool IsDyingOut(Actor pActor)
-        {
-            if (!pActor.hasSubspecies()) return false;
-            int limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
-            return pActor.subspecies.countCurrentFamilies() <= 3
-                   || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50);
         }
 
         public static bool CanReproduce(Actor pActor, Actor pTarget)
@@ -124,12 +112,14 @@ namespace Better_Loving
                 Debug(pActor.getName() + " is being requested to do sex: "+sexReason + ". Sexual happiness: "+d + ". With lover: "+withLover);
             }
 
-            if (!isInit && !HasHadSexRecently(pActor) && (pActor.isLying() || (pActor.hasTask() &&
-                                                                       !(pActor.ai.task.cancellable_by_reproduction ||
-                                                                         pActor.ai.task.cancellable_by_socialize))))
+            if (!isInit)
             {
-                Util.Debug("Unable to do sex from this actor due to an uncancellable task");
-                return false;
+                if(pActor.hasTask() && !(pActor.ai.task.cancellable_by_reproduction ||
+                                         pActor.ai.task.cancellable_by_socialize))
+                {
+                    Debug("Unable to do sex from this actor due to an uncancellable task");
+                    return false;
+                }
             }
             
             var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason);
@@ -142,8 +132,13 @@ namespace Better_Loving
                 reduceChances += toReduce;
             }
 
+            if (pActor.hasTrait("sex_indifferent"))
+                reduceChances = 0f;
+            
+            reduceChances = Math.Max(-0.2f, reduceChances);
+
             if(!allowedToHaveSex
-               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") && !IsFaithful(pActor) ? 0.5f : 1f) + reduceChances)))
+               && Randy.randomChance(Math.Max(0, (pActor.hasTrait("unfaithful") && !pActor.hasTrait("sex_indifferent") ? 0.6f : 0.95f) + reduceChances)))
             {
                 Util.Debug("Not allowed to do sex because of lover and not low enough happiness");
                 return false;
@@ -172,22 +167,27 @@ namespace Better_Loving
                 Util.Debug(pActor.getName() + " is cheating!");
             return true;
         }
+
+        public static void ActorsInteracted(Actor actor1, Actor actor2)
+        {
+            actor1.data.set("last_had_interaction_with", actor2.getID());
+            actor2.data.set("last_had_interaction_with", actor1.getID());
+        }
         
         // handles the actors' happiness and mood towards their sex depending on their preferences
         // handle cheating here too
         public static void JustHadSex(Actor actor1, Actor actor2)
         {
             Util.Debug(actor1.getName() + " had sex with "+actor2.getName()+". They are lovers: "+(actor1.lover==actor2));
-            actor1.data.set("last_had_sex_with", actor2.getID());
-            actor2.data.set("last_had_sex_with", actor1.getID());
+            ActorsInteracted(actor1, actor2);
             
             actor1.addAfterglowStatus();
             actor2.addAfterglowStatus();   
             
-            if (Randy.randomChance(actor1.lover == actor2 ? 1f : QueerTraits.BothPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
+            if (Randy.randomChance(actor1.lover == actor2 ? 1f : QueerTraits.BothActorsPreferencesMatch(actor1, actor2, true) ? 0.25f : 0f))
             {
-                actor1.changeHappiness("just_kissed");
-                actor2.changeHappiness("just_kissed");   
+                actor1.addStatusEffect("just_kissed");
+                actor2.addStatusEffect("just_kissed");
             }
             
             OpinionOnSex(actor1, actor2);
@@ -245,22 +245,22 @@ namespace Better_Loving
             }
         }
 
-        public static bool OnceDated(Actor actor, Actor actor2)
+        public static bool CannotDate(Actor actor, Actor actor2)
         {
-            actor.data.get("cheated_"+actor2.getID(), out bool actor2Cheated);
-            actor2.data.get("cheated_"+actor.getID(), out bool actorCheated);
-            actor.data.get("broke_up_"+actor2.getID(), out bool actor2BrokeUp);
-            actor2.data.get("broke_up_"+actor.getID(), out bool actorBrokeUp);
-            
-            return actor2Cheated || actorCheated || actor2BrokeUp || actorBrokeUp;
+            return IsActorUndateable(actor, actor2) || IsActorUndateable(actor2, actor);
         }
 
         public static void BreakUp(Actor actor)
         {
+            Debug(actor.getName() + " broke up with "+ actor.lover.getName());
+            
             HandleFamilyRemoval(actor);
             
-            actor.data.set("broke_up_" +actor.lover.getID(),true);
-            actor.lover.data.set("broke_up_" +actor.getID(),true);
+            // DateableManager.Manager.AddOrRemoveUndateable(actor, actor.lover);
+            // DateableManager.Manager.AddOrRemoveUndateable(actor.lover, actor);
+            
+            AddOrRemoveUndateableActor(actor, actor.lover);
+            AddOrRemoveUndateableActor(actor.lover, actor);
             
             actor.lover.setLover(null);
             actor.lover.changeHappiness("breakup");
@@ -336,24 +336,89 @@ namespace Better_Loving
             && pActor.current_children_count == 0 || pActor.city.hasFreeHouseSlots()));
         }
 
-        public static bool WantsBaby(Actor pActor)
+        public static bool IsDyingOut(Actor pActor)
         {
-            if (!IsSmart(pActor) || IsDyingOut(pActor))
+            if (!pActor.hasSubspecies()) return false;
+            var limit = (int)pActor.subspecies.base_stats_meta["limit_population"];
+            return pActor.subspecies.countCurrentFamilies() <= 10
+                   || (limit != 0 ? pActor.subspecies.countUnits() <= limit / 3 : pActor.subspecies.countUnits() <= 50);
+        }
+        
+        public static bool WantsBaby(Actor pActor, bool reproductionPurposesIncluded=true)
+        {
+            if (reproductionPurposesIncluded)
             {
-                Debug(pActor.getName() + " wants a baby because they are non-intelligent species or are dying out");
-                return true;
+                if (!IsSmart(pActor) || IsDyingOut(pActor))
+                {
+                    Debug(pActor.getName() + " wants a baby because they are non-intelligent species or are dying out");
+                    return true;
+                }   
             }
-
-            if (pActor.hasHouse() && pActor.getHappiness() >= 100)
+            
+            if (pActor.hasHouse() && pActor.getHappiness() >= 75)
             {
                 Debug(pActor.getName() + " wants a baby because they have a house and are happy enough");
                 return true;
             }
-
+            
             Debug(pActor.getName() + " does not want a baby.");
             return false;
         }
 
+        public static bool IsActorUndateable(Actor pActor, Actor toCheck)
+        {
+            pActor.data.get("amount_undateable", out var length, 0);
+            var id = toCheck.getID();
+            for (var i = 0; i < length; i++)
+            {
+                pActor.data.get("undateable_" + i, out var idFromSave, 0L);
+                if (id == idFromSave)
+                    return true;
+            }
+        
+            return false;
+        }
+        public static void AddOrRemoveUndateableActor(Actor pActor, Actor undateable)
+        {
+            pActor.data.get("amount_undateable", out var length, 0);
+            
+            var id = undateable.getID();
+            var position = -1;
+            
+            for (var i = 0; i < length; i++)
+            {
+                pActor.data.get("undateable_" + i, out var idFromSave, 0L);
+                if (idFromSave == id)
+                {
+                    position = i;
+                    break;
+                }
+            }
+        
+            if (position == -1)
+            {
+                pActor.data.set("undateable_" + length, id);
+                pActor.data.set("amount_undateable", length + 1);
+            }
+            else
+            {
+                pActor.data.removeLong("undateable_"+position);
+                pActor.data.set("amount_undateable", length - 1);
+                
+                for (var i = position + 1; i < length; i++)
+                {
+                    pActor.data.get("undateable_" + i, out var idFromSave, 0L);
+                    pActor.data.set("undateable_" + (i - 1), idFromSave);
+                    pActor.data.removeLong("undateable_"+i);
+                }
+            }
+        }
+
+        public static void LogWithId(string message)
+        {
+            LogService.LogInfo($"[{TopicOfLoving.Mod.GetDeclaration().Name}]: "+message);
+        }
+        
         public static void Debug(string message)
         {
             var config = TopicOfLoving.Mod.GetConfig();
@@ -364,7 +429,7 @@ namespace Better_Loving
                 return;
             if(slowOnLog)
                 Config.setWorldSpeed(AssetManager.time_scales.get("slow_mo"));
-            LogService.LogInfo(message);
+            LogWithId(message);
         }
         
         public static bool NeedSameSexTypeForReproduction(Actor pActor)

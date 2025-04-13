@@ -37,10 +37,10 @@ namespace Better_Loving
                     sprites.Add(queerTraits[0].getSprite());
                     sprites.Add(queerTraits[1].getSprite());
 
-                    if (!(unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference)))
-                        actor.changeHappiness("orientation_fits");
-                    else
+                    if (unfitPreferences.Contains(sexualPreference) || unfitPreferences.Contains(romanticPreference))
                         actor.changeHappiness("orientation_does_not_fit");
+                    else
+                        actor.changeHappiness("orientation_fits");
                 } 
             });
         }
