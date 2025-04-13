@@ -237,7 +237,7 @@ namespace Better_Loving
                 if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
                     return;
                 
-                HandleFamilyRemoval(actor);
+                // HandleFamilyRemoval(actor);
 
                 cheatedActor.addStatusEffect("cheated_on");
                 cheatedActor.setLover(null);
@@ -254,7 +254,7 @@ namespace Better_Loving
         {
             Debug(actor.getName() + " broke up with "+ actor.lover.getName());
             
-            HandleFamilyRemoval(actor);
+            // HandleFamilyRemoval(actor);
             
             // DateableManager.Manager.AddOrRemoveUndateable(actor, actor.lover);
             // DateableManager.Manager.AddOrRemoveUndateable(actor.lover, actor);
