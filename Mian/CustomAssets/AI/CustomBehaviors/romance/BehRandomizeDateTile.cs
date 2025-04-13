@@ -1,4 +1,5 @@
-﻿using ai.behaviours;
+﻿using System.Collections.Generic;
+using ai.behaviours;
 
 namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.romance;
 
@@ -19,28 +20,23 @@ public class BehRandomizeDateTile : BehaviourActionActor
             Util.Debug(pActor.getName()+"'s date has ended!");
             return BehResult.Stop;
         }
-
-        if (Randy.randomBool()) // find random tile
-        {
-            return new BehFindRandomTile().execute(pActor);
-        }
         
-        // find random building
         var region = pActor.current_tile.region;
-        if (Randy.randomChance(0.65f) && region.tiles.Count > 0)
+        if (Randy.randomChance(0.35f) && region.tiles.Count > 0)
         {
             pActor.beh_tile_target = region.tiles.GetRandom();
             return BehResult.Continue;
         }
-        Building building1 = null;
-        foreach (var building2 in Finder.getBuildingsFromChunk(pActor.current_tile, 1, pRandom: true))
+        var buildings = new List<Building>();
+        foreach (var building2 in Finder.getBuildingsFromChunk(pActor.current_tile, 4, pRandom: true))
         {
             if (building2.asset.city_building && building2.current_tile.isSameIsland(pActor.current_tile) && building2.isCiv())
             {
-                building1 = building2;
+                buildings.Add(building2);
                 break;
             }
         }
+        var building1 = buildings.GetRandom();
         if (building1 == null)
         {
             if (region.tiles.Count <= 0)
