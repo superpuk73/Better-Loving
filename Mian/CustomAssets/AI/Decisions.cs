@@ -141,6 +141,7 @@ public class Decisions
             list_civ = true,
             weight = 0.5f,
             only_safe = true,
+            only_adult = true,
             cooldown_on_launch_failure = true
         });
         Finish();
