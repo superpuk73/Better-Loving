@@ -27,6 +27,9 @@ public class BehRandomizeDateTile : BehaviourActionActor
             pActor.beh_tile_target = region.tiles.GetRandom();
             return BehResult.Continue;
         }
+
+        Building building1 = null;
+        
         var buildings = new List<Building>();
         foreach (var building2 in Finder.getBuildingsFromChunk(pActor.current_tile, 4, pRandom: true))
         {
@@ -36,7 +39,11 @@ public class BehRandomizeDateTile : BehaviourActionActor
                 break;
             }
         }
-        var building1 = buildings.GetRandom();
+
+        if (buildings.Count > 0)
+        {
+            building1 = buildings.GetRandom();
+        }
         if (building1 == null)
         {
             if (region.tiles.Count <= 0)
