@@ -133,10 +133,11 @@ namespace Better_Loving.Mian.CustomAssets
                 id = "went_on_date",
                 value = 15,
                 pot_task_id = "singing",
-                path_icon = "ui/Icons/status/iconLovers",
+                path_icon = "ui/Icons/status/went_on_date",
                 pot_amount = 1,
                 ignored_by_psychopaths = true,
                 show_change_happiness_effect = true,
+                dialogs_amount = 5
             });
         }
 

@@ -1,6 +1,9 @@
 ﻿{
+  "status_title_went_on_date": "Went on a Date",
+  "status_description_went_on_date": "A world for two",
+  
   "status_title_just_kissed": "Just Kissed",
-  "status_description_just_kissed": "So lovey dovey.",
+  "status_description_just_kissed": "So lovey dovey",
   
   "status_title_disliked_sex": "Disliked Coupling",
   "status_description_disliked_sex": "Sexual preferences were not met",
@@ -16,16 +19,16 @@
 
   "happiness_went_on_date": "Went on date",
   "happiness_dialog_went_on_date_0": "That was an amazing date!",
-  "happiness_dialog_went_on_date_1": "I love them so much..",
+  "happiness_dialog_went_on_date_1": "I love you so much..",
   "happiness_dialog_went_on_date_2": "I've never been so giddy!",
-  "happiness_dialog_went_on_date_3": "I wonder what their eyes would look like at night..",
-
+  "happiness_dialog_went_on_date_3": "I wonder what your eyes would look like at night..",
+  "happiness_dialog_went_on_date_4": "I must have gone fishing... because you're the perfect catch",
 
   "happiness_adopted_baby": "Adopted a baby",
   "happiness_dialog_adopted_baby_0": "It feels so good to finally have a baby.",
-  "happiness_dialog_adopted_baby_1": "My orientation is the biggest part of what makes me, me.",
-  "happiness_dialog_adopted_baby_2": "I'm going to own myself and I won't hide it!",
-  "happiness_dialog_adopted_baby_3": "I wouldn't have it any other way.",
+  "happiness_dialog_adopted_baby_1": "Finally! A baby.",
+  "happiness_dialog_adopted_baby_2": "This is the happiest day of my life!",
+  "happiness_dialog_adopted_baby_3": "I can't wait to raise you little one.",
 
   "happiness_did_not_want_baby": "Unwanted baby",
   "happiness_dialog_did_not_want_baby_0": "Damn it! Now I have to take care of a toddler..",

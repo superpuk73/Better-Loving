@@ -48,13 +48,14 @@ public class Decisions
         {
             id = "try_date",
             priority = NeuroLayer.Layer_2_Moderate,
-            path_icon = "ui/Icons/status/iconLovers",
+            path_icon = "ui/Icons/status/went_on_date",
             cooldown = 30,
             action_check_launch = actor => Util.IsSmart(actor)
                                            && actor.hasLover()
                                            && !Util.IsSexualHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
-                                           && (QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f)),
+                                           && (QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
+                                           && !actor.hasStatus("went_on_date"),
             list_civ = true,
             weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.5f: 
                 Util.IsSexualHappinessEnough(actor, 50f) ? 0.6f : Util.IsSexualHappinessEnough(actor, 0) ? .8f : 

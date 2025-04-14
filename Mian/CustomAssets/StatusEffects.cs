@@ -110,6 +110,16 @@ public class StatusEffects
         });
         Add(new StatusAsset
         {
+            id="went_on_date",
+            duration = 60f,
+            action_on_receive = (actor, _) =>
+            {
+                actor.a.changeHappiness("went_on_date");
+                return true;
+            }
+        });
+        Add(new StatusAsset
+        {
             id="cheated_on",
             duration = 60f,
             action_on_receive = (cheatedActor, _) =>

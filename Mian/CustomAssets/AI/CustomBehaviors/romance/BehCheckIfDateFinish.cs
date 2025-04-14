@@ -38,8 +38,8 @@ public class BehCheckIfDateFinish : BehaviourActionActor
 
         target.cancelAllBeh();
 
-        pActor.changeHappiness("went_on_date");
-        target.changeHappiness("went_on_date");
+        pActor.addStatusEffect("went_on_date");
+        target.addStatusEffect("went_on_date");
         
         Util.ChangeSexualHappinessBy(pActor, happiness);
         Util.ChangeSexualHappinessBy(target, happiness);

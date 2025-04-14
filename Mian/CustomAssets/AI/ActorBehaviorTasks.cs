@@ -34,7 +34,7 @@ namespace Better_Loving.Mian.CustomAssets.AI
             {
                 id = "kiss_lover",
                 locale_key = "task_kiss_lover",
-                path_icon = "ui/Icons/status/just_kissed"
+                path_icon = "ui/Icons/status/went_on_date"
             };
             doKissWithLover.addBeh(new BehGetLoverForRomanceAction(20f));
             doKissWithLover.addBeh(new BehGoToActorTarget(pCalibrateTargetPosition:true));
@@ -46,7 +46,7 @@ namespace Better_Loving.Mian.CustomAssets.AI
             {
                 id = "try_date",
                 locale_key = "task_try_date",
-                path_icon = "ui/Icons/status/just_kissed"
+                path_icon = "ui/Icons/status/went_on_date"
             };
             tryDate.addBeh(new BehGetLoverForRomanceAction(20f));
             tryDate.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition:true));
@@ -57,7 +57,7 @@ namespace Better_Loving.Mian.CustomAssets.AI
             {
                 id = "action_date",
                 locale_key = "task_action_date",
-                path_icon = "ui/Icons/status/just_kissed"
+                path_icon = "ui/Icons/status/went_on_date"
             };
             actionDate.addBeh(new BehRandomizeDateTile());
             actionDate.addBeh(new BehGoToTileTarget());
@@ -70,7 +70,7 @@ namespace Better_Loving.Mian.CustomAssets.AI
             {
                 id = "follow_action_date",
                 locale_key = "task_follow_action_date",
-                path_icon = "ui/Icons/status/just_kissed"
+                path_icon = "ui/Icons/status/went_on_date"
             };
             followActionDate.addBeh(new BehWait());
             followActionDate.addBeh(new BehFollowDate());
