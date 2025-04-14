@@ -170,15 +170,17 @@ public class BabyMakerPatch
                     {
                         actorSex = pParent2.data.sex;
                     }
-                    
-                    if (Randy.randomBool())
-                        actorSex = !dominantParent.hasCity()
-                            ? (dominantParent.subspecies.cached_females <= dominantParent.subspecies.cached_males
-                                ? ActorSex.Female
-                                : ActorSex.Male)
-                            : (dominantParent.city.status.females <= dominantParent.city.status.males
-                                ? ActorSex.Female
-                                : ActorSex.Male);
+                    else
+                    {
+                        if (Randy.randomBool())
+                            actorSex = !dominantParent.hasCity()
+                                ? (dominantParent.subspecies.cached_females <= dominantParent.subspecies.cached_males
+                                    ? ActorSex.Female
+                                    : ActorSex.Male)
+                                : (dominantParent.city.status.females <= dominantParent.city.status.males
+                                    ? ActorSex.Female
+                                    : ActorSex.Male);   
+                    }
                     if (actorSex != ActorSex.None)
                         actorFromData.data.sex = actorSex;
                     else
