@@ -249,6 +249,9 @@ namespace Topic_of_Love
 
         public static void BreakUp(Actor actor)
         {
+            if (!actor.hasLover())
+                return;
+            
             Debug(actor.getName() + " broke up with "+ actor.lover.getName());
             
             HandleFamilyRemoval(actor);

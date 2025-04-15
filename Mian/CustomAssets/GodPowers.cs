@@ -63,6 +63,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                     _selectedActorB = pActor;
                     _selectedActorB.data.set("force_lover", true);
                     _selectedActorA.data.set("force_lover", true);
+                    Util.BreakUp(_selectedActorA);
+                    Util.BreakUp(_selectedActorB);
                     _selectedActorA.becomeLoversWith(_selectedActorB);
                     _selectedActorA = null;
                     _selectedActorB = null;
