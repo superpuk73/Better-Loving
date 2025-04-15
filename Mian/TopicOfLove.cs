@@ -8,6 +8,9 @@ using NeoModLoader.General;
 
 /*
 
+- lovers in wild shouldnt attack each other
+- lovers should create kingdoms together if in wild (even from different subspecies)
+
 - queer traits arent 100% being added
 
 - sprites are offseted upwards for our speech bubbles idk why :(
@@ -15,9 +18,9 @@ using NeoModLoader.General;
 */
 namespace Topic_of_Love.Mian
 {
-    public class TopicOfLoving : BasicMod<TopicOfLoving>
+    public class TopicOfLove : BasicMod<TopicOfLove>
     {
-        public static BasicMod<TopicOfLoving> Mod;
+        public static BasicMod<TopicOfLove> Mod;
         
         protected override void OnModLoad()
         {

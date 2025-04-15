@@ -26,14 +26,6 @@ namespace Topic_of_Love
             return canMake.GetRandom();
         }
 
-        public static bool IsSmart(Actor actor)
-        {
-            return actor.hasSubspeciesTrait("prefrontal_cortex")
-                   && actor.hasSubspeciesTrait("advanced_hippocampus")
-                   && actor.hasSubspeciesTrait("amygdala")
-                   && actor.hasSubspeciesTrait("wernicke_area");
-        }
-
         public static bool CanReproduce(Actor pActor, Actor pTarget)
         {
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
@@ -366,7 +358,7 @@ namespace Topic_of_Love
             
             if (reproductionPurposesIncluded)
             {
-                if (!IsSmart(pActor) || IsDyingOut(pActor))
+                if (!pActor.isSapient() || IsDyingOut(pActor))
                 {
                     Debug(pActor.getName() + " wants a baby because they are non-intelligent species or are dying out");
                     return true;
@@ -434,12 +426,12 @@ namespace Topic_of_Love
 
         public static void LogWithId(string message)
         {
-            LogService.LogInfo($"[{TopicOfLoving.Mod.GetDeclaration().Name}]: "+message);
+            LogService.LogInfo($"[{TopicOfLove.Mod.GetDeclaration().Name}]: "+message);
         }
         
         public static void Debug(string message)
         {
-            var config = TopicOfLoving.Mod.GetConfig();
+            var config = TopicOfLove.Mod.GetConfig();
             var slowOnLog = (bool)config["Misc"]["SlowOnLog"].GetValue();
             var debug = (bool)config["Misc"]["Debug"].GetValue();
 

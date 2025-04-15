@@ -20,7 +20,7 @@ public class ActorPatch
                 var lover = __instance.lover;
                 if ((!lover.has_attack_target || (lover.has_attack_target && lover.attackedBy != lover.attack_target)) 
                     && __instance.attackedBy != null && !lover.isLying()  && !lover.shouldIgnoreTarget(__instance.attackedBy)
-                    && lover.distanceToActorTile(__instance.attackedBy.a) < 40)
+                    && lover.distanceToObjectTarget(__instance.attackedBy) < 40)
                 {
                     Util.Debug(lover.getName() + "'s lover was attacked! They are going to defend them.");
                     lover.startFightingWith(__instance.attackedBy);
@@ -147,7 +147,7 @@ public class ActorPatch
         static bool Prefix(Actor pTarget, ref bool __result, Actor __instance)
         {
             // LogService.LogInfo($"Can {__instance.getName()} fall in love with {pTarget.getName()}?");
-            var config = TopicOfLoving.Mod.GetConfig();
+            var config = TopicOfLove.Mod.GetConfig();
             var allowCrossSpeciesLove = (bool)config["CrossSpecies"]["AllowCrossSpeciesLove"].GetValue();
             var mustBeSmart = (bool)config["CrossSpecies"]["MustBeSmart"].GetValue();
             var mustBeXenophile = (bool)config["CrossSpecies"]["MustBeXenophile"].GetValue();
@@ -168,7 +168,7 @@ public class ActorPatch
                 
                 || (!(__instance.isSameSpecies(pTarget) || __instance.isSameSubspecies(pTarget.subspecies))
                                                        && !((__instance.hasXenophiles() || !mustBeXenophile)
-                                                             && (Util.IsSmart(__instance) && Util.IsSmart(pTarget) || !mustBeSmart)
+                                                             && (__instance.isSapient() && pTarget.isSapient() || !mustBeSmart)
                                                              && !pTarget.hasXenophobic() || !allowCrossSpeciesLove)) // subspecies stuff!
                 
                 // if queer but culture trait says they do not matter

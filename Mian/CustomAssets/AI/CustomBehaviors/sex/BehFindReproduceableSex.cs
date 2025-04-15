@@ -63,7 +63,7 @@ public class BehFindReproduceableSex : BehaviourActionActor
                         && pTarget.isAdult()
                         && Util.WillDoSex(pTarget, "reproduction", pTarget.lover == pActor)
                         && (pActor.isSameSubspecies(pTarget.subspecies) 
-                            || (Util.IsSmart(pTarget) && Util.IsSmart(pActor) 
+                            || (pTarget.isSapient() && pActor.isSapient() 
                                                       && QueerTraits.PreferenceMatches(pTarget, pActor, true))))
                     {
                         pCollection.Add(pTarget);

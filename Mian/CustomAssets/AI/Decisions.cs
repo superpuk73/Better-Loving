@@ -30,7 +30,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
             cooldown = 15,
-            action_check_launch = actor => Util.IsSmart(actor)
+            action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !Util.IsSexualHappinessEnough(actor, 100f)
@@ -51,7 +51,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/went_on_date",
             cooldown = 30,
-            action_check_launch = actor => Util.IsSmart(actor)
+            action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
                                            && !Util.IsSexualHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
@@ -97,7 +97,7 @@ public class Decisions
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/enjoyed_sex",
             cooldown = 30,
-            action_check_launch = actor => Util.IsSmart(actor)
+            action_check_launch = actor => actor.isSapient()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
                                            && !Util.IsSexualHappinessEnough(actor, 100f)
@@ -119,7 +119,7 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor =>
             {
-                if (!Util.IsSmart(actor) || !Util.WantsBaby(actor, false))
+                if (!actor.isSapient() || !Util.WantsBaby(actor, false))
                     return false;
                     
                 var bestFriend = actor.getBestFriend();

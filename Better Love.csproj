@@ -63,7 +63,7 @@
         <Compile Include="Mian\Patches\MapBoxPatch.cs" />
         <Compile Include="Mian\Patches\SavedMapPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
-        <Compile Include="Mian\TopicOfLoving.cs" />
+        <Compile Include="Mian\TopicOfLove.cs" />
         <Compile Include="Mian\Util.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -77,7 +77,7 @@
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-            <HintPath>Assemblies\Assembly-CSharp-Publicized.dll</HintPath>
+            <HintPath>Assemblies\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>

@@ -1,8 +1,5 @@
-﻿using NCMS.Utils;
-using NeoModLoader.General;
-using NeoModLoader.General.UI.Tab;
+﻿
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
-using UnityEngine;
 
 namespace Topic_of_Love.Mian.CustomAssets
 {
@@ -147,6 +144,10 @@ namespace Topic_of_Love.Mian.CustomAssets
                     ActionLibrary.showWhisperTip("sex_successful");
                     
                     _selectedActorB = pActor;
+                    _selectedActorA.cancelAllBeh();
+                    _selectedActorA.stopMovement();
+                    _selectedActorB.cancelAllBeh();
+                    _selectedActorB.stopMovement();
                     _selectedActorB.data.set("sex_reason", "casual");
                     _selectedActorA.data.set("sex_reason", "casual");
                     _selectedActorA.beh_actor_target = _selectedActorB;
@@ -207,6 +208,11 @@ namespace Topic_of_Love.Mian.CustomAssets
                     }
                     
                     ActionLibrary.showWhisperTip("kiss_successful");
+                    _selectedActorA.cancelAllBeh();
+                    _selectedActorA.stopMovement();
+                    _selectedActorB.cancelAllBeh();
+                    _selectedActorB.stopMovement();
+                    
                     _selectedActorA.beh_actor_target = _selectedActorB;
                     _selectedActorA.setTask("force_kiss", pClean:false, pCleanJob:true, pForceAction:true);
                     _selectedActorA = null;
@@ -273,6 +279,12 @@ namespace Topic_of_Love.Mian.CustomAssets
                     else
                         pActor.beh_actor_target = pActor.getBestFriend();
                     var target = pActor.beh_actor_target.a;
+                    
+                    pActor.cancelAllBeh();
+                    pActor.stopMovement();
+                    target.cancelAllBeh();
+                    target.stopMovement();
+                    
                     pActor.beh_building_target = home;
                     target.beh_actor_target = pActor;
                     target.beh_building_target = home;
@@ -319,6 +331,10 @@ namespace Topic_of_Love.Mian.CustomAssets
           
                     ActionLibrary.showWhisperTip("date_successful");
 
+                    pActor.cancelAllBeh();
+                    pActor.stopMovement();
+                    pActor.lover.cancelAllBeh();
+                    pActor.lover.stopMovement();
                     pActor.beh_actor_target = pActor.lover;
                     pActor.setTask("force_date", pClean: false, pForceAction:true);
                     
