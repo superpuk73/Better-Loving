@@ -15,7 +15,7 @@ public class BehMakeTargetWait : BehaviourActionActor
     {
         if (pActor.beh_actor_target == null)
             return BehResult.Stop;
-        pActor.makeWait(_wait);
+        pActor.beh_actor_target.a.makeWait(_wait);
         return BehResult.Continue;
     }
 }

@@ -196,7 +196,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                     
                     _selectedActorB = pActor;
                     
-                    if (_selectedActorB.isOnSameIsland(_selectedActorA))
+                    if (!_selectedActorB.isOnSameIsland(_selectedActorA))
                     {
                         ActionLibrary.showWhisperTip("kiss_too_far");
                         _selectedActorA = null;

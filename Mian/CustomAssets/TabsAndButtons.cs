@@ -35,7 +35,7 @@ public class TabsAndButtons
                 _modTab, new Vector2(_nextX, _nextY));
         _nextY = _nextY == 18f ? -18f : 18f;
 
-        if (_timesAddedButton == 2)
-            _nextX += 20f;
+        if (_timesAddedButton % 2 == 0)
+            _nextX += 40f;
     }
 }
