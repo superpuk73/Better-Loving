@@ -17,7 +17,7 @@ public class TabsAndButtons
             "Tab_TOL", 
             "tab_title_tol", 
             "tab_desc_tol", 
-            SpriteTextureLoader.getSprite("ui/Icons/god_powers/force_lover"));
+            SpriteTextureLoader.getSprite("ui/Icons/tabs/tab_tol"));
         
         AddButton("forceLover");
         AddButton("forceBreakup");

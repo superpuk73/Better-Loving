@@ -119,14 +119,14 @@ public class Decisions
             cooldown = 15,
             action_check_launch = actor =>
             {
-                if (!Util.IsSmart(actor) || !Util.WantsBaby(actor, false) || actor.hasStatus("pregnant"))
+                if (!Util.IsSmart(actor) || !Util.WantsBaby(actor, false))
                     return false;
                     
                 var bestFriend = actor.getBestFriend();
 
                 if (actor.hasLover())
                 {
-                    if (!Util.WantsBaby(actor.lover, false) || actor.lover.hasStatus("pregnant"))
+                    if (!Util.WantsBaby(actor.lover, false))
                         return false;
                         
                     if (Util.CanReproduce(actor, actor.lover) && !QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, true))

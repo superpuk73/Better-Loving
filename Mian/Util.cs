@@ -361,6 +361,9 @@ namespace Topic_of_Love
         
         public static bool WantsBaby(Actor pActor, bool reproductionPurposesIncluded=true)
         {
+            if (!CanMakeBabies(pActor))
+                return false;
+            
             if (reproductionPurposesIncluded)
             {
                 if (!IsSmart(pActor) || IsDyingOut(pActor))
