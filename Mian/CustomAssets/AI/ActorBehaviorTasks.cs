@@ -1,6 +1,7 @@
 ﻿using ai.behaviours;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.ivf;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.other;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
 using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 
@@ -29,6 +30,17 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
 
         private static void InitRomance()
         {
+            
+            var forceKiss = new BehaviourTaskActor
+            {
+                id = "force_kiss",
+                locale_key = "task_kiss_lover",
+                path_icon = "ui/Icons/status/went_on_date"
+            };
+            forceKiss.addBeh(new BehMakeTargetWait(30f));
+            forceKiss.addBeh(new BehGoToActorTarget(pCalibrateTargetPosition:true));
+            forceKiss.addBeh(new BehKissTarget());
+            Add(forceKiss);
 
             var doKissWithLover = new BehaviourTaskActor
             {
@@ -41,6 +53,17 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             doKissWithLover.addBeh(new BehKissTarget());
             
             Add(doKissWithLover);
+            
+            var forceDate = new BehaviourTaskActor
+            {
+                id = "force_date",
+                locale_key = "task_try_date",
+                path_icon = "ui/Icons/status/went_on_date"
+            };
+            forceDate.addBeh(new BehMakeTargetWait(30f));
+            forceDate.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition:true));
+            forceDate.addBeh(new BehCheckForDate());
+            Add(forceDate);
 
             var tryDate = new BehaviourTaskActor
             {
@@ -180,6 +203,5 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
         {
             AssetManager.tasks_actor.add(behaviour);
         }
-        
     }
 }

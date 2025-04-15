@@ -218,10 +218,18 @@ namespace Topic_of_Love
                                                                   && sexReason.Equals("reproduction")
                                                                   && (!CanMakeBabies(actor.lover) || !CanReproduce(actor, actor.lover)))));
         }
+        
+        public static bool CanHaveRomanceWithoutRepercussionsWithSomeoneElse(Actor actor)
+        {
+            return !actor.hasLover()
+                   || (actor.hasLover() && !QueerTraits.BothPreferencesMatch(actor, actor.lover)
+                                             && actor.hasCultureTrait("sexual_expectations") && actor.lover.hasCultureTrait("sexual_expectations"));
+        }
+
 
         public static void PotentiallyCheatedWith(Actor actor, Actor actor2)
         {
-            if (actor.hasLover() && actor.lover != actor2)
+            if (actor.hasLover() && actor.lover != actor2 && CanStopBeingLovers(actor))
             {
                 var cheatedActor = actor.lover;
                 if (cheatedActor.isLying() || !cheatedActor.isOnSameIsland(actor))
@@ -230,8 +238,7 @@ namespace Topic_of_Love
                 HandleFamilyRemoval(actor);
 
                 cheatedActor.addStatusEffect("cheated_on");
-                cheatedActor.setLover(null);
-                actor.setLover(null);
+                RemoveLovers(actor);
             }
         }
 
@@ -252,10 +259,25 @@ namespace Topic_of_Love
             AddOrRemoveUndateableActor(actor, actor.lover);
             AddOrRemoveUndateableActor(actor.lover, actor);
             
-            actor.lover.setLover(null);
             actor.lover.changeHappiness("breakup");
-            actor.setLover(null);
             actor.changeHappiness("breakup");
+            
+            RemoveLovers(actor);
+        }
+
+        public static bool CanStopBeingLovers(Actor actor)
+        {
+            actor.data.get("force_lover", out var isForced, false);
+            return !isForced;
+        }
+
+        public static void RemoveLovers(Actor actor)
+        {
+            var lover = actor.lover;
+            lover.setLover(null);
+            actor.setLover(null);
+            lover.data.set("force_lover", false);
+            actor.data.set("force_lover", false);
         }
 
         public static void HandleFamilyRemoval(Actor actor)

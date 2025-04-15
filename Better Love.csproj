@@ -26,6 +26,7 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehTrySexualIvf.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehFindMismatchedOrientation.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehInsultOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\other\BehMakeTargetWait.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateFinish.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehCheckIfDateHere.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\romance\BehRandomizeDateTile.cs" />
@@ -41,8 +42,8 @@
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
-        <Compile Include="Mian\CustomAssets\Nameplates.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
+        <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />

@@ -34,6 +34,9 @@ public class StatusEffects
                         changeBy += 10f;
                 
                     Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                    
+                    if(!Util.CanHaveRomanceWithoutRepercussionsWithSomeoneElse(actor.a))
+                        Util.PotentiallyCheatedWith(actor.a, partner);
                 }
 
                 actor.a.changeHappiness("just_kissed");

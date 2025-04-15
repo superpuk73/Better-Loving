@@ -111,7 +111,7 @@ public class ActorPatch
             // Randomize breaking up (1% if preferences match. 25% if preferences do not match.) 
             
             // break up is too common rn, let's implement a system in the future to get lovers back together
-            if (__instance.hasLover() && 
+            if (__instance.hasLover() && Util.CanStopBeingLovers(__instance) &&
                 ((Util.IsOrientationSystemEnabledFor(__instance) 
                   && Randy.randomChance(!QueerTraits.PreferenceMatches(__instance, __instance.lover, false) ? 0.25f : 0.01f)) 
                  || (!Util.IsOrientationSystemEnabledFor(__instance) && !Util.CanReproduce(__instance, __instance.lover))))

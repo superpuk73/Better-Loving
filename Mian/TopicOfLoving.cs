@@ -51,7 +51,7 @@ namespace Topic_of_Love.Mian
             ActorBehaviorTasks.Init();
             Decisions.Init();
             GodPowers.Init();
-            Nameplates.Init();
+            TabsAndButtons.Init();
             
             // Managers
             // DateableManager.Init();
