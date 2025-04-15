@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Better_Loving.Mian;
-using Better_Loving.Mian.CustomAssets;
-using Better_Loving.Mian.CustomManagers.Dateable;
+using Topic_of_Love.Mian;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Traits;
+using Topic_of_Love.Mian.CustomManagers.Dateable;
 using NeoModLoader.services;
 
-namespace Better_Loving
+namespace Topic_of_Love
 {
     public class Util
     {
@@ -31,18 +32,6 @@ namespace Better_Loving
                    && actor.hasSubspeciesTrait("advanced_hippocampus")
                    && actor.hasSubspeciesTrait("amygdala")
                    && actor.hasSubspeciesTrait("wernicke_area");
-        }
-
-        public static void AddActorTrait(ActorTrait trait)
-        {
-            for (int index = 0; index < trait.rate_birth; ++index)
-                AssetManager.traits.pot_traits_birth.Add(trait);
-            for (int index = 0; index < trait.rate_acquire_grow_up; ++index)
-                AssetManager.traits.pot_traits_growup.Add(trait);
-            if (trait.combat)
-                AssetManager.traits.pot_traits_combat.Add(trait);
-
-            AssetManager.traits.add(trait);
         }
 
         public static bool CanReproduce(Actor pActor, Actor pTarget)

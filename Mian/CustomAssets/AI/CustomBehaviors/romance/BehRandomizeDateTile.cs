@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ai.behaviours;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.romance;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
 
 public class BehRandomizeDateTile : BehaviourActionActor
 {

@@ -1,6 +1,6 @@
 ﻿using ai.behaviours;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.ivf;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.ivf;
 public class BehTrySexualIvf : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)

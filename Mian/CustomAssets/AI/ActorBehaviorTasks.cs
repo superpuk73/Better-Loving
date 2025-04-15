@@ -1,10 +1,10 @@
 ﻿using ai.behaviours;
-using Better_Loving.Mian.CustomAssets.AI.CustomBehaviors;
-using Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.ivf;
-using Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.romance;
-using Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.sex;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.ivf;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
+using Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 
-namespace Better_Loving.Mian.CustomAssets.AI
+namespace Topic_of_Love.Mian.CustomAssets.AI
 {
     public class ActorBehaviorTasks
     {

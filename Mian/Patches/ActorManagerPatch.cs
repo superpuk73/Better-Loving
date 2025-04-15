@@ -1,7 +1,8 @@
-﻿using Better_Loving.Mian.CustomAssets;
+﻿using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
 
-namespace Better_Loving.Mian.Patches;
+namespace Topic_of_Love.Mian.Patches;
 
 public class ActorManagerPatch
 {

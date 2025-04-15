@@ -1,6 +1,7 @@
 ﻿using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.sex;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 public class BehFindReproduceableSex : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)

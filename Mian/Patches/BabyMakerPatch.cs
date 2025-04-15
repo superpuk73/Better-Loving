@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 
-namespace Better_Loving.Mian.Patches;
+namespace Topic_of_Love.Mian.Patches;
 
 public class BabyMakerPatch
 {
@@ -152,7 +152,7 @@ public class BabyMakerPatch
                     BabyHelper.traitsInherit(actorFromData, pParent1, nonDominantParent);
                 }
 
-                actorFromData.checkTraitMutationBirth();
+                actorFromData.checkTraitMutationOnBirth();
                 actorFromData.setNutrition(SimGlobals.m.nutrition_start_level_baby);
                 if (pForcedSexType != ActorSex.None)
                 {

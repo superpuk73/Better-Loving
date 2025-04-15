@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Better_Loving.Mian.CustomAssets;
-using Better_Loving.Mian.CustomManagers.Dateable;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.Traits;
+using Topic_of_Love.Mian.CustomManagers.Dateable;
 using HarmonyLib;
 
-namespace Better_Loving.Mian.Patches;
+namespace Topic_of_Love.Mian.Patches;
 
 public class ActorPatch
 {

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace Better_Loving.Mian.CustomAssets
+namespace Topic_of_Love.Mian.CustomAssets
 {
     public class Happiness
     {

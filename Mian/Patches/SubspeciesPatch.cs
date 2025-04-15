@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace Better_Loving.Mian.Patches;
+namespace Topic_of_Love.Mian.Patches;
 
 public class SubspeciesPatch
 {

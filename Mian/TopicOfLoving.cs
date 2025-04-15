@@ -1,6 +1,7 @@
 using System.IO;
-using Better_Loving.Mian.CustomAssets;
-using Better_Loving.Mian.CustomAssets.AI;
+using Topic_of_Love.Mian.CustomAssets;
+using Topic_of_Love.Mian.CustomAssets.AI;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 using NeoModLoader.api;
 using HarmonyLib;
 using NeoModLoader.General;
@@ -12,7 +13,7 @@ using NeoModLoader.General;
 - sprites are offseted upwards for our speech bubbles idk why :(
 
 */
-namespace Better_Loving.Mian
+namespace Topic_of_Love.Mian
 {
     public class TopicOfLoving : BasicMod<TopicOfLoving>
     {
@@ -41,15 +42,16 @@ namespace Better_Loving.Mian
             LM.ApplyLocale();
             
             QueerTraits.Init();
-            ActorTraits.Init();
-            CultureTraits.Init();
-            SubspeciesTraits.Init();
+            new ActorTraits().Init();
+            new CultureTraits().Init();
+            new SubspeciesTraits().Init();
             StatusEffects.Init();
             Happiness.Init();
             CommunicationTopics.Init();
             ActorBehaviorTasks.Init();
             Decisions.Init();
             GodPowers.Init();
+            Nameplates.Init();
             
             // Managers
             // DateableManager.Init();

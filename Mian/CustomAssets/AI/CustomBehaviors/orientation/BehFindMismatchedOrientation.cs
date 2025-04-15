@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
 public class BehFindMismatchedOrientation : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)

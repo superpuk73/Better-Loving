@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 using UnityEngine;
 
-namespace Better_Loving.Mian.CustomAssets;
+namespace Topic_of_Love.Mian.CustomAssets;
 
 public class StatusEffects
 {

@@ -1,4 +1,4 @@
-﻿namespace Better_Loving.Mian.CustomManagers.Dateable;
+﻿namespace Topic_of_Love.Mian.CustomManagers.Dateable;
 
 using System.Collections.Generic;
 

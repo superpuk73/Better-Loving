@@ -4,8 +4,8 @@
         <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     </PropertyGroup>
     <PropertyGroup>
-        <RootNamespace>Better_Loving</RootNamespace>
-        <AssemblyName>Better_Loving</AssemblyName>
+        <RootNamespace>Topic_of_Love</RootNamespace>
+        <AssemblyName>Topic_of_Love</AssemblyName>
         <TargetFramework>net48</TargetFramework>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <ImplicitUsings>disable</ImplicitUsings>
@@ -20,7 +20,6 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
-        <Compile Include="Mian\CustomAssets\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\AI\ActorBehaviorTasks.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehCheckForSexualIvf.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehStartSexualIvf.cs" />
@@ -40,12 +39,15 @@
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\sex\BehGetPossibleTileForSex.cs" />
         <Compile Include="Mian\CustomAssets\AI\Decisions.cs" />
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
-        <Compile Include="Mian\CustomAssets\CultureTraits.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
-        <Compile Include="Mian\CustomAssets\QueerTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Nameplates.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
-        <Compile Include="Mian\CustomAssets\SubspeciesTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Traits\CultureTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Traits\QueerTraits.cs" />
+        <Compile Include="Mian\CustomAssets\Traits\SubspeciesTraits.cs" />
         <Compile Include="Mian\CustomManagers\CustomSavedData.cs" />
         <Compile Include="Mian\CustomManagers\Dateable\Dateable.cs" />
         <Compile Include="Mian\CustomManagers\Dateable\DateableData.cs" />
@@ -74,7 +76,7 @@
             <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NeoModLoader.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp">
-            <HintPath>..\..\worldbox_Data\StreamingAssets\mods\NML\Assembly-CSharp-Publicized.dll</HintPath>
+            <HintPath>Assemblies\Assembly-CSharp-Publicized.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.dll</HintPath>

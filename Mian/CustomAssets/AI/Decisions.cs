@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 using HarmonyLib;
 
-namespace Better_Loving.Mian.CustomAssets.AI;
+namespace Topic_of_Love.Mian.CustomAssets.AI;
 
 public class Decisions
 {

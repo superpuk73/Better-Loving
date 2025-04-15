@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.sex;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
     public class BehFindMatchingPreference : BehaviourActionActor
     {
         public override BehResult execute(Actor pActor)

@@ -1,6 +1,6 @@
 ﻿using ai.behaviours;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.sex;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 public class BehCheckForSexTarget : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)

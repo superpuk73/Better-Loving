@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Better_Loving.Mian.CustomManagers;
-using Better_Loving.Mian.CustomManagers.Dateable;
+using Topic_of_Love.Mian.CustomManagers;
+using Topic_of_Love.Mian.CustomManagers.Dateable;
 using HarmonyLib;
 using NeoModLoader.services;
 
-namespace Better_Loving.Mian.Patches;
+namespace Topic_of_Love.Mian.Patches;
 
 public class SavedMapPatch
 {

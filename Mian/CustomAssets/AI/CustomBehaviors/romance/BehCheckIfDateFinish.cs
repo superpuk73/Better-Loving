@@ -1,6 +1,7 @@
 ﻿using ai.behaviours;
+using Topic_of_Love.Mian.CustomAssets.Traits;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.romance;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.romance;
 
 public class BehCheckIfDateFinish : BehaviourActionActor
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Better_Loving.Mian.CustomManagers.Dateable;
+using Topic_of_Love.Mian.CustomManagers.Dateable;
 
-namespace Better_Loving.Mian.CustomManagers;
+namespace Topic_of_Love.Mian.CustomManagers;
 
 public class CustomSavedData
 {

@@ -1,6 +1,6 @@
 ﻿using ai.behaviours;
 
-namespace Better_Loving.Mian.CustomAssets.AI.CustomBehaviors.sex;
+namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors.sex;
 public class BehGetPossibleTileForSex : BehaviourActionActor
     {
         public bool isPlacePrivateForBreeding(Actor actor, WorldTile tile)
