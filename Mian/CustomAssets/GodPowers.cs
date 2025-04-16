@@ -55,7 +55,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    ActionLibrary.showWhisperTip("love_successful");
+                    Util.ShowWhisperTipWithTime("love_successful", 18f);
                     
                     _selectedActorB = pActor;
                     _selectedActorB.data.set("force_lover", true);
@@ -141,7 +141,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    ActionLibrary.showWhisperTip("sex_successful");
+                    Util.ShowWhisperTipWithTime("sex_successful", 24f);
                     
                     _selectedActorB = pActor;
                     _selectedActorA.cancelAllBeh();
@@ -207,7 +207,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
                     
-                    ActionLibrary.showWhisperTip("kiss_successful");
+                    Util.ShowWhisperTipWithTime("kiss_successful", 24f);
                     _selectedActorA.cancelAllBeh();
                     _selectedActorA.stopMovement();
                     _selectedActorB.cancelAllBeh();
@@ -248,8 +248,6 @@ namespace Topic_of_Love.Mian.CustomAssets
                         ActionLibrary.showWhisperTip("no_lover");
                         return false;
                     }
-          
-                    ActionLibrary.showWhisperTip("sexualivf_successful");
                     
                     if (!pActor.hasLover() && !pActor.hasBestFriend())
                     {
@@ -292,6 +290,8 @@ namespace Topic_of_Love.Mian.CustomAssets
                     pActor.beh_actor_target.a.setTask("go_and_wait_sexual_ivf", pCleanJob: true, pClean:false, pForceAction:true);
                     pActor.beh_actor_target.a.timer_action = 0.0f;
                     pActor.setTask("go_sexual_ivf", pClean: false, pForceAction:true);
+                    
+                    Util.ShowWhisperTipWithTime("sexualivf_successful", 24f);
                     return true;
                 },
             });
@@ -329,7 +329,7 @@ namespace Topic_of_Love.Mian.CustomAssets
                         return false;
                     }
           
-                    ActionLibrary.showWhisperTip("date_successful");
+                    Util.ShowWhisperTipWithTime("date_successful", 24f);
 
                     pActor.cancelAllBeh();
                     pActor.stopMovement();

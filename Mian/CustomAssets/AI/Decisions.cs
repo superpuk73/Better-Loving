@@ -33,14 +33,14 @@ public class Decisions
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
-                                           && !Util.IsSexualHappinessEnough(actor, 100f)
+                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
                                            && !actor.hasStatus("just_kissed")
                                            && (QueerTraits.BothPreferencesMatch(actor, actor.lover) || Randy.randomChance(0.5f)),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsSexualHappinessEnough(actor, 50f) ? 0.6f : Util.IsSexualHappinessEnough(actor, 0) ? .8f : 
-                Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.5f: 
+                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.6f : Util.IsRelationshipHappinessEnough(actor, 0) ? .8f : 
+                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -53,14 +53,14 @@ public class Decisions
             cooldown = 30,
             action_check_launch = actor => actor.isSapient()
                                            && actor.hasLover()
-                                           && !Util.IsSexualHappinessEnough(actor, 100f)
+                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
                                            && (QueerTraits.BothActorsPreferencesMatch(actor, actor.lover, false) || Randy.randomChance(0.5f))
                                            && !actor.hasStatus("went_on_date"),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.5f: 
-                Util.IsSexualHappinessEnough(actor, 50f) ? 0.6f : Util.IsSexualHappinessEnough(actor, 0) ? .8f : 
-                Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.5f: 
+                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.6f : Util.IsRelationshipHappinessEnough(actor, 0) ? .8f : 
+                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_safe = true,
             cooldown_on_launch_failure = true
         });
@@ -100,12 +100,12 @@ public class Decisions
             action_check_launch = actor => actor.isSapient()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !QueerTraits.GetPreferenceFromActor(actor, true).Equals(Preference.Neither)
-                                           && !Util.IsSexualHappinessEnough(actor, 100f)
+                                           && !Util.IsRelationshipHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor),
             list_civ = true,
-            weight_calculate_custom = actor => Util.IsSexualHappinessEnough(actor, 75f) ? 0.25f: 
-                Util.IsSexualHappinessEnough(actor, 50f) ? 0.5f : Util.IsSexualHappinessEnough(actor, 0) ? .75f : 
-                Util.IsSexualHappinessEnough(actor, -50) ? 1f : Util.IsSexualHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
+            weight_calculate_custom = actor => Util.IsRelationshipHappinessEnough(actor, 75f) ? 0.25f: 
+                Util.IsRelationshipHappinessEnough(actor, 50f) ? 0.5f : Util.IsRelationshipHappinessEnough(actor, 0) ? .75f : 
+                Util.IsRelationshipHappinessEnough(actor, -50) ? 1f : Util.IsRelationshipHappinessEnough(actor, -100f) ? 1.5f : 1.25f,
             only_adult = true,
             only_safe = true,
             cooldown_on_launch_failure = true

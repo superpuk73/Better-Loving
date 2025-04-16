@@ -55,28 +55,37 @@ public class BaseTraits<T, TR>
             methodCall = "addTrait";
         }
 
-        LogService.LogInfo(methodCall);
-        if(actorAssets != null)
+        if (actorAssets != null)
+        {
+            var method = typeof(ActorAsset).GetMethod(methodCall, BindingFlags.Instance
+                                                                | BindingFlags.Static
+                                                                | BindingFlags.Public
+                                                                | BindingFlags.NonPublic, null,
+                new Type[] { typeof(string) }, null);
+
             foreach (var asset in actorAssets)
             {
                 var actorAsset = AssetManager.actor_library.get(asset);
-                if(actorAsset != null)
-                    typeof(ActorAsset).GetMethod(methodCall, BindingFlags.Instance 
-                                                                | BindingFlags.Static 
-                                                                | BindingFlags.Public 
-                                                                | BindingFlags.NonPublic, null, new Type[] { typeof(string) }, null).Invoke(actorAsset, new object[]{trait.id});
+                if (actorAsset != null)
+                    method.Invoke(actorAsset, new object[] { trait.id });
             }
-            
-        if(biomeAssets != null)
+        }
+
+        if (biomeAssets != null)
+        {
+            var method = typeof(BiomeAsset).GetMethod(methodCall, BindingFlags.Instance
+                                                                  | BindingFlags.Static
+                                                                  | BindingFlags.Public
+                                                                  | BindingFlags.NonPublic, null,
+                new Type[] { typeof(string) }, null);
             foreach (var asset in biomeAssets)
             {
                 var biomeAsset = AssetManager.biome_library.get(asset);
                 if(biomeAsset != null)
-                    typeof(BiomeAsset).GetMethod(methodCall, BindingFlags.Instance 
-                                                             | BindingFlags.Static 
-                                                             | BindingFlags.Public 
-                                                             | BindingFlags.NonPublic, null, new Type[] { typeof(string) }, null).Invoke(biomeAsset, new object[]{trait.id});
+                    method.Invoke(biomeAsset, new object[]{trait.id});
             }
+
+        }
         
         trait.path_icon = "ui/Icons/"+_id+"_traits/" + trait.id;
         _assets.Add(trait);

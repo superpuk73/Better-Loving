@@ -33,7 +33,7 @@ public class StatusEffects
                     if (partner == actor.a.lover)
                         changeBy += 10f;
                 
-                    Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                    Util.ChangeRelationshipHappinessBy(actor.a, changeBy);
                     
                     if(!Util.CanHaveRomanceWithoutRepercussionsWithSomeoneElse(actor.a))
                         Util.PotentiallyCheatedWith(actor.a, partner);
@@ -50,7 +50,7 @@ public class StatusEffects
             duration = 35f,
             action_on_receive = (actor, _) =>
             {
-                actor.a.data.get("sexual_happiness", out float happiness);
+                actor.a.data.get("relationship_happiness", out float happiness);
                 actor.a.data.get("last_had_interaction_with", out long partnerID);
                 var changeBy = 20f;
                 
@@ -63,7 +63,7 @@ public class StatusEffects
                     changeBy += Math.Abs(happiness / 3);
                 }
                 
-                Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                Util.ChangeRelationshipHappinessBy(actor.a, changeBy);
                 
                 actor.a.changeHappiness("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -77,7 +77,7 @@ public class StatusEffects
             duration = 35f,
             action_on_receive = (actor, _) => 
             {
-                actor.a.data.get("sexual_happiness", out float happiness);
+                actor.a.data.get("relationship_happiness", out float happiness);
                 var changeBy = -35f;
                 
                 if (happiness <= 0)
@@ -85,7 +85,7 @@ public class StatusEffects
                     changeBy += happiness / 3; // become more deprived if the sex was bad
                 }
 
-                Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                Util.ChangeRelationshipHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("disliked_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("okay_sex");
@@ -105,7 +105,7 @@ public class StatusEffects
                 if (sexPartner != null && sexPartner == actor.a.lover)
                     changeBy += 5f; // okay sex but add extra if with lover at least
                 
-                Util.ChangeSexualHappinessBy(actor.a, changeBy);
+                Util.ChangeRelationshipHappinessBy(actor.a, changeBy);
                 actor.a.changeHappiness("okay_sex");
                 actor.a.finishStatusEffect("enjoyed_sex");
                 actor.a.finishStatusEffect("disliked_sex");
@@ -128,13 +128,15 @@ public class StatusEffects
             duration = 60f,
             action_on_receive = (cheatedActor, _) =>
             {
+                var lover = cheatedActor.a.lover;
+                Util.RemoveLovers(cheatedActor.a);
                 if (Randy.randomChance(0.5f))
                 {
                     cheatedActor.a.addStatusEffect("crying");
                 } else
                 {
-                    cheatedActor.a.addAggro(cheatedActor.a.lover);
-                    cheatedActor.a.lover.data.get("last_had_interaction_with", out long id);
+                    cheatedActor.a.addAggro(lover);
+                    lover.data.get("last_had_interaction_with", out long id);
                     var otherActorInvolved = MapBox.instance.units.get(id);
                     if (otherActorInvolved != null)
                     {
@@ -144,17 +146,17 @@ public class StatusEffects
                     }
                     else
                     {
-                        if(cheatedActor.a.lover.isOnSameIsland(cheatedActor.a))
-                            cheatedActor.a.startFightingWith(cheatedActor.a.lover);
+                        if(lover.isOnSameIsland(cheatedActor.a))
+                            cheatedActor.a.startFightingWith(lover);
                     }
                 }
                 cheatedActor.a.changeHappiness("cheated_on");
-                cheatedActor.a.data.set("cheated_" +cheatedActor.a.lover.getID(),true);
+                cheatedActor.a.data.set("cheated_" +lover.getID(),true);
                 
-                // DateableManager.Manager.AddOrRemoveUndateable(cheatedActor.a, cheatedActor.a.lover);
-                Util.AddOrRemoveUndateableActor(cheatedActor.a, cheatedActor.a.lover);
+                // DateableManager.Manager.AddOrRemoveUndateable(cheatedActor.a, lover);
+                Util.AddOrRemoveUndateableActor(cheatedActor.a, lover);
 
-                Util.Debug(cheatedActor.a.lover.getName() + " just cheated on "+cheatedActor.a.getName());
+                Util.Debug(lover.getName() + " just cheated on "+cheatedActor.a.getName());
                 return true;
             }
         });

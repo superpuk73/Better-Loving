@@ -8,8 +8,14 @@ using NeoModLoader.General;
 
 /*
 
-- lovers in wild shouldnt attack each other
-- lovers should create kingdoms together if in wild (even from different subspecies)
+- lovers in wild shouldnt attack each other (done)
+- lovers should create kingdoms together if in wild (even from different subspecies) (done)
+
+- custom find lover decision (combination of romantic tasks that infleunce romantic opinion, lovers may randomly fall in love even when fighting)
+- cupid who can force lovers together
+- kings from two different kingdoms who are lovers will have good opinions on each other (done, also did homo/hetero sexuality)
+
+- other specices no reproduce :(((
 
 - queer traits arent 100% being added
 
@@ -53,6 +59,7 @@ namespace Topic_of_Love.Mian
             CommunicationTopics.Init();
             ActorBehaviorTasks.Init();
             Decisions.Init();
+            Opinions.Init();
             GodPowers.Init();
             TabsAndButtons.Init();
             

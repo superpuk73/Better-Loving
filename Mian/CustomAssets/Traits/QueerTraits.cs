@@ -220,10 +220,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             return Preference.Inapplicable; // if they have no preference, then they like neither
         }
 
-        public static bool IsConsideredHomo(Actor pActor, bool sexual)
+        public static bool IncludesHomoPreference(Preference preference)
         {
-            var preference = GetPreferenceFromActor(pActor, sexual);
-            return preference.Equals(Preference.SameSex) || preference.Equals(Preference.DifferentSex) || preference.Equals(Preference.All);
+            return preference.Equals(Preference.SameSex) || preference.Equals(Preference.SameOrDifferentSex) || preference.Equals(Preference.All);
         }
         
         // Important note that this checks FROM the first actor's point of view, you should also use PreferenceMatches on the other actor to confirm they both like each other!

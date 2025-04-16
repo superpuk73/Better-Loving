@@ -47,6 +47,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             AssetManager.subspecies_traits.get("reproduction_hermaphroditic").opposite_traits.Add(reproductionSameSex);
             
             Add(reproductionSameSex, actorAssets: new List<string>{"skeleton"});
+            AssetManager.actor_library.get("skeleton").addSubspeciesTrait("reproduction_strategy_viviparity");
             
             Finish();
         }

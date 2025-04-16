@@ -42,6 +42,7 @@
         <Compile Include="Mian\CustomAssets\CommunicationTopics.cs" />
         <Compile Include="Mian\CustomAssets\GodPowers.cs" />
         <Compile Include="Mian\CustomAssets\Happiness.cs" />
+        <Compile Include="Mian\CustomAssets\Opinions.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
@@ -60,6 +61,7 @@
         <Compile Include="Mian\Patches\BehSHFBPatch.cs" />
         <Compile Include="Mian\Patches\CultureManagerPatch.cs" />
         <Compile Include="Mian\Patches\DecisionAssetPatch.cs" />
+        <Compile Include="Mian\Patches\BaseSimObjectPatch.cs" />
         <Compile Include="Mian\Patches\MapBoxPatch.cs" />
         <Compile Include="Mian\Patches\SavedMapPatch.cs" />
         <Compile Include="Mian\Patches\SubspeciesPatch.cs" />
@@ -84,6 +86,9 @@
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>..\..\worldbox_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UI">
+            <HintPath>..\..\worldbox_Data\Managed\UnityEngine.UI.dll</HintPath>
         </Reference>
     </ItemGroup>
 </Project>

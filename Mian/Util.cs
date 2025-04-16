@@ -10,6 +10,16 @@ namespace Topic_of_Love
 {
     public class Util
     {
+        public static void ShowWhisperTipWithTime(string pText, float time=6f)
+        {
+            string pText1 = LocalizedTextManager.getText(pText);
+            if (Config.whisper_A != null)
+                pText1 = pText1.Replace("$kingdom_A$", Config.whisper_A.name);
+            if (Config.whisper_B != null)
+                pText1 = pText1.Replace("$kingdom_B$", Config.whisper_B.name);
+            WorldTip.showNow(pText1, false, "top", time);
+        }
+        
         // Returns the parent that has a population limit not REACHED yet
         public static Actor EnsurePopulationFromParent(List<Actor> parents)
         {
@@ -31,16 +41,16 @@ namespace Topic_of_Love
             return pActor.subspecies.isPartnerSuitableForReproduction(pActor, pTarget);
         }
 
-        public static bool IsSexualHappinessEnough(Actor actor, float happiness)
+        public static bool IsRelationshipHappinessEnough(Actor actor, float happiness)
         {
-            actor.data.get("sexual_happiness", out float compare);
+            actor.data.get("relationship_happiness", out float compare);
             return compare >= happiness;
         }
         
-        public static void ChangeSexualHappinessBy(Actor actor, float happiness)
+        public static void ChangeRelationshipHappinessBy(Actor actor, float happiness)
         {
-            actor.data.get("sexual_happiness", out float init);
-            actor.data.set("sexual_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
+            actor.data.get("relationship_happiness", out float init);
+            actor.data.set("relationship_happiness", Math.Max(-100, Math.Min(happiness + init, 100)));
         }
 
         private static void OpinionOnSex(Actor actor1, Actor actor2)
@@ -57,7 +67,7 @@ namespace Topic_of_Love
                     if (actor1.lover == actor2)
                         normal += 0.5f;
 
-                    actor1.a.data.get("sexual_happiness", out float happiness);
+                    actor1.a.data.get("relationship_happiness", out float happiness);
                     if (happiness < 0)
                     {
                         normal += Math.Abs((happiness / 100) / 2);
@@ -84,7 +94,7 @@ namespace Topic_of_Love
             // if (QueerTraits.GetPreferenceFromActor(pActor, true) == Preference.Neither)
             //     return false;
             
-            pActor.data.get("sexual_happiness", out float d);
+            pActor.data.get("relationship_happiness", out float d);
             if (isInit)
             {
                 Debug(pActor.getName() + " is requesting to do sex: "+sexReason + ". Sexual happiness: "+d + ". With lover: "+withLover);
@@ -106,11 +116,11 @@ namespace Topic_of_Love
             
             var allowedToHaveSex = withLover || CanHaveSexWithoutRepercussionsWithSomeoneElse(pActor, sexReason);
             var reduceChances = 0f;
-            pActor.data.get("sexual_happiness", out float sexualHappiness);
+            pActor.data.get("relationship_happiness", out float relationshipHappiness);
             
-            if (sexualHappiness < 0)
+            if (relationshipHappiness < 0)
             {
-                var toReduce = sexualHappiness / 100;
+                var toReduce = relationshipHappiness / 100;
                 reduceChances += toReduce;
             }
 
@@ -133,9 +143,9 @@ namespace Topic_of_Love
             }
             
             reduceChances = 0.1f;
-            if (sexualHappiness > 0)
+            if (relationshipHappiness > 0)
             {
-                reduceChances += sexualHappiness / 100f;
+                reduceChances += relationshipHappiness / 100f;
             }
 
             var doSex = Randy.randomChance(Math.Max(0, 1f - reduceChances));
@@ -192,12 +202,12 @@ namespace Topic_of_Love
 
             if (actor1.hasLover() && actor1.lover != actor2)
             {
-                ChangeSexualHappinessBy(actor1.lover, -25f);
+                ChangeRelationshipHappinessBy(actor1.lover, -25f);
             }
 
             if (actor2.hasLover() && actor2.lover != actor1)
             {
-                ChangeSexualHappinessBy(actor2.lover, -25f);
+                ChangeRelationshipHappinessBy(actor2.lover, -25f);
             }
         }
 
@@ -230,7 +240,6 @@ namespace Topic_of_Love
                 HandleFamilyRemoval(actor);
 
                 cheatedActor.addStatusEffect("cheated_on");
-                RemoveLovers(actor);
             }
         }
 

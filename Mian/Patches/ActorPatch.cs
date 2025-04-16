@@ -10,6 +10,21 @@ namespace Topic_of_Love.Mian.Patches;
 
 public class ActorPatch
 {
+    [HarmonyPatch(typeof(Actor), nameof(Actor.buildCityAndStartCivilization))]
+    class NewCivilizationPatch
+    {
+        static void Postfix(Actor __instance)
+        {
+            if (__instance.hasLover() && (!__instance.lover.hasKingdom() || __instance.lover.kingdom.wild))
+            {
+                __instance.lover.setForcedKingdom(__instance.kingdom);
+                __instance.lover.setCity(__instance.city);
+                __instance.lover.setCulture(__instance.culture);
+                __instance.kingdom.data.original_actor_asset = __instance.getActorAsset().id;
+            }
+        }
+    }
+    
     [HarmonyPatch(typeof(Actor), nameof(Actor.getHit))]
     class GetHitPatch
     {
@@ -35,7 +50,7 @@ public class ActorPatch
         static void Postfix(Actor __instance)
         {
             __instance.asset.addDecision("find_lover");
-            __instance.data.set("sexual_happiness", 10f);
+            __instance.data.set("relationship_happiness", 10f);
         }
     }
 
@@ -71,9 +86,9 @@ public class ActorPatch
                         __instance.changeHappiness("true_self");
                 }
                 if(QueerTraits.GetPreferenceFromActor(__instance, true) != Preference.Neither && Util.IsOrientationSystemEnabledFor(__instance))
-                    Util.ChangeSexualHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
+                    Util.ChangeRelationshipHappinessBy(__instance.a, -Randy.randomFloat(5, 10f));
                 else
-                    __instance.data.set("sexual_happiness", 100f);
+                    __instance.data.set("relationship_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
                 QueerTraits.GiveQueerTraits(__instance, false, true);
@@ -121,8 +136,8 @@ public class ActorPatch
                     Util.BreakUp(__instance);   
                 }
             }
-        }
-}
+        } 
+    }
 
     [HarmonyPatch(typeof(Actor), nameof(Actor.becomeLoversWith))]
     class BecomeLoversWithPatch

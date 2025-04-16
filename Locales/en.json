@@ -75,13 +75,13 @@
   "happiness_dialog_orientation_does_not_fit_1": "Why am I hated for who I am?",
 
   "happiness_insulted_for_orientation": "Insulted for their orientation",
-  "happiness_dialog_insulted_for_orientation_0": "Why should they care who I have sex with or date?!",
+  "happiness_dialog_insulted_for_orientation_0": "Why should they care who I couple with or date?!",
   "happiness_dialog_insulted_for_orientation_1": "What the hell is wrong with them!",
   
   "task_insult_orientation": "Insult Orientations",
-  "task_invite_for_sex": "Invite for Sex",
+  "task_invite_for_sex": "Invite for Coupling",
   "task_kiss_lover": "Going to Kiss",
-  "task_have_sex_go": "Have Sex",
+  "task_have_sex_go": "Go Coupling",
   "task_reproduce_preservation": "Reproduce Preservation",
   "task_try_sexual_ivf": "Try Sexual IVF",
   "task_go_sexual_ivf": "Go Sexual IVF",
@@ -130,7 +130,7 @@
   "ForceDate Description": "Force a lover to go on a date with their lover",
 
   "trait_sex_indifferent": "Sex-Indifferent",
-  "trait_sex_indifferent_info": "Sex is not a requirement for them to be in a relationship.",
+  "trait_sex_indifferent_info": "Coupling is not a requirement for them to be in a relationship.",
   "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
   
   "trait_aromantic": "Aromantic",
@@ -150,19 +150,19 @@
   "trait_biromantic_info_2": "Pulls sexes without needing to fuck any of them. What's your excuse?",
 
   "trait_asexual": "Asexual",
-  "trait_asexual_info": "They do not desire sex unlike most",
-  "trait_asexual_info_2": "Sex is so weird. It's soggy and time consuming.",
+  "trait_asexual_info": "They do not desire coupling unlike most",
+  "trait_asexual_info_2": "Coupling is so weird. It's soggy and time consuming.",
   
   "trait_heterosexual": "Heterosexual",
-  "trait_heterosexual_info": "They prefer having sex with the opposite sex",
+  "trait_heterosexual_info": "They prefer coupling with the opposite sex",
   "trait_heterosexual_info_2": "Aka, factory settings.",
 
   "trait_homosexual": "Homosexual",
-  "trait_homosexual_info": "They prefer having sex with the same sex",
+  "trait_homosexual_info": "They prefer coupling with the same sex",
   "trait_homosexual_info_2": "It ain't a choice, that much can be told.",
 
   "trait_bisexual": "Bisexual",
-  "trait_bisexual_info": "They love having sex with both sexes",
+  "trait_bisexual_info": "They love coupling with both sexes",
   "trait_bisexual_info_2": "Gotta swing both ways!",
 
   "trait_faithful": "Faithful",
@@ -190,7 +190,7 @@
   "culture_trait_heterophobic_info_2": "It's strange to think of two different sex people getting together.",
 
   "culture_trait_incest": "Incest",
-  "culture_trait_incest_info": "Biologically related members may fall in love and have sex",
+  "culture_trait_incest_info": "Biologically related members may fall in love and couple",
   "culture_trait_incest_info_2": "Awkward!",
 
   "culture_trait_orientationless": "Orientationless",
@@ -220,7 +220,11 @@
   "subspecies_trait_reproduction_same_sex": "Same Sex Reproduction",
   "subspecies_trait_reproduction_same_sex_info": "Two of the same sex are required to reproduce",
   "subspecies_trait_reproduction_same_sex_info_2": "Two indeed become more",
-
+  
+  "opinion_homosexual": "Opinions on Homosexuality",
+  "opinion_heterosexual": "Opinions on Heterosexuality",
+  "opinion_king_lovers": "Kings Are Lovers",
+  
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
   

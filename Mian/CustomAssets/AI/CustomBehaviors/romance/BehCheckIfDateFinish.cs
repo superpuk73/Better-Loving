@@ -42,8 +42,8 @@ public class BehCheckIfDateFinish : BehaviourActionActor
         pActor.addStatusEffect("went_on_date");
         target.addStatusEffect("went_on_date");
         
-        Util.ChangeSexualHappinessBy(pActor, happiness);
-        Util.ChangeSexualHappinessBy(target, happiness);
+        Util.ChangeRelationshipHappinessBy(pActor, happiness);
+        Util.ChangeRelationshipHappinessBy(target, happiness);
         
         pActor.data.removeFloat("date_happiness");
         
