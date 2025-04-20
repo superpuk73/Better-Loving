@@ -221,6 +221,38 @@
   "culture_trait_sexual_expectations_info": "Lovers may fulfill their sexual expectations with someone else without repercussions even if it is not their partner.",
   "culture_trait_sexual_expectations_info_2": "They can express their sexual being!",
 
+  "culture_trait_comfort_demand": "Comfort Demand",
+  "culture_trait_comfort_demand_info": "Parents will want a child, if one parent has a house and they both are happy enough.",
+  "culture_trait_comfort_demand_info_2": "We must give something to our child!",
+
+  "culture_trait_wealth_demand": "Wealth Demand",
+  "culture_trait_wealth_demand_info": "Parents will want a child, if they have enough money combined.",
+  "culture_trait_wealth_demand_info_2": "We must feed our child something!",
+
+  "culture_trait_kills_demand": "Kills Demand",
+  "culture_trait_kills_demand_info": "Parents will want a child, if they took enough lives combined.",
+  "culture_trait_kills_demand_info_2": "We must deserve this child first!",
+
+  "culture_trait_deed_demand": "Deed Demand",
+  "culture_trait_deed_demand_info": "Parents will not think about consequences of having a child, and will make children almost every time they couple.",
+  "culture_trait_deed_demand_info_2": "We can always make another!",
+
+  "culture_trait_moon_age_encouragement": "Moon Age Encouragement",
+  "culture_trait_moon_age_encouragement_info": "Parents will make children without thinking twice when its moon age.",
+  "culture_trait_moon_age_encouragement_info_2": "Moon calls for its legion to fullful!",
+
+  "culture_trait_despair_age_encouragement": "Despair Age Encouragement",
+  "culture_trait_despair_age_encouragement_info": "Parents will make children without thinking twice when its despair age.",
+  "culture_trait_despair_age_encouragement_info_2": "What can be better than ash smell in the morning!",
+
+  "culture_trait_chaos_age_encouragement": "Chaos Age Encouragement",
+  "culture_trait_chaos_age_encouragement_info": "Parents will make children without thinking twice when its chaos age.",
+  "culture_trait_chaos_age_encouragement_info_2": "Time to turn absolutely crazy!",
+
+  "culture_trait_wonder_age_encouragement": "Wonder Age Encouragement",
+  "culture_trait_wonder_age_encouragement_info": "Parents will make children without thinking twice when its wonder age.",
+  "culture_trait_wonder_age_encouragement_info_2": "Life is rainbows and butterflies!",
+
   "subspecies_trait_preservation": "Preservation",
   "subspecies_trait_preservation_info": "If their relative population count to their max limits are low, they will try to find people that they can reproduce with no matter what, disregarding what their culture or orientation may deem appropriate.",
   "subspecies_trait_preservation_info_2": "When the going gets tough, you do what you must to keep your legacies.",
@@ -256,6 +288,8 @@
   "religion_trait_lust_recongition": "Lust Recognition",
   "religion_trait_lust_recongition_info": "They think that lust isnt really a sin.",
   "religion_trait_lust_recongition_info_2": "Life is short",
+
+  "trait_group_parenthood": "Parenthood",
 
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",

@@ -45,6 +45,7 @@
         <Compile Include="Mian\CustomAssets\Opinions.cs" />
         <Compile Include="Mian\CustomAssets\StatusEffects.cs" />
         <Compile Include="Mian\CustomAssets\TabsAndButtons.cs" />
+        <Compile Include="Mian\CustomAssets\TraitGroups\CultureTraitGroups.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ClanTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\ActorTraits.cs" />
         <Compile Include="Mian\CustomAssets\Traits\BaseTraits.cs" />

@@ -7,7 +7,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
     {
         public void Init()
         {
-            Init("religion", false);
+            Init("religion");
             
             Add(new ReligionTrait
             {

@@ -2,6 +2,7 @@ using System.IO;
 using Topic_of_Love.Mian.CustomAssets;
 using Topic_of_Love.Mian.CustomAssets.AI;
 using Topic_of_Love.Mian.CustomAssets.Traits;
+using Topic_of_Love.Mian.CustomAssets.TraitGroups;
 using NeoModLoader.api;
 using HarmonyLib;
 using NeoModLoader.General;
@@ -52,6 +53,7 @@ namespace Topic_of_Love.Mian
             
             QueerTraits.Init();
             new ActorTraits().Init();
+            new CultureTraitGroups().Init();
             new CultureTraits().Init();
             new SubspeciesTraits().Init();
             new ClanTraits().Init();

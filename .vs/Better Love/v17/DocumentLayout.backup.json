@@ -7,16 +7,8 @@
       "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\topicoflove.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\religiontraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traits\\religiontraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\subspeciestraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traits\\subspeciestraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traitgroups\\culturetraitgroups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traitgroups\\culturetraitgroups.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\culturetraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,6 +17,18 @@
     {
       "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traits\\clantraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\religiontraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traits\\religiontraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:locales\\en.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|d:\\steam\\steamapps\\common\\worldbox\\worldbox_data\\streamingassets\\mods\\better-loving\\mian\\customassets\\traits\\actortraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F084A23C-6992-490E-A6AF-E7DBD080FDDB}|Better Love.csproj|solutionrelative:mian\\customassets\\traits\\actortraits.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,17 +38,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "CultureTraitGroups.cs",
+              "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\TraitGroups\\CultureTraitGroups.cs",
+              "RelativeDocumentMoniker": "Mian\\CustomAssets\\TraitGroups\\CultureTraitGroups.cs",
+              "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\TraitGroups\\CultureTraitGroups.cs",
+              "RelativeToolTip": "Mian\\CustomAssets\\TraitGroups\\CultureTraitGroups.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-20T15:51:29.172Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ActorTraits.cs",
+              "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ActorTraits.cs",
+              "RelativeDocumentMoniker": "Mian\\CustomAssets\\Traits\\ActorTraits.cs",
+              "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ActorTraits.cs",
+              "RelativeToolTip": "Mian\\CustomAssets\\Traits\\ActorTraits.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-20T14:40:41.597Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ReligionTraits.cs",
               "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ReligionTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\Traits\\ReligionTraits.cs",
               "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ReligionTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\Traits\\ReligionTraits.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-20T09:06:55.598Z",
               "EditorCaption": ""
@@ -57,58 +87,49 @@
               "RelativeDocumentMoniker": "Mian\\TopicOfLove.cs",
               "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\TopicOfLove.cs",
               "RelativeToolTip": "Mian\\TopicOfLove.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAAADkAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAADUAAAAAAAAAAAAAADcAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-20T07:59:19.282Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "ClanTraits.cs",
               "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ClanTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\Traits\\ClanTraits.cs",
               "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\ClanTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\Traits\\ClanTraits.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAB8AAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAowAgAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T07:37:53.983Z"
+              "WhenOpened": "2025-04-20T07:37:53.983Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "CultureTraits.cs",
               "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\CultureTraits.cs",
               "RelativeDocumentMoniker": "Mian\\CustomAssets\\Traits\\CultureTraits.cs",
               "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\CultureTraits.cs",
               "RelativeToolTip": "Mian\\CustomAssets\\Traits\\CultureTraits.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAAADUAAABhAAAAAAAAAA==",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAAwIMAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T07:06:23.394Z"
+              "WhenOpened": "2025-04-20T07:06:23.394Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SubspeciesTraits.cs",
-              "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\SubspeciesTraits.cs",
-              "RelativeDocumentMoniker": "Mian\\CustomAssets\\Traits\\SubspeciesTraits.cs",
-              "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Mian\\CustomAssets\\Traits\\SubspeciesTraits.cs",
-              "RelativeToolTip": "Mian\\CustomAssets\\Traits\\SubspeciesTraits.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACEAAACvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-20T07:00:19.75Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "en.json",
               "DocumentMoniker": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Locales\\en.json",
               "RelativeDocumentMoniker": "Locales\\en.json",
               "ToolTip": "D:\\Steam\\steamapps\\common\\worldbox\\worldbox_Data\\StreamingAssets\\mods\\Better-Loving\\Locales\\en.json",
               "RelativeToolTip": "Locales\\en.json",
-              "ViewState": "AgIAAN4AAAAAAAAAAAAAAAEBAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAAMBAAAAAAAAAAAAACMBAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-20T06:12:13.07Z"
+              "WhenOpened": "2025-04-20T06:12:13.07Z",
+              "EditorCaption": ""
             }
           ]
         }

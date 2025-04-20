@@ -95,7 +95,107 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_removed = true,
                 can_be_given = true
             }, List.Of("elf"), List.Of("biome_maple"));
+
+            AddParenthoodRelatedTraits();
+
             Finish();
+        }
+
+        private void AddParenthoodRelatedTraits()
+        {
+            Add(new CultureTrait
+            {
+                id = "comfort_demand",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R2_Epic,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("elf", "civ_wolf", "human", "dwarf", "civ_goat", "goat", "civ_cat", "civ_rhino", "ostrich", "seal", "druid", "plague_doctor", "white_mage"), List.Of("biome_maple", "biome_grass"));
+            Finish();
+
+            Add(new CultureTrait
+            {
+                id = "wealth_demand",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R2_Epic,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("orc", "dwarf", "human", "civ_sheep", "bandit", "civ_scorpion", "civ_dog"), List.Of("biome_arcane_desert"));
+
+            Add(new CultureTrait
+            {
+                id = "kills_demand",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R3_Legendary,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("orc", "bandit", "demon", "civ_scorpion", "candy_man", "civ_wolf"), List.Of("biome_arcane_desert", "biome_candy"));
+
+            Add(new CultureTrait
+            {
+                id = "deed_demand",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R2_Epic,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("lemon_man", "garlic_man"), List.Of("biome_lemon", "biome_garlic"))
+                .addOpposites(List.Of("kills_demand", "wealth_demand", "comfort_demand"));
+
+            Add(new CultureTrait
+            {
+                id = "chaos_age_encouragement",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R3_Legendary,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("demon", "evil_mage", "fire_elemental", "fire_skull"), List.Of("biome_infernal"))
+                .addOpposites(List.Of("moon_age_encouragement", "despair_age_encouragement", "wonder_age_encouragement"));
+
+            Add(new CultureTrait
+            {
+                id = "despair_age_encouragement",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R3_Legendary,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("greg"), List.Of("biome_singularity"))
+                .addOpposites(List.Of("moon_age_encouragement", "chaos_age_encouragement", "wonder_age_encouragement"));
+
+            Add(new CultureTrait
+            {
+                id = "moon_age_encouragement",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R3_Legendary,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("civ_wolf", "wolf"), List.Of("biome_clover", "biome_grass"))
+                .addOpposites(List.Of("despair_age_encouragement", "chaos_age_encouragement", "wonder_age_encouragement"));
+
+            Add(new CultureTrait
+            {
+                id = "wonder_age_encouragement",
+                group_id = "parenthood",
+                needs_to_be_explored = true,
+                rarity = Rarity.R3_Legendary,
+                can_be_in_book = true,
+                can_be_removed = true,
+                can_be_given = true
+            }, List.Of("flower_bud", "civ_buffalo", "buffalo", "sheep", "civ_sheep", "cow", "civ_cow", "dog", "civ_dog"), List.Of("biome_flower", "biome_grass", "biome_celestial"))
+                .addOpposites(List.Of("despair_age_encouragement", "chaos_age_encouragement", "moon_age_encouragement"));
         }
     }
 }
