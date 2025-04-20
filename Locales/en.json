@@ -233,6 +233,10 @@
   "subspecies_trait_incest_practice_info": "Biologically related members may fall in love and couple",
   "subspecies_trait_incest_practice_info_2": "Awkward!",
 
+  "clan_trait_clanbound_isolation": "Clanbound Isolation",
+  "clan_trait_clanbound_isolation_info": "Clan members wont ever marry those, who dont have their own clan.",
+  "clan_trait_clanbound_isolation_info_2": "We cant let any plebeians rule our lands!",
+
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
   "opinion_king_lovers": "Kings Are Lovers",
