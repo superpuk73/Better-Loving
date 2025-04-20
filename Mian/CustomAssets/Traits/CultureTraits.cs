@@ -44,14 +44,24 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             
             Add(new CultureTrait
             {
-                id = "incest",
+                id = "incest_taboo",
                 group_id = "miscellaneous",
                 needs_to_be_explored = true,
                 rarity = Rarity.R1_Rare,
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
+            }, List.Of("human", "dwarf", "elf", "druid", "civ_dog", "white_mage"), List.Of("biome_celestial", "biome_maple")).addOpposite("scar_of_incest");
+
+            Add(new CultureTrait
+            {
+                id = "scar_of_incest",
+                group_id = "miscellaneous",
+                rarity = Rarity.R1_Rare,
+                can_be_given = true,
+                can_be_in_book = false,
+                can_be_removed = true,
+            }, List.Of("orc", "demon", "rabbit", "hyena", "civ_hyena", "rat", "civ_rat", "evil_mage", "bandit"), List.Of("biome_infernal", "biome_corrupted")).addOpposite("incest_taboo");
             
             Add(new CultureTrait
             {
@@ -62,7 +72,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, List.Of("elf", "coolbeak"), List.Of("biome_celestial", "biome_flower"));
+            }, List.Of("elf", "civ_penguin"), List.Of("biome_celestial", "biome_flower"));
             
             Add(new CultureTrait
             {
@@ -85,16 +95,6 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_removed = true,
                 can_be_given = true
             }, List.Of("elf"), List.Of("biome_maple"));
-            
-            Add(new CultureTrait
-            {
-                id = "scar_of_incest",
-                group_id = "miscellaneous",
-                rarity = Rarity.R1_Rare,
-                can_be_given = true,
-                can_be_in_book = false,
-                can_be_removed = true,
-            }, List.Of("orc", "demon"), List.Of("biome_infernal", "biome_corrupted"));
             Finish();
         }
     }

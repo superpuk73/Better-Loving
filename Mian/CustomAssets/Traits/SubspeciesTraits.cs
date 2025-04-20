@@ -22,7 +22,17 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             {
                 actorAsset.addSubspeciesTrait("preservation");
             }
-            
+
+            Add(new SubspeciesTrait
+            {
+                id = "incest_practice",
+                group_id = "reproduction_strategy",
+                rarity = Rarity.R2_Epic,
+                spawn_random_trait_allowed = true,
+                in_mutation_pot_add = true,
+                remove_for_zombies = true
+            }, List.Of("human", "civ_dog", "orc", "dog", "hyena", "civ_hyena", "rabbit", "civ_rabbit", "cow", "sheep", "civ_rat", "rat", "demon", "evil_mage", "dwarf", "bandit"), List.Of("biome_infernal", "biome_corrupted"));
+
             SubspeciesTrait reproductionSameSex = new SubspeciesTrait
             {
                 id = "reproduction_same_sex",
