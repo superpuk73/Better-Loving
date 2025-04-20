@@ -21,11 +21,12 @@
     <ItemGroup>
         <Compile Include="AssemblyInfo.cs" />
         <Compile Include="Mian\CustomAssets\AI\ActorBehaviorTasks.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\inquisition\BehFindLustCommitter.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehCheckForSexualIvf.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehStartSexualIvf.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\ivf\BehTrySexualIvf.cs" />
-        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\inquisition\BehFindMismatchedOrientation.cs" />
-        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\inquisition\BehHuntdownOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\inquisition\BehFindSinfulOrientation.cs" />
+        <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\inquisition\BehInquisitionHuntdown.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehFindMismatchedOrientation.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\orientation\BehInsultOrientation.cs" />
         <Compile Include="Mian\CustomAssets\AI\CustomBehaviors\other\BehMakeTargetWait.cs" />

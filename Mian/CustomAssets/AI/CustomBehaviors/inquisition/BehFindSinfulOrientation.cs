@@ -16,11 +16,12 @@ public class BehFindSinfulOrientation : BehaviourActionActor
         }
         private static Actor GetClosestActorSinfulOrientation(Actor pActor)
         {
+            if (!pActor.hasReligion())
+                return null;
+
             using (ListPool<Actor> pCollection = new ListPool<Actor>(4))
             {
                 var unfitPreferences = new List<Preference>();
-                if (!pActor.hasReligion())
-                    return null;
                 if (pActor.religion.hasTrait("homomisos"))
                 {
                     unfitPreferences.Add(Preference.All);

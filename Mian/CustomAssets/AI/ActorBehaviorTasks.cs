@@ -32,8 +32,20 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             inquisitionHuntdownOrientation.addBeh(new BehFindSinfulOrientation());
             inquisitionHuntdownOrientation.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
             inquisitionHuntdownOrientation.addBeh(new BehCheckNearActorTarget());
-            inquisitionHuntdownOrientation.addBeh(new BehHuntdownOrientation());
+            inquisitionHuntdownOrientation.addBeh(new BehInquisitionHuntdown());
             Add(inquisitionHuntdownOrientation);
+
+            BehaviourTaskActor inquisitionHuntdownLust = new BehaviourTaskActor
+            {
+                id = "inquisition_huntdown_lust",
+                locale_key = "task_inquisition_huntdown_lust",
+                path_icon = "ui/Icons/religion_traits/lust_punishment",
+            };
+            inquisitionHuntdownLust.addBeh(new BehFindLustCommitter());
+            inquisitionHuntdownLust.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
+            inquisitionHuntdownLust.addBeh(new BehCheckNearActorTarget());
+            inquisitionHuntdownLust.addBeh(new BehInquisitionHuntdown());
+            Add(inquisitionHuntdownLust);
 
             InitRomance();
             InitSex();

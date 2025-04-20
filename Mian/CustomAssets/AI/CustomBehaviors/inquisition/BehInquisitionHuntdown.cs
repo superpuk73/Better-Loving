@@ -1,7 +1,7 @@
 ﻿using ai.behaviours;
 
 namespace Topic_of_Love.Mian.CustomAssets.AI.CustomBehaviors;
-public class BehHuntdownOrientation : BehaviourActionActor
+public class BehInquisitionHuntdown : BehaviourActionActor
 {
     public override BehResult execute(Actor pActor)
     {

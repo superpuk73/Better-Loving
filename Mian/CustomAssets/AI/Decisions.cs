@@ -46,6 +46,25 @@ public class Decisions
 
         Add(new DecisionAsset
         {
+            id = "inquisition_huntdown_lust_try",
+            task_id = "inquisition_huntdown_lust",
+            priority = NeuroLayer.Layer_2_Moderate,
+            path_icon = "ui/Icons/religion_traits/lust_punishment",
+            cooldown = 30,
+            action_check_launch = actor =>
+            {
+                if (!actor.hasReligion())
+                    return false;
+                return actor.religion.hasTrait("lust_punishment") && actor.isWarrior();
+            },
+            weight = 0.5f,
+            list_civ = true,
+            only_safe = true
+        });
+        AssetManager.subspecies_traits.get("prefrontal_cortex").addDecision("inquisition_huntdown_lust_try");
+
+        Add(new DecisionAsset
+        {
             id = "kiss_lover",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
