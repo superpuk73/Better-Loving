@@ -26,12 +26,31 @@ public class Decisions
 
         Add(new DecisionAsset
         {
+            id = "inquisition_huntdown_orientation_try",
+            task_id = "inquisition_huntdown_orientation",
+            priority = NeuroLayer.Layer_2_Moderate,
+            path_icon = "ui/Icons/religion_traits/unneutrumomisos",
+            cooldown = 30,
+            action_check_launch = actor =>
+            {
+                if (!actor.hasReligion())
+                    return false;
+                return (actor.religion.hasTrait("homomisos") || actor.religion.hasTrait("heteromisos") || actor.religion.hasTrait("unneutrumomisos"))
+                && Util.IsOrientationSystemEnabledFor(actor) && actor.isWarrior();
+            },
+            weight = 0.5f,
+            list_civ = true,
+            only_safe = true
+        });
+        AssetManager.subspecies_traits.get("prefrontal_cortex").addDecision("inquisition_huntdown_orientation_try");
+
+        Add(new DecisionAsset
+        {
             id = "kiss_lover",
             priority = NeuroLayer.Layer_2_Moderate,
             path_icon = "ui/Icons/status/just_kissed",
             cooldown = 15,
-            action_check_launch = actor => actor.isSapient()
-                                           && actor.hasLover()
+            action_check_launch = actor => actor.hasLover()
                                            && QueerTraits.GetQueerTraits(actor).Count >= 2 
                                            && !Util.IsRelationshipHappinessEnough(actor, 100f)
                                            && Util.IsOrientationSystemEnabledFor(actor)
@@ -44,7 +63,8 @@ public class Decisions
             only_safe = true,
             cooldown_on_launch_failure = true
         });
-        
+        AssetManager.subspecies_traits.get("amygdala").addDecision("kiss_lover");
+
         Add(new DecisionAsset
         {
             id = "try_date",
@@ -64,7 +84,7 @@ public class Decisions
             only_safe = true,
             cooldown_on_launch_failure = true
         });
-        
+
         Add(new DecisionAsset
         {
             id = "reproduce_preservation",
@@ -110,6 +130,10 @@ public class Decisions
             only_safe = true,
             cooldown_on_launch_failure = true
         });
+        AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("invite_for_sex");
+        AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("invite_for_sex");
+        AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("invite_for_sex");
+        AssetManager.subspecies_traits.get("reproduction_parthenogenesis").addDecision("invite_for_sex");
 
         Add(new DecisionAsset
         {
@@ -145,6 +169,10 @@ public class Decisions
             only_adult = true,
             cooldown_on_launch_failure = true
         });
+        AssetManager.subspecies_traits.get("reproduction_sexual").addDecision("try_sexual_ivf");
+        AssetManager.subspecies_traits.get("reproduction_same_sex").addDecision("try_sexual_ivf");
+        AssetManager.subspecies_traits.get("reproduction_hermaphroditic").addDecision("try_sexual_ivf");
+
         Finish();
     }
     

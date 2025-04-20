@@ -22,7 +22,19 @@ namespace Topic_of_Love.Mian.CustomAssets.AI
             insultOrientation.addBeh(new BehCheckNearActorTarget());
             insultOrientation.addBeh(new BehInsultOrientation());
             Add(insultOrientation);
-            
+
+            BehaviourTaskActor inquisitionHuntdownOrientation = new BehaviourTaskActor
+            {
+                id = "inquisition_huntdown_orientation",
+                locale_key = "task_inquisition_huntdown_orientation",
+                path_icon = "ui/Icons/religion_traits/unneutrumomisos",
+            };
+            inquisitionHuntdownOrientation.addBeh(new BehFindSinfulOrientation());
+            inquisitionHuntdownOrientation.addBeh(new BehGoToActorTarget(GoToActorTargetType.NearbyTileClosest, pCalibrateTargetPosition: true));
+            inquisitionHuntdownOrientation.addBeh(new BehCheckNearActorTarget());
+            inquisitionHuntdownOrientation.addBeh(new BehHuntdownOrientation());
+            Add(inquisitionHuntdownOrientation);
+
             InitRomance();
             InitSex();
             InitSexualIvf();
