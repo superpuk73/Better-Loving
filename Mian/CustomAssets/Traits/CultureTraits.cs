@@ -51,7 +51,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 can_be_in_book = true,
                 can_be_removed = true,
                 can_be_given = true
-            }, List.Of("human", "dwarf", "elf", "druid", "civ_dog", "white_mage"), List.Of("biome_celestial", "biome_maple")).addOpposite("scar_of_incest");
+            }, List.Of("human", "dwarf", "elf", "druid", "civ_dog", "white_mage", "plague_doctor"), List.Of("biome_celestial", "biome_maple")).addOpposite("scar_of_incest");
 
             Add(new CultureTrait
             {

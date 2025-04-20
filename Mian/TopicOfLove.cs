@@ -55,6 +55,7 @@ namespace Topic_of_Love.Mian
             new CultureTraits().Init();
             new SubspeciesTraits().Init();
             new ClanTraits().Init();
+            new ReligionTraits().Init();
             StatusEffects.Init();
             Happiness.Init();
             CommunicationTopics.Init();

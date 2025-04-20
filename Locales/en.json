@@ -237,6 +237,26 @@
   "clan_trait_clanbound_isolation_info": "Clan members wont ever marry those, who dont have their own clan.",
   "clan_trait_clanbound_isolation_info_2": "We cant let any plebeians rule our lands!",
 
+  "religion_trait_homomisos": "Homomisos",
+  "religion_trait_homomisos_info": "They think anyone except heteros are heretics.",
+  "religion_trait_homomisos_info_2": "It is an abomination",
+
+  "religion_trait_heteromisos": "Heteromisos",
+  "religion_trait_heteromisos_info": "They think anyone except homos and bis are heretics.",
+  "religion_trait_heteromisos_info_2": "Сallousness of soul promotes callousness of interests",
+
+  "religion_trait_unneutrumomisos": "Unneutrumomisos",
+  "religion_trait_unneutrumomisos_info": "They think anyone except aromantics are heretics.",
+  "religion_trait_unneutrumomisos_info_2": "Love is their biggest sin",
+
+  "religion_trait_lust_punishment": "Lust Punishment",
+  "religion_trait_lust_punishment_info": "They hate lecherous people in their society.",
+  "religion_trait_lust_punishment_info_2": "Forgo, brothers",
+
+  "religion_trait_lust_recongition": "Lust Recognition",
+  "religion_trait_lust_recongition_info": "They think that lust isnt really a sin.",
+  "religion_trait_lust_recongition_info_2": "Life is short",
+
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
   "opinion_king_lovers": "Kings Are Lovers",

@@ -15,7 +15,9 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 unlocked_with_achievement = false,
                 rarity = Rarity.R2_Epic,
                 needs_to_be_explored = true,
-            }, List.Of("human", "civ_wolf", "necromancer"));
+                spawn_random_trait_allowed = true,
+            }, List.Of("human", "civ_wolf", "necromancer", "lemon_snail", "lemon_man", "garl", "garlic_man", "plague_doctor"), List.Of("biome_lemon", "biome_garlic"));
+
             Finish();
         }
 
