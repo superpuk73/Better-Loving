@@ -1,10 +1,10 @@
 ﻿{
   "status_title_went_on_date": "Went on a Date",
   "status_description_went_on_date": "A world for two",
-  
+
   "status_title_just_kissed": "Just Kissed",
   "status_description_just_kissed": "So lovey dovey",
-  
+
   "status_title_disliked_sex": "Disliked Coupling",
   "status_description_disliked_sex": "Sexual preferences were not met",
 
@@ -39,7 +39,7 @@
   "happiness_okay_sex": "Mildly enjoyed coupling",
   "happiness_dialog_okay_sex_0": "That was alright, they weren't the best at it.",
   "happiness_dialog_okay_sex_1": "Meh, at least it was okay",
-  
+
   "happiness_enjoyed_sex": "Enjoyed coupling",
   "happiness_dialog_enjoyed_sex_0": "I loved that! I would be down to do them again.",
   "happiness_dialog_enjoyed_sex_1": "Perfect, just how I like doing it.",
@@ -47,7 +47,7 @@
   "happiness_disliked_sex": "Disliked coupling",
   "happiness_dialog_disliked_sex_0": "I did not like any single bit of that.",
   "happiness_dialog_disliked_sex_1": "Ugh that was terrible, I regret doing that.",
-  
+
   "happiness_cheated_on": "Cheated on",
   "happiness_dialog_cheated_on_0": "Why does this always happen to me..?",
   "happiness_dialog_cheated_on_1": "Was it my fault?",
@@ -59,7 +59,7 @@
   "happiness_dialog_breakup_1": "At least I wasn't cheated on..",
   "happiness_dialog_breakup_2": "I loved them so much.",
   "happiness_dialog_breakup_3": "I'm sorry that we ended up this way.",
-  
+
   "happiness_true_self": "Identity feels different",
   "happiness_dialog_true_self_0": "It feels so good to realize myself.",
   "happiness_dialog_true_self_1": "My orientation is the biggest part of what makes me, me.",
@@ -77,7 +77,7 @@
   "happiness_insulted_for_orientation": "Insulted for their orientation",
   "happiness_dialog_insulted_for_orientation_0": "Why should they care who I couple with or date?!",
   "happiness_dialog_insulted_for_orientation_1": "What the hell is wrong with them!",
-  
+
   "task_insult_orientation": "Insult Orientations",
   "task_invite_for_sex": "Invite for Coupling",
   "task_kiss_lover": "Going to Kiss",
@@ -97,7 +97,7 @@
   "unit_selected_first": "Now select another unit",
   "lover_selected": "Choose a unit that has a lover",
   "no_lover": "This unit does not have a lover!",
-  
+
   "love_cancelled": "Force lover cancelled!",
   "love_successful": "Force lover successful! They will not break up on their own unless you intervene.",
   "ForceLover": "Force Lover",
@@ -107,7 +107,7 @@
   "sex_successful": "Force coupling successful! They will attempt to couple as soon as possible. Outer forces may interrupt the deed.",
   "ForceSex": "Force Coupling",
   "ForceSex Description": "Force a unit to commence coupling with another unit",
-  
+
   "breakup_successful": "Break up successful!",
   "ForceBreakup": "Force Break Up",
   "ForceBreakup Description": "Force a lover to break up",
@@ -132,7 +132,15 @@
   "trait_sex_indifferent": "Sex-Indifferent",
   "trait_sex_indifferent_info": "Coupling is not a requirement for them to be in a relationship.",
   "trait_sex_indifferent_info_2": "They'd rather love than do the deed!",
-  
+
+  "trait_cheated": "Cheated",
+  "trait_cheated_info": "Cheated on their partner in the past.",
+  "trait_cheated_info_2": "Whatever happens once may never happen again, but whatever happens twice is bound to happen a third time",
+
+  "trait_committed_incest": "Committed Incest",
+  "trait_committed_incest_info": "Had a romance with their family member.",
+  "trait_committed_incest_info_2": "An awkward thing to share!",
+
   "trait_aromantic": "Aromantic",
   "trait_aromantic_info": "They do not desire love unlike most",
   "trait_aromantic_info_2": "It's not because they have not found the right person, they just feel this way",
@@ -152,7 +160,7 @@
   "trait_asexual": "Asexual",
   "trait_asexual_info": "They do not desire coupling unlike most",
   "trait_asexual_info_2": "Coupling is so weird. It's soggy and time consuming.",
-  
+
   "trait_heterosexual": "Heterosexual",
   "trait_heterosexual_info": "They prefer coupling with the opposite sex",
   "trait_heterosexual_info_2": "Aka, factory settings.",
@@ -220,14 +228,14 @@
   "subspecies_trait_reproduction_same_sex": "Same Sex Reproduction",
   "subspecies_trait_reproduction_same_sex_info": "Two of the same sex are required to reproduce",
   "subspecies_trait_reproduction_same_sex_info_2": "Two indeed become more",
-  
+
   "opinion_homosexual": "Opinions on Homosexuality",
   "opinion_heterosexual": "Opinions on Heterosexuality",
   "opinion_king_lovers": "Kings Are Lovers",
-  
+
   "tab_title_tol": "Topic of Love",
   "tab_desc_tol": "For all your romantic and sexual needs!",
-  
+
   "Misc": "Developer Settings",
   "SlowOnLog": "Slow on Log",
   "SlowOnLog Description": "Slows the game automatically when logs happen when enabled. You can ignore this as a player.",

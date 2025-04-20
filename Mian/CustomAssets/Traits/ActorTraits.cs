@@ -33,7 +33,8 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 needs_to_be_explored = true,
                 affects_mind = true,
                 opposite_traits = new HashSet<ActorTrait>()
-            }).addOpposite("unfaithful");
+            }, List.Of("civ_dog")).addOpposite("unfaithful");
+
             Add(new ActorTrait
             {
                 id = "unfaithful",
@@ -46,6 +47,33 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 needs_to_be_explored = true,
                 affects_mind = true,
             }).addOpposite("faithful");
+
+            Add(new ActorTrait
+            {
+                id = "cheated",
+                group_id = "acquired",
+                rate_birth = 2,
+                rate_acquire_grow_up = 4,
+                type = TraitType.Negative,
+                unlocked_with_achievement = false,
+                rarity = Rarity.R1_Rare,
+                needs_to_be_explored = true,
+                affects_mind = true,
+            });
+
+            Add(new ActorTrait
+            {
+                id = "committed_incest",
+                group_id = "acquired",
+                rate_birth = 2,
+                rate_acquire_grow_up = 4,
+                type = TraitType.Negative,
+                unlocked_with_achievement = false,
+                rarity = Rarity.R1_Rare,
+                needs_to_be_explored = true,
+                affects_mind = true,
+            });
+
             Finish();
         }
 
