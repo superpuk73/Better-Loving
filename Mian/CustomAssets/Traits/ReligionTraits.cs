@@ -12,7 +12,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Add(new ReligionTrait
             {
                 id = "homomisos",
-                group_id = "harmony",
+                group_id = "civic_position",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
@@ -24,7 +24,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Add(new ReligionTrait
             {
                 id = "heteromisos",
-                group_id = "harmony",
+                group_id = "civic_position",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
@@ -36,7 +36,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Add(new ReligionTrait
             {
                 id = "unneutrumomisos",
-                group_id = "harmony",
+                group_id = "civic_position",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
@@ -48,7 +48,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Add(new ReligionTrait
             {
                 id = "lust_punishment",
-                group_id = "harmony",
+                group_id = "civic_position",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
@@ -59,7 +59,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             Add(new ReligionTrait
             {
                 id = "lust_recognition",
-                group_id = "harmony",
+                group_id = "civic_position",
                 needs_to_be_explored = true,
                 rarity = Rarity.R2_Epic,
                 can_be_in_book = true,
