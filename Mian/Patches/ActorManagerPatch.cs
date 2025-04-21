@@ -14,7 +14,7 @@ public class ActorManagerPatch
             if (pActor.isAdult())
             {
                 if (!QueerTraits.HasQueerTraits(pActor)){
-                    QueerTraits.GiveQueerTraits(pActor, false, true);
+                    QueerTraits.GiveQueerTraits(pActor, true);
                     pActor.changeHappiness("true_self");
                 }
             }

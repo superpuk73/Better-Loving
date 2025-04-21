@@ -119,7 +119,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             return list;
         }
 
-        public static void GiveQueerTraits(Actor pActor, bool equalChances, bool clearInapplicable = false)
+        public static void GiveQueerTraits(Actor pActor, bool clearInapplicable = false)
         {
             if (!pActor.hasSubspecies()) return;
             var currentTraits = GetQueerTraits(pActor);
@@ -129,7 +129,7 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
                 pActor.removeTrait(trait);
             }
             
-            var queerTraits = RandomizeQueerTraits(pActor, equalChances, currentTraits);
+            var queerTraits = RandomizeQueerTraits(pActor, currentTraits);
             for(int i = 0; i < queerTraits.Count; i++)
             {
                 if (queerTraits[i] != null)
@@ -139,68 +139,62 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
             }
         }
 
-        public static Preference GetSexualPrefBasedOnReproduction(Actor pActor)
+        public static List<List<int>> GetSexualPrefBasedOnReproduction(Actor pActor)
         {
-            if (!pActor.hasSubspecies()) return Preference.Neither;
-            if (pActor.subspecies.hasTraitReproductionSexual())
-                return Preference.DifferentSex;
+            if (!pActor.hasSubspecies()) return null;
+            if (pActor.subspecies.hasTraitReproductionSexual() && !pActor.hasSubspeciesTrait("reproduction_parthenogenetic"))
+                return repSexualChances;
+            if (!pActor.subspecies.hasTraitReproductionSexual() && pActor.hasSubspeciesTrait("reproduction_parthenogenetic"))
+                return repParthenogeneticChances;
+            if (pActor.subspecies.hasTraitReproductionSexual() && pActor.hasSubspeciesTrait("reproduction_parthenogenetic"))
+                return repSexualParthenogeneticChances;
             if (pActor.subspecies.hasTraitReproductionSexualHermaphroditic())
-                return Preference.SameOrDifferentSex;
+                return repHermaphroditismChances;
             if (pActor.hasSubspeciesTrait("reproduction_same_sex"))
-                return Preference.SameSex;
-            return Preference.Neither;
+                return repSameSexChances;
+            return repEqualChances;
         }
 
         // randomizes chances based on what actor's reproduction methods
-        public static List<QueerTrait> RandomizeQueerTraits(Actor pActor, bool equalChances, List<QueerTrait> exclude)
+        public static List<QueerTrait> RandomizeQueerTraits(Actor pActor, List<QueerTrait> exclude)
         {
             if (!pActor.hasSubspecies()) return null;
             // randomize for sexual
-            var matchingPreference = equalChances ? Preference.All : GetSexualPrefBasedOnReproduction(pActor);
+            var matchingPreference = GetSexualPrefBasedOnReproduction(pActor);
+            if (matchingPreference != null)
+                return null;
 
             List<QueerTrait> randomPool = new List<QueerTrait>();
-            foreach (var trait in _sexualityTraits)
+
+            int random = Randy.randomInt(1, 101);
+            for (int i = 0; i < 4; i++)
             {
-                if (exclude.Contains(trait) || trait.preference.Equals(Preference.Inapplicable)) continue;
-                
-                if (trait.preference.Equals(matchingPreference))
+                if (random >= matchingPreference[i][0] && random <= matchingPreference[i][1])
                 {
-                    for (int i = 0; i < 27; i++)
+                    if (pActor.hasSubspeciesTrait("amygdala"))
                     {
-                        randomPool.Add(trait);
+                        randomPool.Add(_romanticTraits[i]);
+                    }
+                    if (pActor.isSapient())
+                    {
+                        randomPool.Add(_sexualityTraits[i]);
                     }
                 }
-                else
-                {
-                    randomPool.Add(trait);
-                }
             }
 
-            var sexualTrait = randomPool[Random.Range(0, randomPool.Count)];
-            var romanticTrait = GetOppositeVariant(sexualTrait);
-            
-            // random chance that romantic trait will not fit sexuality trait
-            if (Randy.randomChance(0.03f))
+            random = Randy.randomInt(1, 101);
+            if (random >= matchingPreference[4][0]  && random <= matchingPreference[4][1])
             {
-                romanticTrait = _romanticTraits[Random.Range(0, _romanticTraits.Count)];
-            }
-            
-            var queerTraits = List.Of(sexualTrait, romanticTrait);
-            
-            // randomize non-preference traits
-            if (Randy.randomChance(0.05f))
-            {
-                randomPool = _sexualityTraits.Where(trait => trait.preference.Equals(Preference.Inapplicable)).ToList();
-                queerTraits.Add(randomPool[Random.Range(0, randomPool.Count)]);
-            }
-            
-            if (Randy.randomChance(0.05f))
-            {
-                randomPool = _romanticTraits.Where(trait => trait.preference.Equals(Preference.Inapplicable)).ToList();
-                queerTraits.Add(randomPool[Random.Range(0, randomPool.Count)]);
+                randomPool.Add(_romanticTraits[4]);
             }
 
-            return queerTraits;
+            random = Randy.randomInt(1, 101);
+            if (random >= matchingPreference[4][0] && random <= matchingPreference[4][1])
+            {
+                randomPool.Add(_sexualityTraits[4]);
+            }
+
+            return randomPool;
         }
         
         // gets the romantic/sexual version of the trait that matches preferences
@@ -280,5 +274,12 @@ namespace Topic_of_Love.Mian.CustomAssets.Traits
 
             AssetManager.traits.add(trait);
         }
+
+        private static List<List<int>> repSexualChances = List.Of(List.Of(1, 90), List.Of(91, 95), List.Of(95, 98), List.Of(99, 100), List.Of(1, 1));
+        private static List<List<int>> repSameSexChances = List.Of(List.Of(1, 3), List.Of(4, 77), List.Of(78, 95), List.Of(96, 100), List.Of(1, 10));
+        private static List<List<int>> repHermaphroditismChances = List.Of(List.Of(1, 15), List.Of(16, 20), List.Of(21, 97), List.Of(98, 100), List.Of(0, 0));
+        private static List<List<int>> repParthenogeneticChances = List.Of(List.Of(1, 4), List.Of(5, 6), List.Of(6, 17), List.Of(18, 100), List.Of(1, 2));
+        private static List<List<int>> repSexualParthenogeneticChances = List.Of(List.Of(1, 50), List.Of(51, 52), List.Of(53, 60), List.Of(61, 100), List.Of(1, 2));
+        private static List<List<int>> repEqualChances = List.Of(List.Of(1, 25), List.Of(26, 50), List.Of(51, 75), List.Of(76, 100), List.Of(1, 25));
     }
 }

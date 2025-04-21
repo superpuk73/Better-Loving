@@ -62,14 +62,14 @@ public class ActorPatch
             if (__instance.isAdult()) // fluid sexuality
             {
                 if (!QueerTraits.HasQueerTraits(__instance)){
-                    QueerTraits.GiveQueerTraits(__instance, false, true);
+                    QueerTraits.GiveQueerTraits(__instance, true);
                     __instance.changeHappiness("true_self");
                 }
                 else
                 {
                     bool changed = false;
                     var list = QueerTraits.GetQueerTraits(__instance);
-                    list = QueerTraits.RandomizeQueerTraits(__instance, true, list);
+                    list = QueerTraits.RandomizeQueerTraits(__instance, list);
                     if (__instance.hasTrait("abroromantic") && Randy.randomChance(0.1f))
                     {
                         QueerTraits.CleanQueerTraits(__instance, false);
@@ -91,7 +91,7 @@ public class ActorPatch
                     __instance.data.set("relationship_happiness", 100f);
             } else if (!__instance.isAdult() && Randy.randomChance(0.1f)) // random chance younger kid finds their orientations
             {
-                QueerTraits.GiveQueerTraits(__instance, false, true);
+                QueerTraits.GiveQueerTraits(__instance, true);
                 __instance.changeHappiness("true_self");
             }
             
